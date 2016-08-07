@@ -7,8 +7,8 @@
   <packaging>sonar-plugin</packaging>
   <version>0.1-SNAPSHOT</version>
 
-  <name>Example Plugin for SonarQube</name>
-  <description>Example of plugin for SonarQube</description>
+  <name>TSQL Plugin for SonarQube</name>
+  <description>TSQL plugin for SonarQube</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
