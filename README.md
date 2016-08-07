@@ -19,7 +19,7 @@ In the future it is planned to:
 3. Start SonarQube and enable rules
 
 ## Plugin parameters ##
-By default plugin tries to find all xml files in base directory ending in *staticcodeanalysis.results.xml*. It is possible to override these by specyfing the following parameters:
+By default plugin tries to find all xml files in base directory ending in *staticcodeanalysis.results.xml*. It is possible to override these by specifying the following parameters:
 
 - *sonar.tsql.ms.reportPath* - directory where analysis results are stored
 - *sonar.tsql.ms.report* - report file
