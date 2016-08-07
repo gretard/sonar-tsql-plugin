@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+extraProperties=sonar.apiVersion\=5.6
+projectKey=org.sonar.plugins.tsql\:sonar-tsql-plugin
+serverUrl=http\://localhost\:9000
+version=2

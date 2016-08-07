@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Problems>
+  <Problem>
+    <Rule>Microsoft.Rules.Data.SR0001</Rule>
+    <ProblemDescription>The shape of the result set produced by a SELECT * statement will change if the underlying table or view structure changes.</ProblemDescription>
+    <SourceFile>c:\Database1\Procedure1.sql</SourceFile>
+    <Line>6</Line>
+    <Column>9</Column>
+    <Severity>Warning</Severity>
+  </Problem>
+</Problems>
