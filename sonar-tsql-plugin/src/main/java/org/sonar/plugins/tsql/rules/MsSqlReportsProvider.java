@@ -26,11 +26,14 @@ public class MsSqlReportsProvider implements IReporsProvider {
 		return res;
 	}
 
-	public static List<File> listf(String directoryName) {
+	private static List<File> listf(String directoryName) {
 		File directory = new File(directoryName);
 
 		List<File> resultList = new ArrayList<File>();
 
+		if (!directory.exists()) {
+			return resultList;
+		}
 		File[] fList = directory.listFiles();
 		resultList.addAll(Arrays.asList(fList));
 		for (File file : fList) {
