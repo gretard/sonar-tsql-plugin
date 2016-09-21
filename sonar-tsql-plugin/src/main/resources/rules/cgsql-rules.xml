@@ -1,0 +1,1682 @@
+<sql-rules>
+<rule>
+<key>BP001</key>
+<name>Index type is not specified</name>
+<internalKey>BP001</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Index type is not specified</h2><p>Index type (CLUSTERED or NONCLUSTERED) is not specified in CREATE INDEX statement.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP002</key>
+<name>ORDER BY clause with constants</name>
+<internalKey>BP002</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>ORDER BY clause with constants</h2><p>It is not recommended to use constants in ORDER BY clause.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP003</key>
+<name>SELECT in trigger</name>
+<internalKey>BP003</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>SELECT in trigger</h2><p>Trigger should not return data to a client.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP004</key>
+<name>INSERT without column list</name>
+<internalKey>BP004</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>INSERT without column list</h2><p>It is recommended to specify column list explicitly. Table variables are not checked</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP005</key>
+<name>Asterisk in select list</name>
+<internalKey>BP005</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Asterisk in select list</h2><p>It is not recommended to use asterisk in select list.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP006</key>
+<name>TOP without ORDER BY</name>
+<internalKey>BP006</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>TOP without ORDER BY</h2><p>Usually TOP without ORDER BY is meaningless.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP007</key>
+<name>Declaring var type variables without length</name>
+<internalKey>BP007</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Declaring var type variables without length</h2><p>Explicitly specify length.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP008</key>
+<name>CAST/CONVERT to var types without length</name>
+<internalKey>BP008</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>CAST/CONVERT to var types without length</h2><p>Explicitly specify the length.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP009</key>
+<name>Avoid var types of length 1 or 2</name>
+<internalKey>BP009</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Avoid var types of length 1 or 2</h2><p>Avoid var types of length 1 or 2</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP010</key>
+<name>Usage of @@identity</name>
+<internalKey>BP010</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Usage of @@identity</h2><p>It is not recommended to use @@identity because of side effects. Use SCOPE_IDENTITY instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP011</key>
+<name>NULL comparison or addition/substring</name>
+<internalKey>BP011</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>NULL comparison or addition/substring</h2><p>Operations with NULL can produce undesired results. Use IS [NOT] NULL and ISNULL/COALESCE function.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP012</key>
+<name>CASE without ELSE</name>
+<internalKey>BP012</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>CASE without ELSE</h2><p>It is recommended to explicitly specify a default action.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP013</key>
+<name>EXECUTE(string) is used</name>
+<internalKey>BP013</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>EXECUTE(string) is used</h2><p>It is not recommended to use EXEC to run dynamic SQL. Use sp_executesql instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP014</key>
+<name>[NOT] NULL option is not specified in CREATE/DECLARE TABLE statement (registered once per table)</name>
+<internalKey>BP014</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>[NOT] NULL option is not specified in CREATE/DECLARE TABLE statement (registered once per table)</h2><p>It is recommended to explicitly specify [NOT] NULL option in a table column definition.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP015</key>
+<name>Scope of cursor (LOCAL/GLOBAL) is not specified</name>
+<internalKey>BP015</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Scope of cursor (LOCAL/GLOBAL) is not specified</h2><p>It is recommended to specify the cursor scope explicitly.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP016</key>
+<name>Return without result code</name>
+<internalKey>BP016</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Return without result code</h2><p>Return without result code</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP017</key>
+<name>DELETE statement without WHERE clause</name>
+<internalKey>BP017</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>DELETE statement without WHERE clause</h2><p>DELETE statement without WHERE clause</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>BP018</key>
+<name>UPDATE statement without WHERE clause</name>
+<internalKey>BP018</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>UPDATE statement without WHERE clause</h2><p>UPDATE statement without WHERE clause</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>best-practise</tag>
+</rule>
+<rule>
+<key>DEP001</key>
+<name>Table hint without WITH keyword.</name>
+<internalKey>DEP001</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Table hint without WITH keyword.</h2><p>Table hint without WITH keyword. Use WITH keyword.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP002</key>
+<name>WRITETEXT,UPDATETEXT and READTEXT statements are deprecated.</name>
+<internalKey>DEP002</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>WRITETEXT,UPDATETEXT and READTEXT statements are deprecated.</h2><p>WRITETEXT,UPDATETEXT and READTEXT statements are deprecated.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP003</key>
+<name>GROUP BY ALL clause is depracated.</name>
+<internalKey>DEP003</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>GROUP BY ALL clause is depracated.</h2><p>GROUP BY ALL clause is depracated. Use custom case-by-case solution with UNION or derived table.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP004</key>
+<name>COMPUTE and COMPUTE BY clauses are deprecated.</name>
+<internalKey>DEP004</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>COMPUTE and COMPUTE BY clauses are deprecated.</h2><p>COMPUTE and COMPUTE BY clauses are deprecated. Use ROLLUP instead</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP005</key>
+<name>FASTFIRSTROW table hint is deperecated.</name>
+<internalKey>DEP005</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>FASTFIRSTROW table hint is deperecated.</h2><p>FASTFIRSTROW table hint is deperecated. Use [FAST n] instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP006</key>
+<name>SETUSER statement is deprecated.</name>
+<internalKey>DEP006</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>SETUSER statement is deprecated.</h2><p>SETUSER statement is deprecated. Use EXECUTE AS instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP007</key>
+<name>TAPE as backup device is deprecated.</name>
+<internalKey>DEP007</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>TAPE as backup device is deprecated.</h2><p>TAPE as backup device is deprecated.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP008</key>
+<name>PASSWORD/MEDIAPASSWORD options in BACKUP/RESTORE statement are deprecated.</name>
+<internalKey>DEP008</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>PASSWORD/MEDIAPASSWORD options in BACKUP/RESTORE statement are deprecated.</h2><p>PASSWORD/MEDIAPASSWORD options in BACKUP/RESTORE statement are deprecated.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP009</key>
+<name>DBCC DBREINDEX statement is deprecated.</name>
+<internalKey>DEP009</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>DBCC DBREINDEX statement is deprecated.</h2><p>DBCC DBREINDEX statement is deprecated. Use ALTER INDEX REBUILD instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP010</key>
+<name>DBCC CONCURRENCYVIOLATION is deprecated.</name>
+<internalKey>DEP010</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>DBCC CONCURRENCYVIOLATION is deprecated.</h2><p>DBCC CONCURRENCYVIOLATION is deprecated.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP011</key>
+<name>DBCC INDEXDEFRAG is deprecated.</name>
+<internalKey>DEP011</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>DBCC INDEXDEFRAG is deprecated.</h2><p>DBCC INDEXDEFRAG is deprecated. Use ALTER INDEX DEFRAG instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP012</key>
+<name>DBCC SHOWCONTIG is deprecated.</name>
+<internalKey>DEP012</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>DBCC SHOWCONTIG is deprecated.</h2><p>DBCC SHOWCONTIG is deprecated. Use sys.dm_db_index_physical_stats instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP013</key>
+<name>Deprecated SET options</name>
+<internalKey>DEP013</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Deprecated SET options</h2><p>SET ANSI_NULLS,ANSI_PADDING,CONCAT_NULL_YIELDS_NULL,REMOTE_PROC_TRANSACTIONS,OFFSETS options are deprecated.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP014</key>
+<name>SET ROWCOUNT option is deprecated.</name>
+<internalKey>DEP014</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>SET ROWCOUNT option is deprecated.</h2><p>SET ROWCOUNT option is deprecated. Use TOP(n) instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP015</key>
+<name>READONLY and READWRITE options are deprecated.</name>
+<internalKey>DEP015</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>READONLY and READWRITE options are deprecated.</h2><p>READONLY and READWRITE options are deprecated. Use READ_ONLY and READ_WRITE options.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP016</key>
+<name>TORN_PAGE_DETECTION option is deprecated.</name>
+<internalKey>DEP016</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>TORN_PAGE_DETECTION option is deprecated.</h2><p>TORN_PAGE_DETECTION option is deprecated.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP017</key>
+<name>NON-ANSI join (*= or =*) is used</name>
+<internalKey>DEP017</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>NON-ANSI join (*= or =*) is used</h2><p>Non-ANSI joins (via *= or =*) are deprecated, use LEFT/RIGHT OUTER join syntax instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP018</key>
+<name>ALL option in GRANT/DENY/REVOKE statement is deprecated</name>
+<internalKey>DEP018</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>ALL option in GRANT/DENY/REVOKE statement is deprecated</h2><p>ALL option in GRANT/DENY/REVOKE statement is deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP019</key>
+<name>System table or view is deprecated.</name>
+<internalKey>DEP019</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>System table or view is deprecated.</h2><p>System table or view is deprecated.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP020</key>
+<name>Numbered procedures are deprecated.</name>
+<internalKey>DEP020</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Numbered procedures are deprecated.</h2><p>Numbered procedures are deprecated. Do not use numbered procedures</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP021</key>
+<name>String literals as column aliases are deprecated</name>
+<internalKey>DEP021</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>String literals as column aliases are deprecated</h2><p>String literals as column aliases are deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP022</key>
+<name>DROP INDEX with two-part name is deprecated</name>
+<internalKey>DEP022</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>DROP INDEX with two-part name is deprecated</h2><p>DROP INDEX with two-part name is deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP023</key>
+<name>Not ending Transact-SQL statements with a semicolon is deprecated</name>
+<internalKey>DEP023</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Not ending Transact-SQL statements with a semicolon is deprecated</h2><p>Not ending Transact-SQL statements with a semicolon is deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP024</key>
+<name>Use of a space as a separator between table hints is deprecated</name>
+<internalKey>DEP024</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Use of a space as a separator between table hints is deprecated</h2><p>Use of a space as a separator between table hints is deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP025</key>
+<name>System stored procedure is deprecated</name>
+<internalKey>DEP025</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>System stored procedure is deprecated</h2><p>System stored procedure is deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP026</key>
+<name>Three-part and four-part column references in SELECT list are deprecated.</name>
+<internalKey>DEP026</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Three-part and four-part column references in SELECT list are deprecated.</h2><p>Three-part and four-part column references in SELECT list are deprecated. Two-part names is the standard-compliant behavior.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP027</key>
+<name>System function is deprecated</name>
+<internalKey>DEP027</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>System function is deprecated</h2><p>System function is deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>DEP028</key>
+<name>This RAISERROR syntax is deprecated</name>
+<internalKey>DEP028</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>This RAISERROR syntax is deprecated</h2><p>This RAISERROR syntax is deprecated</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>depreciated</tag>
+</rule>
+<rule>
+<key>EI001</key>
+<name>Incompatible variable type for procedure call</name>
+<internalKey>EI001</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Incompatible variable type for procedure call</h2><p>Variable type is not fully compatible with procedure parameter type.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI002</key>
+<name>Incompatible literal type for procedure call</name>
+<internalKey>EI002</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Incompatible literal type for procedure call</h2><p>Literal type is not fully compatible with procedure parameter type.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI003</key>
+<name>Non-scalar subquery in place of a scalar</name>
+<internalKey>EI003</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Non-scalar subquery in place of a scalar</h2><p>Subquery may return more than one row.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI004</key>
+<name>Extra parameter passed</name>
+<internalKey>EI004</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Extra parameter passed</h2><p>A named parameter is not found in parameter list of a procedure.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI005</key>
+<name>Unnamed call after named call</name>
+<internalKey>EI005</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Unnamed call after named call</h2><p>It is not recommended to use the position notation after the named notation.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI006</key>
+<name>Required parameter is not passed</name>
+<internalKey>EI006</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Required parameter is not passed</h2><p>Parameter is not passed to a procedure and no default is provided.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI007</key>
+<name>Call parameter declared as output</name>
+<internalKey>EI007</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Call parameter declared as output</h2><p>Procedure parameter is not defined as OUTPUT, but marked as OUTPUT in procedure call statement.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI008</key>
+<name>Call parameter is not declared as output</name>
+<internalKey>EI008</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Call parameter is not declared as output</h2><p>Procedure parameter is defined as OUTPUT, but not marked as OUTPUT in procedure call statement.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI009</key>
+<name>Call has more parameters than required</name>
+<internalKey>EI009</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Call has more parameters than required</h2><p>Number of passed parameters exceeds the number of procedure parameters.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI010</key>
+<name>OPEN of undefined cursor</name>
+<internalKey>EI010</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>OPEN of undefined cursor</h2><p>The cursor definition is not found in the current scope. OPEN statement will cause an error.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI011</key>
+<name>FETCH from undefined cursor</name>
+<internalKey>EI011</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>FETCH from undefined cursor</h2><p>The cursor definition is not found in the current scope. FETCH statement will cause an error.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI012</key>
+<name>CLOSE of undefined cursor</name>
+<internalKey>EI012</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>CLOSE of undefined cursor</h2><p>The cursor definition is not found in the current scope. CLOSE statement will cause an error.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI013</key>
+<name>DEALLOCATE of undefined cursor</name>
+<internalKey>EI013</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>DEALLOCATE of undefined cursor</h2><p>The cursor definition is not found in the current scope. DEALLOCATE statement will cause an error.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI014</key>
+<name>Fetch from cursor with asterisk in select list, unable to check columns</name>
+<internalKey>EI014</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Fetch from cursor with asterisk in select list, unable to check columns</h2><p>It is not recommended to use the asterisk in select list when defining a cursor.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI015</key>
+<name>Incorrect number of fetch variables</name>
+<internalKey>EI015</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Incorrect number of fetch variables</h2><p>Number of variables in FETCH statement differs from the number of columns in cursor definition.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI016</key>
+<name>Reference to procedure in other database</name>
+<internalKey>EI016</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Reference to procedure in other database</h2><p>Take notice of using hardcoded references to other databases.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI017</key>
+<name>Hardcoded current database name in procedure call</name>
+<internalKey>EI017</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Hardcoded current database name in procedure call</h2><p>Take notice of using hardcoded names.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI018</key>
+<name>Missing parameter(s) name in procedure call</name>
+<internalKey>EI018</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Missing parameter(s) name in procedure call</h2><p>It is recommended to specify parameter name while calling a stored procedure.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI019</key>
+<name>BEGIN TRANSACTION without ROLLBACK TRANSACTION</name>
+<internalKey>EI019</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>BEGIN TRANSACTION without ROLLBACK TRANSACTION</h2><p>Take notice of using BEGIN TRANSACTION without ROLLBACK TRANSACTION.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI020</key>
+<name>ROLLBACK TRANSACTION without BEGIN TRANSACTION</name>
+<internalKey>EI020</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>ROLLBACK TRANSACTION without BEGIN TRANSACTION</h2><p>Take notice of using ROLLBACK TRANSACTION without BEGIN TRANSACTION.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI021</key>
+<name>Closing of unopened cursor</name>
+<internalKey>EI021</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Closing of unopened cursor</h2><p>It is not possible to close an unopened cursor.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI022</key>
+<name>Fetch from unopened cursor</name>
+<internalKey>EI022</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Fetch from unopened cursor</h2><p>It is not possible to fetch rows from an unopened cursor.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI023</key>
+<name>Update/delete operation on cursor, but cursor is not declared as updatable</name>
+<internalKey>EI023</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Update/delete operation on cursor, but cursor is not declared as updatable</h2><p>It is recommended to specify a cursor as updatable before performing UPDATE/DELETE operation on the cursor.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI024</key>
+<name>Stored procedure name starts with sp_</name>
+<internalKey>EI024</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Stored procedure name starts with sp_</h2><p>It is not recommended to start a user stored procedure name with sp_ as this prefix is used in built in stored procedures.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI025</key>
+<name>Executing stored procedure without getting result</name>
+<internalKey>EI025</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Executing stored procedure without getting result</h2><p>Executing stored procedure without getting result</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI026</key>
+<name>Reference to function in other database</name>
+<internalKey>EI026</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Reference to function in other database</h2><p>Reference to function in other database</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI027</key>
+<name>Reference to table or view in other database</name>
+<internalKey>EI027</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Reference to table or view in other database</h2><p>Reference to table or view in other database</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI028</key>
+<name>Adding NOT NULL column without default value</name>
+<internalKey>EI028</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Adding NOT NULL column without default value</h2><p>Adding NOT NULL column without default value to a table with data will fail</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>EI029</key>
+<name>Avoid using ISNUMERIC() function</name>
+<internalKey>EI029</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Avoid using ISNUMERIC() function</h2><p>Avoid using ISNUMERIC() function because it accepts int, numeric, float and money numbers</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>execution-issues</tag>
+</rule>
+<rule>
+<key>CGTIME</key>
+<name>Timed out</name>
+<internalKey>CGTIME</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Timed out</h2><p>Timeout during parsing</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>CGUNP</key>
+<name>Unparsed SQL</name>
+<internalKey>CGUNP</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Unparsed SQL</h2><p>Unable to parse SQL code</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>MI001</key>
+<name>Table var is declared but never used</name>
+<internalKey>MI001</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Table var is declared but never used</h2><p>Table var is declared but never used</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>MI002</key>
+<name>Temp table is declared but never used</name>
+<internalKey>MI002</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Temp table is declared but never used</h2><p>Temp table is declared but never used</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>MI003</key>
+<name>Unqualified column name</name>
+<internalKey>MI003</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Unqualified column name</h2><p>This issue is not registered for query with single table in FROM clause.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>MI004</key>
+<name>Usage of sp_executesql (only in procedure/trigger)</name>
+<internalKey>MI004</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Usage of sp_executesql (only in procedure/trigger)</h2><p>Usage of sp_executesql (only in procedure/trigger)</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>MI005</key>
+<name>Variable is declared but never used</name>
+<internalKey>MI005</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Variable is declared but never used</h2><p>Variable is declared but never used</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>MI006</key>
+<name>Parameter is declared but never used</name>
+<internalKey>MI006</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Parameter is declared but never used</h2><p>Parameter is declared but never used</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>MI007</key>
+<name>WAIT FOR DELAY/TIME used</name>
+<internalKey>MI007</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>WAIT FOR DELAY/TIME used</h2><p>WAIT FOR DELAY/TIME used</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>misc</tag>
+</rule>
+<rule>
+<key>PE001</key>
+<name>Schema name for procedure is not specified</name>
+<internalKey>PE001</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Schema name for procedure is not specified</h2><p>It is recommended to always specify schema name</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE002</key>
+<name>Schema name for table or view is not specified</name>
+<internalKey>PE002</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Schema name for table or view is not specified</h2><p>It is recommended to always specify schema name</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE003</key>
+<name>Creation of table by SELECT ... INTO ... statement</name>
+<internalKey>PE003</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Creation of table by SELECT ... INTO ... statement</h2><p>It is not recommended to use this method of creating a table. Create the table manually by means of CREATE TABLE statement.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE004</key>
+<name>INDEX HINT is used</name>
+<internalKey>PE004</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>INDEX HINT is used</h2><p>It is not recommended to use index hints</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE005</key>
+<name>JOIN HINT is used</name>
+<internalKey>PE005</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>JOIN HINT is used</h2><p>It is not recommended to use join hints</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE006</key>
+<name>TABLE HINT is used</name>
+<internalKey>PE006</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>TABLE HINT is used</h2><p>It is not recommended to use table hints</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE007</key>
+<name>QUERY HINT is used</name>
+<internalKey>PE007</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>QUERY HINT is used</h2><p>It is not recommended to use query hints</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE008</key>
+<name>SET NOCOUNT OFF is used</name>
+<internalKey>PE008</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>SET NOCOUNT OFF is used</h2><p>It is not recommended to set NOCOUNT to OFF</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE009</key>
+<name>No SET NOCOUNT ON before DML</name>
+<internalKey>PE009</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>No SET NOCOUNT ON before DML</h2><p>It is recommended to set NOCOUNT to ON before any DML statements</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE010</key>
+<name>Interleaving DDL and DML in stored procedure/trigger.</name>
+<internalKey>PE010</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Interleaving DDL and DML in stored procedure/trigger.</h2><p>It is not recommended to mix DML and DDL statement because recompilation issues may arise</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE011</key>
+<name>PRINT statement is used in trigger</name>
+<internalKey>PE011</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>PRINT statement is used in trigger</h2><p>Trigger should not return data back to a client.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE012</key>
+<name>Setting ANSI_DEFAULTS ANSI_NULLS ANSI_PADDING ANSI_WARNINGS CONCAT_NULL_YIELDS_NULL lead to procedure recompilation (only in proc/trigger)</name>
+<internalKey>PE012</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Setting ANSI_DEFAULTS ANSI_NULLS ANSI_PADDING ANSI_WARNINGS CONCAT_NULL_YIELDS_NULL lead to procedure recompilation (only in proc/trigger)</h2><p>Setting this option from within batch leads to batch recompilation.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE013</key>
+<name>Incorrect usage of COUNT()</name>
+<internalKey>PE013</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Incorrect usage of COUNT()</h2><p>It is not recommended to use COUNT() in such manner. Use [NOT] EXISTS() instead.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE014</key>
+<name>SET FORCEPLAN used</name>
+<internalKey>PE014</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>SET FORCEPLAN used</h2><p>It is not recommended to use SET FORCEPLAN OFF because of possibility of performance degradation.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE015</key>
+<name>No FETCH FIRST/LAST/PRIOR, but cursor is not declared as forward only</name>
+<internalKey>PE015</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>No FETCH FIRST/LAST/PRIOR, but cursor is not declared as forward only</h2><p>It is recommended to declare cursor with appropriate scroll options(FORWARD_ONLY,FAST_FORWARD etc).</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE016</key>
+<name>Cursor is opened but is not deallocated</name>
+<internalKey>PE016</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Cursor is opened but is not deallocated</h2><p>It is recommended to deallocate a cursor explicitly.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE017</key>
+<name>Incorrect usage of const UDF</name>
+<internalKey>PE017</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Incorrect usage of const UDF</h2><p>It is not recommended to use the UDF that returns const value in JOIN, WHERE clauses or in select list. It is better to store the UDF value in a variable.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE018</key>
+<name>No update/delete operation on cursor, but the cursor is not declared as readonly</name>
+<internalKey>PE018</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>No update/delete operation on cursor, but the cursor is not declared as readonly</h2><p>It is recommended to declare a cursor as readonly if no UPDATE or DELETE at the cursor position is planned.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>PE019</key>
+<name>Consider using [NOT] EXISTS instead of [NOT] IN (subquery).</name>
+<internalKey>PE019</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Consider using [NOT] EXISTS instead of [NOT] IN (subquery).</h2><p>Consider using [NOT] EXISTS instead of [NOT] IN (subquery).</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>performance</tag>
+</rule>
+<rule>
+<key>SC001</key>
+<name>Script should end with GO</name>
+<internalKey>SC001</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Script should end with GO</h2><p>Script should end with GO</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>script</tag>
+</rule>
+<rule>
+<key>SC002</key>
+<name>Script should end with empty line</name>
+<internalKey>SC002</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Script should end with empty line</h2><p>Script should end with empty line</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>script</tag>
+</rule>
+<rule>
+<key>SC003</key>
+<name>There should be no USE statement in batch</name>
+<internalKey>SC003</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>There should be no USE statement in batch</h2><p>There should be no USE statement in batch</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>script</tag>
+</rule>
+<rule>
+<key>SC004</key>
+<name>Found todo item</name>
+<internalKey>SC004</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Found todo item</h2><p>Found todo item</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>script</tag>
+</rule>
+<rule>
+<key>ST001</key>
+<name>Old-style join is used (...from table1,table2...)</name>
+<internalKey>ST001</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Old-style join is used (...from table1,table2...)</h2><p>Use ANSI-style joins via JOIN</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST002</key>
+<name>Old-style column alias via EQUAL sign</name>
+<internalKey>ST002</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Old-style column alias via EQUAL sign</h2><p>It is recommended to specify alias via AS</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST003</key>
+<name>Procedure body not enclosed with BEGIN...END</name>
+<internalKey>ST003</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Procedure body not enclosed with BEGIN...END</h2><p>It is recommended to enclose a routine body in BEGIN...END block.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST004</key>
+<name>SQL-92 style cursor declaration is used</name>
+<internalKey>ST004</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>SQL-92 style cursor declaration is used</h2><p>Use extended syntax instead</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST005</key>
+<name>IF or ELSE without BEGIN...END block</name>
+<internalKey>ST005</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>IF or ELSE without BEGIN...END block</h2><p>It is recommended to use BEGIN...END as a wrapper for a block of code in IF or ELSE statements.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST006</key>
+<name>Old-style TOP clause is used</name>
+<internalKey>ST006</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Old-style TOP clause is used</h2><p>It is recommended to use new style TOP clause - TOP(n).</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST007</key>
+<name>Cursor name is reused</name>
+<internalKey>ST007</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Cursor name is reused</h2><p>More than one cursor has the same name.</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST008</key>
+<name>Non-named parameter style used</name>
+<internalKey>ST008</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Non-named parameter style used</h2><p>Use named parameters when calling procedure (exec dbo.Prcoedure @Parameter1=value,@parameter2=...). Issue registered once per procedure call</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST009</key>
+<name>Avoid using GOTO to improve readability</name>
+<internalKey>ST009</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Avoid using GOTO to improve readability</h2><p>Avoid using GOTO to improve readability</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST010</key>
+<name>Use alias for all table sources</name>
+<internalKey>ST010</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Use alias for all table sources</h2><p>Use alias for all table sources</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST011</key>
+<name>Consider using table variable instead of temporary table</name>
+<internalKey>ST011</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Consider using table variable instead of temporary table</h2><p>Consider using table variable instead of temporary table</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST012</key>
+<name>Consider using temporary table instead of table variable</name>
+<internalKey>ST012</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Consider using temporary table instead of table variable</h2><p>Consider using temporary table instead of table variable</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+<rule>
+<key>ST013</key>
+<name>Non-ANSI NOT_EQUAL operator used (!=)</name>
+<internalKey>ST013</internalKey>
+<descriptionFormat>HTML</descriptionFormat>
+<description><![CDATA[<h2>Non-ANSI NOT_EQUAL operator used (!=)</h2><p>Use ANSI-style NOT_EQUAL operator (<>)</p>]]></description>
+<severity>MINOR</severity>
+<cardinality>SINGLE</cardinality>
+<status>READY</status>
+<remediationFunction>LINEAR</remediationFunction>
+<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
+<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+<tag>style</tag>
+</rule>
+</sql-rules>

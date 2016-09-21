@@ -1,8 +1,8 @@
-package org.sonar.plugins.tsql.rules;
+package org.sonar.plugins.tsql.rules.files;
 
 import java.io.File;
 import java.util.List;
 
 public interface IReporsProvider {
-	List<File> get(String baseDir);
+	List<File> get();
 }

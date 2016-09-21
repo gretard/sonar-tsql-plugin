@@ -7,12 +7,12 @@ public class AbsolutePathCaseInsensitivePredicate implements FilePredicate {
 
 	private final String path;
 
-	public AbsolutePathCaseInsensitivePredicate(String path) {
+	public AbsolutePathCaseInsensitivePredicate(final String path) {
 		this.path = path.replace('\\', '/');
 	}
 
 	@Override
-	public boolean apply(InputFile inputFile) {
+	public boolean apply(final InputFile inputFile) {
 		return this.path.equalsIgnoreCase(inputFile.absolutePath().replace('\\', '/'));
 	}
 

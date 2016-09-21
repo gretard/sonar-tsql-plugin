@@ -1,4 +1,4 @@
-<vssql-rules>
+<sql-rules>
 	<rule>
 		<key>Microsoft.Rules.Data.SR0001</key>
 		<name>SR0001: Avoid SELECT * in stored procedures, views, and table-valued functions</name>
@@ -737,4 +737,4 @@ END</code></pre>
 		<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
 		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
 	</rule>
-</vssql-rules>
+</sql-rules>

@@ -1,26 +1,16 @@
-package org.sonar.plugins.tsql.rules;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+package org.sonar.plugins.tsql.rules.issues;
 
 import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.plugins.tsql.rules.AbsolutePathCaseInsensitivePredicate;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class TsqlIssue {
 
-	@XmlElement(name = "Rule")
 	private String type;
 
-	@XmlElement(name = "ProblemDescription")
 	private String description;
 
-	@XmlElement(name = "SourceFile")
 	private String filePath;
 
-	@XmlElement(name = "Line")
 	private int line;
 
 	public String getType() {

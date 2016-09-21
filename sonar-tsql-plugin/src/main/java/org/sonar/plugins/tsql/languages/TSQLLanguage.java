@@ -15,7 +15,7 @@ public final class TSQLLanguage extends AbstractLanguage {
 
 	private final Settings settings;
 
-	public TSQLLanguage(Settings settings) {
+	public TSQLLanguage(final Settings settings) {
 		super(KEY, NAME);
 		this.settings = settings;
 	}
@@ -30,7 +30,7 @@ public final class TSQLLanguage extends AbstractLanguage {
 	}
 
 	private String[] filterEmptyStrings(String[] stringArray) {
-		List<String> nonEmptyStrings = new ArrayList<>();
+		final List<String> nonEmptyStrings = new ArrayList<>();
 		for (String string : stringArray) {
 			if (StringUtils.isNotBlank(string.trim())) {
 				nonEmptyStrings.add(string.trim());

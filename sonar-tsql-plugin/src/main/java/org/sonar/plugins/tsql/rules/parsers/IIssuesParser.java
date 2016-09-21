@@ -1,4 +1,4 @@
-package org.sonar.plugins.tsql.rules;
+package org.sonar.plugins.tsql.rules.parsers;
 
 import java.io.File;
 
