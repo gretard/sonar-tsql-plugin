@@ -31,8 +31,8 @@ public final class CodeGuardRulesDefinition implements RulesDefinition {
 
 	@Override
 	public void define(final Context context) {
-		String repositoryKey = CodeGuardRulesDefinition.getRepositoryKeyForLanguage(TSQLLanguage.KEY);
-		String repositoryName = CodeGuardRulesDefinition.getRepositoryNameForLanguage(TSQLLanguage.KEY);
+		final String repositoryKey = CodeGuardRulesDefinition.getRepositoryKeyForLanguage(TSQLLanguage.KEY);
+		final String repositoryName = CodeGuardRulesDefinition.getRepositoryNameForLanguage(TSQLLanguage.KEY);
 		defineRulesForLanguage(context, repositoryKey, repositoryName, TSQLLanguage.KEY);
 	}
 

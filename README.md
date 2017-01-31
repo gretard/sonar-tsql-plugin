@@ -5,10 +5,11 @@ This repository contains T-SQL language plugin for Sonar.
 Currently plugin supports:
 
 - 14 code analysis rules by Microsoft. Details can be found at [https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx](https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx "https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx").
+- 120 code analysis rules by SQL Code Guard tool. Details can be found at [http://sqlcodeguard.com/index-database-issues.html](http://sqlcodeguard.com/index-database-issues.html "http://sqlcodeguard.com/index-database-issues.html")
+
 
 In the future it is planned to:
 
-- Add support for SQL Code guard rules [http://sqlcodeguard.com/](http://sqlcodeguard.com/)
 - Implement syntax highlighting of the reserved words
  
 
@@ -21,8 +22,10 @@ In the future it is planned to:
 ## Plugin parameters ##
 By default plugin tries to find all xml files in base directory ending in *staticcodeanalysis.results.xml*. It is possible to override these by specifying the following parameters:
 
-- *sonar.tsql.ms.reportPath* - directory where analysis results are stored
-- *sonar.tsql.ms.report* - report file
+- *sonar.tsql.ms.reportPath* - directory where ms static code analysis results are stored
+- *sonar.tsql.ms.report* - ms static code analysis report file
+- *sonar.tsql.cg.report* - SQL Code Guard report file
+- *sonar.tsql.cg.reportPath* - directory where SQL Code Guard analysis results are stored
 
 In example, the following settings will force plugin to search files ending in test.xml in c:\test directory:
 <pre>
@@ -34,3 +37,5 @@ sonar.sourceEncoding=UTF-8
 sonar.tsql.ms.reportPath=c:\\test
 sonar.tsql.ms.report=test.xml
 </pre>
+
+Please see *Example* directory where sample T-SQL project is stored.

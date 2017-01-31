@@ -8,7 +8,7 @@ import java.util.List;
 public class BaseReportsProvider implements IReporsProvider {
 
 	private final String baseDir;
-	
+
 	private final String searchName;
 
 	public BaseReportsProvider(final String baseDir, final String searchName) {
@@ -21,7 +21,6 @@ public class BaseReportsProvider implements IReporsProvider {
 		final List<File> res = new ArrayList<>();
 		final List<File> files = listf(this.baseDir);
 		for (final File f : files) {
-System.out.println(f);
 			if (f.getName().toLowerCase().endsWith(this.searchName)) {
 				res.add(f);
 			}
@@ -37,7 +36,7 @@ System.out.println(f);
 		if (!directory.exists()) {
 			return resultList;
 		}
-		
+
 		final File[] fList = directory.listFiles();
 		resultList.addAll(Arrays.asList(fList));
 		for (final File file : fList) {

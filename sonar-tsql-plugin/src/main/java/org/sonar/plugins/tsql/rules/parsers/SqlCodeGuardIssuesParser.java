@@ -9,7 +9,6 @@ import javax.xml.bind.Unmarshaller;
 
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.rules.BaseTsqlSensor;
 import org.sonar.plugins.tsql.rules.issues.CgIssues;
 import org.sonar.plugins.tsql.rules.issues.CgIssues.File.Issue;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
@@ -17,7 +16,7 @@ import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 public class SqlCodeGuardIssuesParser implements IIssuesParser<TsqlIssue> {
 
 	private static final Logger LOGGER = Loggers.get(SqlCodeGuardIssuesParser.class);
-	
+
 	@Override
 	public TsqlIssue[] parse(final File file) {
 		final List<TsqlIssue> list = new ArrayList<TsqlIssue>();
@@ -27,7 +26,7 @@ public class SqlCodeGuardIssuesParser implements IIssuesParser<TsqlIssue> {
 			final CgIssues issues = (CgIssues) jaxbUnmarshaller.unmarshal(file);
 			for (final org.sonar.plugins.tsql.rules.issues.CgIssues.File f : issues.getFile()) {
 				for (final Issue is : f.getIssue()) {
-					TsqlIssue issue = new TsqlIssue();
+					final TsqlIssue issue = new TsqlIssue();
 					issue.setDescription(is.getText());
 					issue.setFilePath(f.getFullname());
 					issue.setLine(is.getLine());

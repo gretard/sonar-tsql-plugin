@@ -52,10 +52,10 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 		}
 
 		try {
-			RuleKey rule = RuleKey.of(getRepositoryKeyForLanguage(file.language()), error.getType());
-			NewIssue issue = context.newIssue();
+			final RuleKey rule = RuleKey.of(getRepositoryKeyForLanguage(file.language()), error.getType());
+			final NewIssue issue = context.newIssue();
 
-			NewIssueLocation loc = issue.newLocation().on(file).at(file.selectLine(error.getLine()))
+			final NewIssueLocation loc = issue.newLocation().on(file).at(file.selectLine(error.getLine()))
 					.message(error.getDescription());
 			issue.at(loc).forRule(rule);
 			issue.save();
@@ -67,7 +67,7 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 		}
 	}
 
-	private String getRepositoryKeyForLanguage(String languageKey) {
+	private String getRepositoryKeyForLanguage(final String languageKey) {
 		return languageKey.toLowerCase() + "-" + this.repositoryKey;
 	}
 
@@ -80,9 +80,9 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 	public void execute(final org.sonar.api.batch.sensor.SensorContext context) {
 
 		for (final File reportPath : this.reportsProvider.get()) {
-			TsqlIssue[] errors = this.parser.parse(reportPath);
+			final TsqlIssue[] errors = this.parser.parse(reportPath);
 			LOGGER.info(format("Found total %d issues at %s.", errors.length, reportPath));
-			for (TsqlIssue error : errors) {
+			for (final TsqlIssue error : errors) {
 				add(error, context);
 			}
 		}
