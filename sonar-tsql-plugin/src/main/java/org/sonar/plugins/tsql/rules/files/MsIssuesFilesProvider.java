@@ -32,7 +32,7 @@ public class MsIssuesFilesProvider implements IReporsProvider {
 	}
 
 	@Override
-	public List<File> get() {
+	public File[] get() {
 		return this.reportsProvider.get();
 	}
 

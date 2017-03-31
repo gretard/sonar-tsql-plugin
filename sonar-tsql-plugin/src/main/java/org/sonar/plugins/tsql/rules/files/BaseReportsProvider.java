@@ -17,7 +17,7 @@ public class BaseReportsProvider implements IReporsProvider {
 	}
 
 	@Override
-	public List<File> get() {
+	public File[] get() {
 		final List<File> res = new ArrayList<>();
 		final List<File> files = listf(this.baseDir);
 		for (final File f : files) {
@@ -25,7 +25,7 @@ public class BaseReportsProvider implements IReporsProvider {
 				res.add(f);
 			}
 		}
-		return res;
+		return res.toArray(new File[0]);
 	}
 
 	private static List<File> listf(final String directoryName) {

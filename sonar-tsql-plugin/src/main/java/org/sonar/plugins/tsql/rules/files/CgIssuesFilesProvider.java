@@ -1,7 +1,6 @@
 package org.sonar.plugins.tsql.rules.files;
 
 import java.io.File;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
@@ -18,14 +17,14 @@ public class CgIssuesFilesProvider implements IReporsProvider {
 	public CgIssuesFilesProvider(final Settings settings, final FileSystem fileSystem) {
 		final String reportPath = settings.getString(REPORT_PATH_KEY);
 		final String reportEnd = settings.getString(REPORT_FILE);
-		
+
 		String dir = fileSystem.baseDir().getAbsolutePath();
 		String ending = "cgresults.xml";
 
 		if (!StringUtils.isEmpty(reportPath)) {
 			dir = reportPath;
 		}
-		
+
 		if (!StringUtils.isEmpty(reportEnd)) {
 			ending = reportEnd.toLowerCase();
 		}
@@ -33,7 +32,7 @@ public class CgIssuesFilesProvider implements IReporsProvider {
 	}
 
 	@Override
-	public List<File> get() {
+	public File[] get() {
 		return this.reportsProvider.get();
 	}
 
