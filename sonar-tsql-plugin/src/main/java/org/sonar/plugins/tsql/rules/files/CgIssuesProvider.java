@@ -1,7 +1,6 @@
 package org.sonar.plugins.tsql.rules.files;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.FileSystem;
@@ -50,7 +49,7 @@ public class CgIssuesProvider implements IReporsProvider {
 		final File tempResultsFile = folder.newFile("temp", "results.xml");
 		try {
 			FileUtils.copyURLToFile(getClass().getResource("/config/sqlcodeguardsettings.xml"), configFile);
-		} catch (IOException e1) {
+		} catch (Throwable e1) {
 			LOGGER.warn("Was not able to copy sql code guard config settings, trying to search directories instead", e1);
 			return getCGANalysisFiles();
 
