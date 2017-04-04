@@ -18,7 +18,7 @@ public class VsSqlIssuesParser implements IIssuesParser<TsqlIssue> {
 	private static final Logger LOGGER = Loggers.get(VsSqlIssuesParser.class);
 
 	@Override
-	public TsqlIssue[] parse(File file) {
+	public TsqlIssue[] parse(final File file) {
 		final List<TsqlIssue> list = new ArrayList<TsqlIssue>();
 		try {
 			final JAXBContext jaxbContext = JAXBContext.newInstance(VsIssues.class);
@@ -33,8 +33,8 @@ public class VsSqlIssuesParser implements IIssuesParser<TsqlIssue> {
 				list.add(issue);
 			}
 			return list.toArray(new TsqlIssue[0]);
-		} catch (Throwable e) {
-			LOGGER.error("Unexpected error occured", e);
+		} catch (final Throwable e) {
+			LOGGER.warn("Unexpected error occured", e);
 		}
 		return new TsqlIssue[0];
 	}

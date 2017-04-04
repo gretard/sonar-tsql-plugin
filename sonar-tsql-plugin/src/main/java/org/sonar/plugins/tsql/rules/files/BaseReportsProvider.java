@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 public class BaseReportsProvider implements IReporsProvider {
 
 	private final String baseDir;
@@ -18,6 +20,10 @@ public class BaseReportsProvider implements IReporsProvider {
 
 	@Override
 	public File[] get() {
+		if (StringUtils.isEmpty(this.searchName)) {
+			return new File[0];
+		}
+
 		final List<File> res = new ArrayList<>();
 		final List<File> files = listf(this.baseDir);
 		for (final File f : files) {

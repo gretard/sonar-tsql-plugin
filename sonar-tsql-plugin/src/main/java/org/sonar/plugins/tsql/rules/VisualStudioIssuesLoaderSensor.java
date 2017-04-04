@@ -10,6 +10,6 @@ public class VisualStudioIssuesLoaderSensor extends BaseTsqlSensor {
 
 	public VisualStudioIssuesLoaderSensor(final Settings settings, final FileSystem fileSystem) {
 		super(settings, fileSystem, new VsSqlIssuesParser(), new MsIssuesFilesProvider(settings, fileSystem),
-				TsqlMsRulesDefinition.KEY);
+				TsqlMsRulesDefinition.getRepositoryKeyForLanguage());
 	}
 }

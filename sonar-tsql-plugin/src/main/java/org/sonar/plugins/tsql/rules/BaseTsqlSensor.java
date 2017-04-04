@@ -45,30 +45,25 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 	protected void add(final TsqlIssue error, final org.sonar.api.batch.sensor.SensorContext context) {
 
 		final InputFile file = fileSystem.inputFile(fileSystem.predicates().and(error.getPredicate()));
+
 		if (file == null) {
-			LOGGER.warn(format("Cound not find file %s to add issue %s at line %d.", error.getFilePath(),
+			LOGGER.debug(format("Cound not find file %s to add issue %s at line %d.", error.getFilePath(),
 					error.getType(), error.getLine()));
 			return;
 		}
 
 		try {
-			final RuleKey rule = RuleKey.of(getRepositoryKeyForLanguage(file.language()), error.getType());
+			final RuleKey rule = RuleKey.of(repositoryKey, error.getType());
 			final NewIssue issue = context.newIssue();
 
 			final NewIssueLocation loc = issue.newLocation().on(file).at(file.selectLine(error.getLine()))
 					.message(error.getDescription());
 			issue.at(loc).forRule(rule);
 			issue.save();
-			LOGGER.debug(format("Added issue %s on file %s at line %d.", error.getType(), file.absolutePath(),
-					error.getLine()));
 		} catch (Throwable e) {
-			LOGGER.error(format("Can't add issue %s on file %s at line %d.", error.getType(), file.absolutePath(),
+			LOGGER.warn(format("Can't add issue %s on file %s at line %d.", error.getType(), file.absolutePath(),
 					error.getLine()), e);
 		}
-	}
-
-	private String getRepositoryKeyForLanguage(final String languageKey) {
-		return languageKey.toLowerCase() + "-" + this.repositoryKey;
 	}
 
 	@Override
@@ -81,7 +76,7 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 
 		for (final File reportPath : this.reportsProvider.get()) {
 			final TsqlIssue[] errors = this.parser.parse(reportPath);
-			LOGGER.info(format("Found total %d issues at %s.", errors.length, reportPath));
+			LOGGER.debug(format("Found total %d issues at %s.", errors.length, reportPath));
 			for (final TsqlIssue error : errors) {
 				add(error, context);
 			}

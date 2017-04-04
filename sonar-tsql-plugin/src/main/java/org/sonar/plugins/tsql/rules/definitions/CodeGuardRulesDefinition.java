@@ -31,17 +31,17 @@ public final class CodeGuardRulesDefinition implements RulesDefinition {
 
 	@Override
 	public void define(final Context context) {
-		final String repositoryKey = CodeGuardRulesDefinition.getRepositoryKeyForLanguage(TSQLLanguage.KEY);
-		final String repositoryName = CodeGuardRulesDefinition.getRepositoryNameForLanguage(TSQLLanguage.KEY);
+		final String repositoryKey = CodeGuardRulesDefinition.getRepositoryKeyForLanguage();
+		final String repositoryName = CodeGuardRulesDefinition.getRepositoryNameForLanguage();
 		defineRulesForLanguage(context, repositoryKey, repositoryName, TSQLLanguage.KEY);
 	}
 
-	public static String getRepositoryKeyForLanguage(final String languageKey) {
-		return languageKey.toLowerCase() + "-" + KEY;
+	public static String getRepositoryKeyForLanguage() {
+		return TSQLLanguage.KEY.toLowerCase() + "-" + KEY;
 	}
 
-	public static String getRepositoryNameForLanguage(final String languageKey) {
-		return languageKey.toUpperCase() + " " + NAME;
+	public static String getRepositoryNameForLanguage() {
+		return TSQLLanguage.KEY.toUpperCase() + " " + NAME;
 	}
 
 }

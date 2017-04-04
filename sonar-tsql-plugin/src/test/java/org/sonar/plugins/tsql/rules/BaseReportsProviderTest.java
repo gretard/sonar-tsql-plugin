@@ -1,7 +1,6 @@
 package org.sonar.plugins.tsql.rules;
 
 import java.io.File;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;

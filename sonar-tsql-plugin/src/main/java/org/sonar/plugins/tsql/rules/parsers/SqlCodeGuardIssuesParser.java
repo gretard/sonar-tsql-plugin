@@ -38,7 +38,7 @@ public class SqlCodeGuardIssuesParser implements IIssuesParser<TsqlIssue> {
 			return list.toArray(new TsqlIssue[0]);
 
 		} catch (Throwable e) {
-			LOGGER.error("Unexpected error occured", e);
+			LOGGER.warn("Unexpected error occured", e);
 		}
 		return new TsqlIssue[0];
 	}
