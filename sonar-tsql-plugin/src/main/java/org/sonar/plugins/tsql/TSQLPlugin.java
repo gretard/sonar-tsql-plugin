@@ -18,16 +18,19 @@ public class TSQLPlugin implements Plugin {
 				.description("Path to the sql code guard exe")
 				.defaultValue("C:\\Program Files (x86)\\SqlCodeGuard\\SqlCodeGuard.Cmd.exe").type(PropertyType.STRING)
 				.build());
+
 		context.addExtension(PropertyDefinition.builder(Constants.CG_REPORT_FILE).name("SQL Code Guard results file")
-				.description("SQL Code Guard results file")
-				.defaultValue("cgresults.xml").type(PropertyType.STRING)
+				.description("SQL Code Guard results file").defaultValue("cgresults.xml").type(PropertyType.STRING)
 				.build());
-		
-		context.addExtension(PropertyDefinition.builder(Constants.MS_REPORT_FILE).name("MSBuild SQL code analysis results file")
-				.description("MSBuild SQL code analysis results file")
-				.defaultValue("staticcodeanalysis.results.xml").type(PropertyType.STRING)
+
+		context.addExtension(PropertyDefinition.builder(Constants.MS_REPORT_FILE)
+				.name("MSBuild SQL code analysis results file").description("MSBuild SQL code analysis results file")
+				.defaultValue("staticcodeanalysis.results.xml").type(PropertyType.STRING).build());
+
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP).name("Disable plugin")
+				.description("Flag whether to disable plugin").defaultValue("false").type(PropertyType.BOOLEAN)
 				.build());
-		
+
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
 		context.addExtensions(TsqlMsRulesDefinition.class, CodeGuardRulesDefinition.class,
 				VisualStudioIssuesLoaderSensor.class, SqlCodeGuardIssuesLoaderSensor.class);

@@ -13,6 +13,7 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.rules.files.IReporsProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 import org.sonar.plugins.tsql.rules.parsers.IIssuesParser;
@@ -73,6 +74,13 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 
 	@Override
 	public void execute(final org.sonar.api.batch.sensor.SensorContext context) {
+
+		final boolean skipAnalysis = this.settings.getBoolean(Constants.PLUGIN_SKIP);
+
+		if (skipAnalysis) {
+			LOGGER.debug(format("Skipping plugin"));
+			return;
+		}
 
 		for (final File reportPath : this.reportsProvider.get()) {
 			final TsqlIssue[] errors = this.parser.parse(reportPath);
