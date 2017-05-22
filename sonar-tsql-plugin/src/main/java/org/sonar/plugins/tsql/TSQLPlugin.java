@@ -5,10 +5,10 @@ import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.languages.TSQLQualityProfile;
-import org.sonar.plugins.tsql.rules.SqlCodeGuardIssuesLoaderSensor;
-import org.sonar.plugins.tsql.rules.VisualStudioIssuesLoaderSensor;
 import org.sonar.plugins.tsql.rules.definitions.CodeGuardRulesDefinition;
-import org.sonar.plugins.tsql.rules.definitions.TsqlMsRulesDefinition;
+import org.sonar.plugins.tsql.rules.definitions.MsRulesDefinition;
+import org.sonar.plugins.tsql.sensors.CodeGuardIssuesLoaderSensor;
+import org.sonar.plugins.tsql.sensors.MsIssuesLoaderSensor;
 
 public class TSQLPlugin implements Plugin {
 
@@ -32,8 +32,8 @@ public class TSQLPlugin implements Plugin {
 				.build());
 
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
-		context.addExtensions(TsqlMsRulesDefinition.class, CodeGuardRulesDefinition.class,
-				VisualStudioIssuesLoaderSensor.class, SqlCodeGuardIssuesLoaderSensor.class);
+		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class,
+				MsIssuesLoaderSensor.class, CodeGuardIssuesLoaderSensor.class);
 
 	}
 }

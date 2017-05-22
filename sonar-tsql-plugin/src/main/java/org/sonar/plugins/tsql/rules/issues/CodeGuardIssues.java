@@ -66,10 +66,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "file" })
 @XmlRootElement(name = "root")
-public class CgIssues {
+public class CodeGuardIssues {
 
 	@XmlElement(required = true)
-	protected List<CgIssues.File> file;
+	protected List<CodeGuardIssues.File> file;
 
 	/**
 	 * Gets the value of the file property.
@@ -89,14 +89,14 @@ public class CgIssues {
 	 * 
 	 * 
 	 * <p>
-	 * Objects of the following type(s) are allowed in the list {@link CgIssues.File
+	 * Objects of the following type(s) are allowed in the list {@link CodeGuardIssues.File
 	 * }
 	 * 
 	 * 
 	 */
-	public List<CgIssues.File> getFile() {
+	public List<CodeGuardIssues.File> getFile() {
 		if (file == null) {
-			file = new ArrayList<CgIssues.File>();
+			file = new ArrayList<CodeGuardIssues.File>();
 		}
 		return this.file;
 	}
@@ -143,7 +143,7 @@ public class CgIssues {
 	public static class File {
 
 		@XmlElement(required = true)
-		protected List<CgIssues.File.Issue> issue;
+		protected List<CodeGuardIssues.File.Issue> issue;
 		@XmlAttribute(name = "fullname")
 		protected String fullname;
 		@XmlAttribute(name = "name")
@@ -168,13 +168,13 @@ public class CgIssues {
 		 * 
 		 * <p>
 		 * Objects of the following type(s) are allowed in the list
-		 * {@link CgIssues.File.Issue }
+		 * {@link CodeGuardIssues.File.Issue }
 		 * 
 		 * 
 		 */
-		public List<CgIssues.File.Issue> getIssue() {
+		public List<CodeGuardIssues.File.Issue> getIssue() {
 			if (issue == null) {
-				issue = new ArrayList<CgIssues.File.Issue>();
+				issue = new ArrayList<CodeGuardIssues.File.Issue>();
 			}
 			return this.issue;
 		}

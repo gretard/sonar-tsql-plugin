@@ -7,7 +7,7 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
-public final class TsqlMsRulesDefinition implements RulesDefinition {
+public final class MsRulesDefinition implements RulesDefinition {
 
 	public static final String KEY = "mssql";
 
@@ -32,8 +32,8 @@ public final class TsqlMsRulesDefinition implements RulesDefinition {
 
 	@Override
 	public void define(final Context context) {
-		final String repositoryKey = TsqlMsRulesDefinition.getRepositoryKeyForLanguage();
-		final String repositoryName = TsqlMsRulesDefinition.getRepositoryNameForLanguage();
+		final String repositoryKey = MsRulesDefinition.getRepositoryKeyForLanguage();
+		final String repositoryName = MsRulesDefinition.getRepositoryNameForLanguage();
 		defineRulesForLanguage(context, repositoryKey, repositoryName, TSQLLanguage.KEY);
 	}
 

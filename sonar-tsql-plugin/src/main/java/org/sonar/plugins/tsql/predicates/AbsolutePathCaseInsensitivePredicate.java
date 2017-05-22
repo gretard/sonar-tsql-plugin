@@ -1,4 +1,4 @@
-package org.sonar.plugins.tsql.rules;
+package org.sonar.plugins.tsql.predicates;
 
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.InputFile;

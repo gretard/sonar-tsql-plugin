@@ -6,11 +6,11 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 import org.sonar.plugins.tsql.Constants;
 
-public class CgIssuesFilesProvider implements IReporsProvider {
+public class CodeGuardIssuesFilesProvider implements IReporsProvider {
 
 	private final IReporsProvider reportsProvider;
 
-	public CgIssuesFilesProvider(final Settings settings, final FileSystem fileSystem) {
+	public CodeGuardIssuesFilesProvider(final Settings settings, final FileSystem fileSystem) {
 
 		final String reportEnd = settings.getString(Constants.CG_REPORT_FILE);
 		this.reportsProvider = new BaseReportsProvider(fileSystem.baseDir().getAbsolutePath(), reportEnd);

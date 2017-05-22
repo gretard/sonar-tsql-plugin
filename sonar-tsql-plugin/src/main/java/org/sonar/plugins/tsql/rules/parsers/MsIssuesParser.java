@@ -10,20 +10,20 @@ import javax.xml.bind.Unmarshaller;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.rules.issues.VsIssues;
-import org.sonar.plugins.tsql.rules.issues.VsIssues.Problem;
+import org.sonar.plugins.tsql.rules.issues.MsIssues;
+import org.sonar.plugins.tsql.rules.issues.MsIssues.Problem;
 
-public class VsSqlIssuesParser implements IIssuesParser<TsqlIssue> {
+public class MsIssuesParser implements IIssuesParser<TsqlIssue> {
 
-	private static final Logger LOGGER = Loggers.get(VsSqlIssuesParser.class);
+	private static final Logger LOGGER = Loggers.get(MsIssuesParser.class);
 
 	@Override
 	public TsqlIssue[] parse(final File file) {
 		final List<TsqlIssue> list = new ArrayList<TsqlIssue>();
 		try {
-			final JAXBContext jaxbContext = JAXBContext.newInstance(VsIssues.class);
+			final JAXBContext jaxbContext = JAXBContext.newInstance(MsIssues.class);
 			final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			final VsIssues issues = (VsIssues) jaxbUnmarshaller.unmarshal(file);
+			final MsIssues issues = (MsIssues) jaxbUnmarshaller.unmarshal(file);
 			for (final Problem p : issues.getProblem()) {
 				final TsqlIssue issue = new TsqlIssue();
 				issue.setDescription(p.getProblemDescription());

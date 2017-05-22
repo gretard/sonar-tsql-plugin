@@ -11,11 +11,11 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 
-public class CgIssuesProvider implements IReporsProvider {
+public class CodeGuardExecutingReportsProvider implements IReporsProvider {
 
 	private static final String cgCommandLine = "\"%s\" -source \"%s\" -out \"%s\" -config \"%s\"";
 
-	private static final Logger LOGGER = Loggers.get(CgIssuesProvider.class);
+	private static final Logger LOGGER = Loggers.get(CodeGuardExecutingReportsProvider.class);
 
 	private final FileSystem fileSystem;
 
@@ -23,14 +23,15 @@ public class CgIssuesProvider implements IReporsProvider {
 
 	private Settings settings;
 
-	public CgIssuesProvider(final Settings settings, final FileSystem fileSystem, final TempFolder folder) {
+	public CodeGuardExecutingReportsProvider(final Settings settings, final FileSystem fileSystem,
+			final TempFolder folder) {
 		this.settings = settings;
 		this.fileSystem = fileSystem;
 		this.folder = folder;
 	}
 
 	private File[] getCGANalysisFiles() {
-		return new CgIssuesFilesProvider(this.settings, this.fileSystem).get();
+		return new CodeGuardIssuesFilesProvider(this.settings, this.fileSystem).get();
 	}
 
 	@Override
@@ -38,10 +39,15 @@ public class CgIssuesProvider implements IReporsProvider {
 		final String cgPath = this.settings.getString(Constants.CG_APP_PATH);
 
 		if (StringUtils.isEmpty(cgPath) || !new File(cgPath).exists()) {
+			LOGGER.info(String.format("SQL Code guard path is empty, trying to search directories instead"));
+			return getCGANalysisFiles();
+		}
+		
+		if (!new File(cgPath).exists()) {
 			LOGGER.info(String.format("SQL Code guard not found at %s, trying to search directories instead", cgPath));
 			return getCGANalysisFiles();
 		}
-
+		
 		final File sourceDir = fileSystem.baseDir().toPath().toFile();
 		final File configFile = folder.newFile("temp", "config.xml");
 		final File tempResultsFile = folder.newFile("temp", "results.xml");
@@ -58,7 +64,7 @@ public class CgIssuesProvider implements IReporsProvider {
 				tempResultsFile.getAbsolutePath(), configFile.getAbsolutePath());
 
 		try {
-			LOGGER.debug("Running command", command);
+			LOGGER.debug(String.format("Running command: %s", command));
 			final Process process = new ProcessBuilder(command).start();
 			process.waitFor();
 			LOGGER.debug("Running command finished");

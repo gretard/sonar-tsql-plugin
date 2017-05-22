@@ -5,7 +5,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.rules.parsers.SqlCodeGuardIssuesParser;
+import org.sonar.plugins.tsql.rules.parsers.CodeGuardIssuesParser;
 
 public class CgSqlIssuesParserTest {
 
@@ -13,7 +13,7 @@ public class CgSqlIssuesParserTest {
 	public void testParser() {
 
 		String file = this.getClass().getClassLoader().getResource("cgSample.xml").getFile();
-		SqlCodeGuardIssuesParser parser = new SqlCodeGuardIssuesParser();
+		CodeGuardIssuesParser parser = new CodeGuardIssuesParser();
 
 		TsqlIssue[] issues = parser.parse(new File(file));
 		Assert.assertNotNull("Returned issues was null", issues);

@@ -9,22 +9,22 @@ import javax.xml.bind.Unmarshaller;
 
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.rules.issues.CgIssues;
-import org.sonar.plugins.tsql.rules.issues.CgIssues.File.Issue;
+import org.sonar.plugins.tsql.rules.issues.CodeGuardIssues;
+import org.sonar.plugins.tsql.rules.issues.CodeGuardIssues.File.Issue;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
-public class SqlCodeGuardIssuesParser implements IIssuesParser<TsqlIssue> {
+public class CodeGuardIssuesParser implements IIssuesParser<TsqlIssue> {
 
-	private static final Logger LOGGER = Loggers.get(SqlCodeGuardIssuesParser.class);
+	private static final Logger LOGGER = Loggers.get(CodeGuardIssuesParser.class);
 
 	@Override
 	public TsqlIssue[] parse(final File file) {
 		final List<TsqlIssue> list = new ArrayList<TsqlIssue>();
 		try {
-			final JAXBContext jaxbContext = JAXBContext.newInstance(CgIssues.class);
+			final JAXBContext jaxbContext = JAXBContext.newInstance(CodeGuardIssues.class);
 			final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			final CgIssues issues = (CgIssues) jaxbUnmarshaller.unmarshal(file);
-			for (final org.sonar.plugins.tsql.rules.issues.CgIssues.File f : issues.getFile()) {
+			final CodeGuardIssues issues = (CodeGuardIssues) jaxbUnmarshaller.unmarshal(file);
+			for (final org.sonar.plugins.tsql.rules.issues.CodeGuardIssues.File f : issues.getFile()) {
 				for (final Issue is : f.getIssue()) {
 					final TsqlIssue issue = new TsqlIssue();
 					issue.setDescription(is.getText());

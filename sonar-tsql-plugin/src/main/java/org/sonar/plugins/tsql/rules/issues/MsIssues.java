@@ -56,10 +56,10 @@ import javax.xml.bind.annotation.XmlType;
     "problem"
 })
 @XmlRootElement(name = "Problems")
-public class VsIssues {
+public class MsIssues {
 
     @XmlElement(name = "Problem", required = true)
-    protected List<VsIssues.Problem> problem;
+    protected List<MsIssues.Problem> problem;
 
     /**
      * Gets the value of the problem property.
@@ -79,13 +79,13 @@ public class VsIssues {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link VsIssues.Problem }
+     * {@link MsIssues.Problem }
      * 
      * 
      */
-    public List<VsIssues.Problem> getProblem() {
+    public List<MsIssues.Problem> getProblem() {
         if (problem == null) {
-            problem = new ArrayList<VsIssues.Problem>();
+            problem = new ArrayList<MsIssues.Problem>();
         }
         return this.problem;
     }

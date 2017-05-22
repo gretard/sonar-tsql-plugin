@@ -5,7 +5,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.rules.parsers.VsSqlIssuesParser;
+import org.sonar.plugins.tsql.rules.parsers.MsIssuesParser;
 
 public class VsSqlIssuesParserTest {
 
@@ -13,7 +13,7 @@ public class VsSqlIssuesParserTest {
 	public void testParser() {
 
 		String file = this.getClass().getClassLoader().getResource("vsSample.xml").getFile();
-		VsSqlIssuesParser parser = new VsSqlIssuesParser();
+		MsIssuesParser parser = new MsIssuesParser();
 
 		TsqlIssue[] issues = parser.parse(new File(file));
 		Assert.assertNotNull("Returned issues was null", issues);

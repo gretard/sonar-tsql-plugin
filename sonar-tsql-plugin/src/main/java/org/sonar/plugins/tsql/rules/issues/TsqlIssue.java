@@ -1,7 +1,7 @@
 package org.sonar.plugins.tsql.rules.issues;
 
 import org.sonar.api.batch.fs.FilePredicate;
-import org.sonar.plugins.tsql.rules.AbsolutePathCaseInsensitivePredicate;
+import org.sonar.plugins.tsql.predicates.AbsolutePathCaseInsensitivePredicate;
 
 public class TsqlIssue {
 
