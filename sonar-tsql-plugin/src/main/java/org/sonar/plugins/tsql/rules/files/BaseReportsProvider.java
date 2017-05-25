@@ -9,23 +9,20 @@ import org.apache.commons.lang.StringUtils;
 
 public class BaseReportsProvider implements IReporsProvider {
 
-	private final String baseDir;
-
 	private final String searchName;
 
-	public BaseReportsProvider(final String baseDir, final String searchName) {
-		this.baseDir = baseDir;
+	public BaseReportsProvider(final String searchName) {
 		this.searchName = searchName.toLowerCase();
 	}
 
 	@Override
-	public File[] get() {
+	public File[] get(final String baseDir) {
 		if (StringUtils.isEmpty(this.searchName)) {
 			return new File[0];
 		}
 
 		final List<File> res = new ArrayList<>();
-		final List<File> files = listf(this.baseDir);
+		final List<File> files = listf(baseDir);
 		for (final File f : files) {
 			if (f.getName().toLowerCase().endsWith(this.searchName)) {
 				res.add(f);

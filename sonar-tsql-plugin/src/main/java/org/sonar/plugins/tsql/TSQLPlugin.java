@@ -8,6 +8,7 @@ import org.sonar.plugins.tsql.languages.TSQLQualityProfile;
 import org.sonar.plugins.tsql.rules.definitions.CodeGuardRulesDefinition;
 import org.sonar.plugins.tsql.rules.definitions.MsRulesDefinition;
 import org.sonar.plugins.tsql.sensors.CodeGuardIssuesLoaderSensor;
+import org.sonar.plugins.tsql.sensors.HighlightingSensor;
 import org.sonar.plugins.tsql.sensors.MsIssuesLoaderSensor;
 
 public class TSQLPlugin implements Plugin {
@@ -32,8 +33,8 @@ public class TSQLPlugin implements Plugin {
 				.build());
 
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
-		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class,
-				MsIssuesLoaderSensor.class, CodeGuardIssuesLoaderSensor.class);
+		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class, MsIssuesLoaderSensor.class,
+				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class);
 
 	}
 }

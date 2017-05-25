@@ -21,17 +21,13 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 
 	protected final Settings settings;
 
-	protected final FileSystem fileSystem;
-
 	protected final IIssuesProvider issuesProvider;
 
 	private final String repositoryKey;
 
-	public BaseTsqlSensor(final Settings settings, final FileSystem fileSystem, final IIssuesProvider issuesProvider,
-			final String repositoryKey) {
+	public BaseTsqlSensor(final Settings settings, final IIssuesProvider issuesProvider, final String repositoryKey) {
 
 		this.settings = settings;
-		this.fileSystem = fileSystem;
 		this.issuesProvider = issuesProvider;
 		this.repositoryKey = repositoryKey;
 
@@ -39,6 +35,7 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 
 	protected void add(final TsqlIssue error, final org.sonar.api.batch.sensor.SensorContext context) {
 
+		final FileSystem fileSystem = context.fileSystem();
 		final InputFile file = fileSystem.inputFile(fileSystem.predicates().and(error.getPredicate()));
 
 		if (file == null) {
@@ -82,7 +79,9 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 			LOGGER.debug(format("Skipping plugin as skip flag is set"));
 			return;
 		}
-		final TsqlIssue[] issues = this.issuesProvider.getIssues();
+		final String baseDir = context.fileSystem().baseDir().getAbsolutePath();
+
+		final TsqlIssue[] issues = this.issuesProvider.getIssues(baseDir);
 		LOGGER.info(format("Found %d issues", issues.length));
 		for (final TsqlIssue issue : issues) {
 			add(issue, context);

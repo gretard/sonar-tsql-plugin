@@ -8,9 +8,9 @@ import org.sonar.plugins.tsql.rules.issues.CodeGuardIssuesProvider;
 
 public class CodeGuardIssuesLoaderSensor extends BaseTsqlSensor {
 
-	public CodeGuardIssuesLoaderSensor(final Settings settings, final FileSystem fileSystem,
+	public CodeGuardIssuesLoaderSensor(final Settings settings,
 			final TempFolder tempFolder) {
-		super(settings, fileSystem, new CodeGuardIssuesProvider(settings, fileSystem, tempFolder),
+		super(settings, new CodeGuardIssuesProvider(settings, tempFolder),
 				CodeGuardRulesDefinition.getRepositoryKeyForLanguage());
 	}
 }

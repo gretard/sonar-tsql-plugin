@@ -24,14 +24,14 @@ public class CodeGuardIssuesProvider implements IIssuesProvider {
 
 	private static final Logger LOGGER = Loggers.get(CodeGuardIssuesProvider.class);
 
-	public CodeGuardIssuesProvider(final Settings settings, final FileSystem fileSystem, final TempFolder tempFolder) {
-		this.reportsProvider = new CodeGuardExecutingReportsProvider(settings, fileSystem, tempFolder);
+	public CodeGuardIssuesProvider(final Settings settings,  final TempFolder tempFolder) {
+		this.reportsProvider = new CodeGuardExecutingReportsProvider(settings, tempFolder);
 	}
 
 	@Override
-	public TsqlIssue[] getIssues() {
+	public TsqlIssue[] getIssues(String baseDir) {
 		final List<TsqlIssue> foundIssues = new ArrayList<TsqlIssue>();
-		for (final File reportPath : this.reportsProvider.get()) {
+		for (final File reportPath : this.reportsProvider.get(baseDir)) {
 			final TsqlIssue[] errors = this.issuesParser.parse(reportPath);
 			LOGGER.debug(format("Found total %d issues at %s.", errors.length, reportPath));
 			foundIssues.addAll(Arrays.asList(errors));

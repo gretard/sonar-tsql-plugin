@@ -58,18 +58,22 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 				final CommonTokenStream tokens = new CommonTokenStream(lexer);
 				tokens.fill();
 				final List<Token> alltokens = tokens.getTokens();
-				for (final Token t : alltokens)
-
-				{
+				for (final Token t : alltokens) {
 
 					if (t.getType() == tsqlParser.COMMENT || t.getType() == tsqlParser.LINE_COMMENT) {
 						newHighlightning.highlight(t.getStartIndex(), t.getStopIndex() + 1, TypeOfText.COMMENT);
 						continue;
 					}
+
 					if (t.getType() == tsqlParser.STRING) {
 						newHighlightning.highlight(t.getStartIndex(), t.getStopIndex() + 1, TypeOfText.STRING);
 						continue;
 					}
+
+					if (t.getType() > tsqlParser.LINE_COMMENT) {
+						continue;
+					}
+
 					if (this.keys.isKeyword(tsqlParser.VOCABULARY.getSymbolicName(t.getType()))) {
 						newHighlightning.highlight(t.getStartIndex(), t.getStopIndex() + 1, TypeOfText.KEYWORD);
 					}

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -23,14 +22,14 @@ public class MsIssuesProvider implements IIssuesProvider {
 
 	private static final Logger LOGGER = Loggers.get(MsIssuesProvider.class);
 
-	public MsIssuesProvider(final Settings settings, final FileSystem fileSystem) {
-		this.reportsProvider = new MsIssuesFilesProvider(settings, fileSystem);
+	public MsIssuesProvider(final Settings settings) {
+		this.reportsProvider = new MsIssuesFilesProvider(settings);
 	}
 
 	@Override
-	public TsqlIssue[] getIssues() {
+	public TsqlIssue[] getIssues(String baseDir) {
 		final List<TsqlIssue> foundIssues = new ArrayList<TsqlIssue>();
-		for (final File reportPath : this.reportsProvider.get()) {
+		for (final File reportPath : this.reportsProvider.get(baseDir)) {
 			final TsqlIssue[] errors = this.issuesParser.parse(reportPath);
 			LOGGER.debug(format("Found total %d issues at %s.", errors.length, reportPath));
 			foundIssues.addAll(Arrays.asList(errors));

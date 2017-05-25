@@ -10,8 +10,8 @@ public class BaseReportsProviderTest {
 
 	@Test
 	public void testGetNonExistingDir() {
-		BaseReportsProvider cut = new BaseReportsProvider("./test", "test.xml");
-		File[] files = cut.get();
+		BaseReportsProvider cut = new BaseReportsProvider("test.xml");
+		File[] files = cut.get("./test");
 		Assert.assertEquals(0, files.length);
 	}
 
@@ -19,8 +19,8 @@ public class BaseReportsProviderTest {
 	public void testGetFilesInExistingDir() {
 		String file = this.getClass().getClassLoader().getResource(".").getFile();
 
-		BaseReportsProvider cut = new BaseReportsProvider(file, ".xml");
-		File[] files = cut.get();
+		BaseReportsProvider cut = new BaseReportsProvider(".xml");
+		File[] files = cut.get(file);
 		Assert.assertEquals(2, files.length);
 	}
 
@@ -28,8 +28,8 @@ public class BaseReportsProviderTest {
 	public void testGetSpecificFile() {
 		String file = this.getClass().getClassLoader().getResource(".").getFile();
 
-		BaseReportsProvider cut = new BaseReportsProvider(file, "Gsample.xml");
-		File[] files = cut.get();
+		BaseReportsProvider cut = new BaseReportsProvider("Gsample.xml");
+		File[] files = cut.get(file);
 		Assert.assertEquals(1, files.length);
 	}
 }
