@@ -39,7 +39,7 @@ public class KeywordsProvider implements IKeywordsProvider {
 				}
 			}
 		} catch (final IOException e) {
-			LOGGER.warn("Error reading keywords file", e);
+			LOGGER.warn(String.format("Error reading keywords file %s", file), e);
 		}
 
 	}

@@ -10,7 +10,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.config.Settings;
@@ -19,6 +21,7 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
+import org.sonar.plugins.tsql.languages.keywords.IKeywordsProvider;
 import org.sonar.plugins.tsql.languages.keywords.KeywordsProvider;
 
 public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
@@ -27,7 +30,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 	protected final Settings settings;
 
-	private final KeywordsProvider keys = new KeywordsProvider();
+	private final IKeywordsProvider keywordsProvider = new KeywordsProvider();
 
 	public HighlightingSensor(final Settings settings) {
 		this.settings = settings;
@@ -42,46 +45,58 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 	public void execute(final org.sonar.api.batch.sensor.SensorContext context) {
 
 		final boolean skipAnalysis = this.settings.getBoolean(Constants.PLUGIN_SKIP);
+		final boolean skipCpdAnalysis = this.settings.getBoolean(Constants.PLUGIN_SKIP_CPD);
 
 		if (skipAnalysis) {
 			LOGGER.debug(format("Skipping plugin as skip flag is set"));
 			return;
 		}
+
 		final FileSystem fs = context.fileSystem();
 		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().all());
 
 		for (final InputFile file : files) {
 			try {
+
+				final NewCpdTokens cpdTokens = context.newCpdTokens().onFile(file);
 				final NewHighlighting newHighlightning = context.newHighlighting().onFile(file);
 				final CharStream charStream = CharStreams.fromFileName(file.absolutePath());
 				final tsqlLexer lexer = new tsqlLexer(charStream);
 				final CommonTokenStream tokens = new CommonTokenStream(lexer);
 				tokens.fill();
 				final List<Token> alltokens = tokens.getTokens();
-				for (final Token t : alltokens) {
+				for (final Token token : alltokens) {
 
-					if (t.getType() == tsqlParser.COMMENT || t.getType() == tsqlParser.LINE_COMMENT) {
-						newHighlightning.highlight(t.getStartIndex(), t.getStopIndex() + 1, TypeOfText.COMMENT);
+					if (!skipCpdAnalysis && file instanceof DefaultInputFile && token.getType() != tsqlParser.EOF) {
+						cpdTokens.addToken(
+								((DefaultInputFile) file).newRange(token.getStartIndex(), token.getStopIndex() + 1),
+								token.getText());
+					}
+
+					if (token.getType() == tsqlParser.COMMENT || token.getType() == tsqlParser.LINE_COMMENT) {
+						newHighlightning.highlight(token.getStartIndex(), token.getStopIndex() + 1, TypeOfText.COMMENT);
 						continue;
 					}
 
-					if (t.getType() == tsqlParser.STRING) {
-						newHighlightning.highlight(t.getStartIndex(), t.getStopIndex() + 1, TypeOfText.STRING);
+					if (token.getType() == tsqlParser.STRING) {
+						newHighlightning.highlight(token.getStartIndex(), token.getStopIndex() + 1, TypeOfText.STRING);
 						continue;
 					}
 
-					if (t.getType() > tsqlParser.LINE_COMMENT) {
+					if (token.getType() > tsqlParser.LINE_COMMENT) {
 						continue;
 					}
 
-					if (this.keys.isKeyword(tsqlParser.VOCABULARY.getSymbolicName(t.getType()))) {
-						newHighlightning.highlight(t.getStartIndex(), t.getStopIndex() + 1, TypeOfText.KEYWORD);
+					if (this.keywordsProvider.isKeyword(tsqlParser.VOCABULARY.getSymbolicName(token.getType()))) {
+						newHighlightning.highlight(token.getStartIndex(), token.getStopIndex() + 1, TypeOfText.KEYWORD);
 					}
 				}
 
+				cpdTokens.save();
 				newHighlightning.save();
 			} catch (final Throwable e) {
-				LOGGER.warn(format("Unexpected exception adding highlightings on file %s", file.absolutePath()), e);
+				LOGGER.warn(format("Unexpected exception adding highlightings/tokens on file %s", file.absolutePath()),
+						e);
 			}
 		}
 	}

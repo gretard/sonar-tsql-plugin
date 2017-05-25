@@ -5,7 +5,7 @@
   <groupId>org.sonar.plugins.tsql</groupId>
   <artifactId>sonar-tsql-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>0.3.7</version>
+  <version>0.4.0-alpha</version>
 
   <name>TSQL Plugin for SonarQube</name>
   <description>TSQL plugin for SonarQube</description>
@@ -35,7 +35,7 @@
     <groupId>commons-lang</groupId>
     <artifactId>commons-lang</artifactId>
     <version>2.6</version>
-</dependency>
+</dependency>	
 <dependency>
     <groupId>commons-io</groupId>
     <artifactId>commons-io</artifactId>
@@ -60,10 +60,34 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+   
+    <!-- https://mvnrepository.com/artifact/org.antlr/antlr4-runtime -->
+<dependency>
+    <groupId>org.antlr</groupId>
+    <artifactId>antlr4-runtime</artifactId>
+    <version>4.7</version>
+</dependency>
   </dependencies>
 
   <build>
     <plugins>
+   <!-- <plugin>
+    <groupId>org.antlr</groupId>
+    <artifactId>antlr4-maven-plugin</artifactId>
+    <version>4.7</version>
+    <configuration>
+    <outputDirectory>src/main/java</outputDirectory>
+    <libDirectory>src/main/resources</libDirectory>
+    <visitor>true</visitor>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>antlr4</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin> -->
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
@@ -85,4 +109,8 @@
     </plugins>
   </build>
 
+  <scm>
+  	<url>https://github.com/gretard/sonar-tsql-plugin</url>
+  </scm>
+  <url>https://github.com/gretard/sonar-tsql-plugin</url>
 </project>

@@ -17,7 +17,7 @@ public class TsqlIssue {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -25,7 +25,7 @@ public class TsqlIssue {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -33,7 +33,7 @@ public class TsqlIssue {
 		return filePath;
 	}
 
-	public void setFilePath(String filePath) {
+	public void setFilePath(final String filePath) {
 		this.filePath = filePath;
 	}
 
@@ -41,7 +41,7 @@ public class TsqlIssue {
 		return line;
 	}
 
-	public void setLine(int line) {
+	public void setLine(final int line) {
 		this.line = line;
 	}
 

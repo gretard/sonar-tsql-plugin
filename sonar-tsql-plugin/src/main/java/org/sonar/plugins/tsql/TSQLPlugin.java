@@ -32,6 +32,10 @@ public class TSQLPlugin implements Plugin {
 				.description("Flag whether to disable plugin").defaultValue("false").type(PropertyType.BOOLEAN)
 				.build());
 
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_CPD).name("Disable duplication detection")
+				.description("Flag whether to disable code duplication detection").defaultValue("false")
+				.type(PropertyType.BOOLEAN).build());
+
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
 		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class, MsIssuesLoaderSensor.class,
 				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class);
