@@ -6,11 +6,9 @@ Currently plug-in supports:
 
 - 14 code analysis rules by Microsoft. Details can be found at [https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx](https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx "https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx").
 - 120 code analysis rules by SQL Code Guard tool. Details can be found at [http://sqlcodeguard.com/index-database-issues.html](http://sqlcodeguard.com/index-database-issues.html "http://sqlcodeguard.com/index-database-issues.html")
+- Experimental keyword highlighting and copy/paste detectiong using Powershell grammar from (https://github.com/antlr/grammars-v4/tree/master/tsql)
 
 
-In the future it is planned to:
-
-- Implement syntax highlighting of the reserved words
  
 
 ## Usage ##
@@ -39,6 +37,7 @@ By default plugin tries to find all xml files in base directory ending in *stati
 - **sonar.tsql.cg.report** - SQL Code Guard results file, defaults to *cgresults.xml*, required only if you run analysis manually, before build
 - **sonar.tsql.ms.report** - ms static code analysis report file, defaults to *staticcodeanalysis.results.xml*
 - **sonar.tsql.skip** - flag to skip plugin
+- **sonar.tsql.skip.cpd** - flag to skip cpd token addition
 
 ### Using default configuration ###
 In example, the following settings will force plugin to run *C:\\Program Files (x86)\\SqlCodeGuard\\SqlCodeGuard.Cmd.exe* and pick up any *staticcodeanalysis.results.xml* produced by msbuild which are found in the sources directory
