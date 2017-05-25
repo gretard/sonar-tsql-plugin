@@ -6,7 +6,7 @@ Currently plug-in supports:
 
 - 14 code analysis rules by Microsoft. Details can be found at [https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx](https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx "https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx").
 - 120 code analysis rules by SQL Code Guard tool. Details can be found at [http://sqlcodeguard.com/index-database-issues.html](http://sqlcodeguard.com/index-database-issues.html "http://sqlcodeguard.com/index-database-issues.html")
-- Experimental keyword highlighting and copy/paste detectiong using Powershell grammar from (https://github.com/antlr/grammars-v4/tree/master/tsql)
+- Experimental keyword highlighting and copy/paste detectiong using T-SQL grammar from (https://github.com/antlr/grammars-v4/tree/master/tsql)
 
 
  
