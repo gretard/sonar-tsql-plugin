@@ -21,6 +21,7 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
+import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.languages.keywords.IKeywordsProvider;
 import org.sonar.plugins.tsql.languages.keywords.KeywordsProvider;
 
@@ -53,7 +54,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 		}
 
 		final FileSystem fs = context.fileSystem();
-		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().all());
+		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));
 
 		for (final InputFile file : files) {
 			try {
@@ -66,44 +67,61 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 				tokens.fill();
 				final List<Token> alltokens = tokens.getTokens();
 				for (final Token token : alltokens) {
+					try {
+						if (token.getType() == tsqlParser.EOF) {
+							continue;
+						}
 
-					if (!skipCpdAnalysis && file instanceof DefaultInputFile && token.getType() != tsqlParser.EOF) {
-						cpdTokens.addToken(
-								((DefaultInputFile) file).newRange(token.getStartIndex(), token.getStopIndex() + 1),
-								token.getText());
-					}
+						if (!skipCpdAnalysis && file instanceof DefaultInputFile) {
+							cpdTokens.addToken(
+									((DefaultInputFile) file).newRange(token.getStartIndex(), token.getStopIndex()),
+									token.getText());
+						}
 
-					if (token.getType() == tsqlParser.COMMENT || token.getType() == tsqlParser.LINE_COMMENT) {
-						newHighlightning.highlight(token.getStartIndex(), token.getStopIndex() + 1, TypeOfText.COMMENT);
-						continue;
-					}
+						if (token.getType() == tsqlParser.COMMENT || token.getType() == tsqlParser.LINE_COMMENT) {
+							newHighlightning.highlight(token.getStartIndex(), token.getStopIndex(), TypeOfText.COMMENT);
+							continue;
+						}
 
-					if (token.getType() == tsqlParser.STRING) {
-						newHighlightning.highlight(token.getStartIndex(), token.getStopIndex() + 1, TypeOfText.STRING);
-						continue;
-					}
+						if (token.getType() == tsqlParser.STRING) {
+							newHighlightning.highlight(token.getStartIndex(), token.getStopIndex(), TypeOfText.STRING);
+							continue;
+						}
 
-					if (token.getType() > tsqlParser.LINE_COMMENT) {
-						continue;
-					}
+						if (token.getType() > tsqlParser.LINE_COMMENT) {
+							continue;
+						}
 
-					if (this.keywordsProvider.isKeyword(tsqlParser.VOCABULARY.getSymbolicName(token.getType()))) {
-						newHighlightning.highlight(token.getStartIndex(), token.getStopIndex() + 1, TypeOfText.KEYWORD);
+						if (this.keywordsProvider.isKeyword(tsqlParser.VOCABULARY.getSymbolicName(token.getType()))) {
+							newHighlightning.highlight(token.getStartIndex(), token.getStopIndex(), TypeOfText.KEYWORD);
+						}
+					} catch (final Throwable e) {
+						LOGGER.debug(
+								format("Unexpected error adding highlightings/tokens on file %s", file.absolutePath()),
+								e);
 					}
 				}
 
-				cpdTokens.save();
-				newHighlightning.save();
+				try {
+					cpdTokens.save();
+				} catch (final Throwable e) {
+					LOGGER.debug(format("Unexpected error saving cpdtokens on file %s", file.absolutePath()), e);
+				}
+				try {
+					newHighlightning.save();
+				} catch (final Throwable e) {
+					LOGGER.debug(format("Unexpected error saving highlightings on file %s", file.absolutePath()), e);
+				}
+
 			} catch (final Throwable e) {
-				LOGGER.warn(format("Unexpected exception adding highlightings/tokens on file %s", file.absolutePath()),
-						e);
+				LOGGER.warn(format("Unexpected error adding highlightings/tokens on file %s", file.absolutePath()), e);
 			}
 		}
 	}
 
 	@Override
 	public void describe(final SensorDescriptor descriptor) {
-		descriptor.name(this.getClass().getSimpleName());
+		descriptor.name(this.getClass().getSimpleName()).onlyOnLanguage(TSQLLanguage.KEY);
 	}
 
 }

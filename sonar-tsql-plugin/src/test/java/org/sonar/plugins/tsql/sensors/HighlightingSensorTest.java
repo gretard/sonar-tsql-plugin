@@ -31,12 +31,16 @@ public class HighlightingSensorTest {
 
 		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
 
-		DefaultInputFile ti = new DefaultInputFile("test", "test.sql");
-		ti.initMetadata(new String(Files.readAllBytes(baseFile.toPath())));
-		ti.setLanguage(TSQLLanguage.KEY);
+		DefaultInputFile file1 = new DefaultInputFile("test", "test.sql");
 
+		file1.initMetadata(new String(Files.readAllBytes(baseFile.toPath())));
+		file1.setLanguage(TSQLLanguage.KEY);
+
+		DefaultInputFile file2 = new DefaultInputFile("test", "test.php");
+		file2.setLanguage("php");
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
-		ctxTester.fileSystem().add(ti);
+		ctxTester.fileSystem().add(file1);
+		ctxTester.fileSystem().add(file2);
 		HighlightingSensor sensor = new HighlightingSensor(new Settings());
 		sensor.execute(ctxTester);
 
@@ -50,4 +54,5 @@ public class HighlightingSensorTest {
 		Assert.assertEquals(17, ctxTester.cpdTokens("test:test.sql").size());
 
 	}
+
 }

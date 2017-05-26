@@ -12,6 +12,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.rules.issues.IIssuesProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
@@ -90,7 +91,7 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 
 	@Override
 	public void describe(final SensorDescriptor descriptor) {
-		descriptor.name(this.getClass().getSimpleName());
+		descriptor.name(this.getClass().getSimpleName()).onlyOnLanguage(TSQLLanguage.KEY);
 	}
 
 }
