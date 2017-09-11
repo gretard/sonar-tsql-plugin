@@ -1,15 +1,29 @@
 package org.sonar.plugins.tsql;
 
+import org.sonar.plugins.tsql.languages.TSQLLanguage;
+
 public final class Constants {
 	public static final String PROFILE_NAME = "Sonar Way";
 
 	public static final String CG_REPORT_FILE = "sonar.tsql.cg.report";
-	
+
 	public static final String PLUGIN_SKIP = "sonar.tsql.skip";
-	
+
 	public static final String CG_APP_PATH = "sonar.tsql.cg.path";
 
 	public static final String MS_REPORT_FILE = "sonar.tsql.ms.report";
-	
+
 	public static final String PLUGIN_SKIP_CPD = "sonar.tsql.skip.cpd";
+
+	public static final String CG_REPO_KEY = TSQLLanguage.KEY.toLowerCase() + "-sqlcodeguard";
+
+	public static final String CG_REPO_NAME = TSQLLanguage.KEY.toLowerCase() + " SQL Code Guard";
+
+	public static final String CG_RULES_FILE = "/rules/cgsql-rules.xml";
+
+	public static final String MS_REPO_KEY = TSQLLanguage.KEY.toLowerCase() + "-mssql";
+
+	public static final String MS_REPO_NAME = TSQLLanguage.KEY.toLowerCase() + " Microsoft T-SQL";
+
+	public static final String MS_RULES_FILE = "/rules/vssql-rules.xml";
 }
