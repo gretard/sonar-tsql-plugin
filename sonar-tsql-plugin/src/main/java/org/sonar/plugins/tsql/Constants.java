@@ -26,4 +26,8 @@ public final class Constants {
 	public static final String MS_REPO_NAME = TSQLLanguage.KEY.toLowerCase() + " Microsoft T-SQL";
 
 	public static final String MS_RULES_FILE = "/rules/vssql-rules.xml";
+	
+	public static final String PLUGIN_CUSTOM_RULES_PATH = "sonar.tsql.customrules.paths";
+
+	public static final String PLUGIN_CUSTOM_RULES_PREFIX = "sonar.tsql.customrules.prefix";
 }

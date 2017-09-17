@@ -1,0 +1,119 @@
+<sql-rules repoName="CustomRules" repoKey="CustomRepo1" reportFile="">
+	<rule>
+		<key>C003</key>
+		<name>Cursor is not closed or deallocated</name>
+		<internalKey>C003</internalKey>
+		<descriptionFormat>HTML</descriptionFormat>
+		<description>
+			<![CDATA[<h2>Cursor is not closed or deallocated</h2><p>Cursor is not closed or deallocated.</p>]]>
+		</description>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<remediationFunction>LINEAR</remediationFunction>
+		<remediationFunctionBaseEffort/>
+		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+		<tag>best-practise</tag>
+		<ruleImplementation>
+			<className>Cursor_nameContext</className>
+			<usesRules>
+				<ruleImplementation>
+					<className>Cursor_statementContext</className>
+					<textToFind>
+						<textItem>DEALLOCATE</textItem>
+					</textToFind>
+					<ruleViolationMessage>Cursor was not deallocated</ruleViolationMessage>
+					<failIfFound>false</failIfFound>
+				</ruleImplementation>
+				<ruleImplementation>
+					<className>Cursor_statementContext</className>
+					<distance>1</distance>
+					<textToFind>
+						<textItem>CLOSE</textItem>
+					</textToFind>
+					<ruleViolationMessage>Cursor was not closed</ruleViolationMessage>
+					<failIfFound>false</failIfFound>
+				</ruleImplementation>
+				<ruleImplementation>
+					<className>Cursor_statementContext</className>
+					<distance>1</distance>
+					<textToFind>
+						<textItem>DECLARE</textItem>
+					</textToFind>
+					<ruleViolationMessage>Cursor was not declared</ruleViolationMessage>
+					<failIfFound>false</failIfFound>
+				</ruleImplementation>
+			</usesRules>
+			
+			<ruleViolationMessage/>
+			<failIfFound>false</failIfFound>
+		</ruleImplementation>
+	</rule>
+	<rule>
+		<key>C001</key>
+		<name>WAITFOR is used</name>
+		<internalKey>C001</internalKey>
+		<descriptionFormat>HTML</descriptionFormat>
+		<description>
+			<![CDATA[<h2>WAITFOR is used</h2><p>WAITFOR is used.</p>]]>
+		</description>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<remediationFunction>LINEAR</remediationFunction>
+		<remediationFunctionBaseEffort/>
+		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+		<tag>best-practise</tag>
+		<ruleImplementation>
+			<className>Waitfor_statementContext</className>
+			<distance>0</distance>
+			<textToFind>
+			</textToFind>
+			<ruleViolationMessage>Wait for is used</ruleViolationMessage>
+			<failIfFound>true</failIfFound>
+		</ruleImplementation>
+	</rule>
+	<rule>
+		<key>C002</key>
+		<name>Cursor is used</name>
+		<internalKey>C002</internalKey>
+		<descriptionFormat>HTML</descriptionFormat>
+		<description>
+			<![CDATA[<h2>Cursor is used</h2><p>Cursor is used.</p>]]>
+		</description>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<remediationFunction>LINEAR</remediationFunction>
+		<remediationFunctionBaseEffort/>
+		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+		<tag>best-practise</tag>
+		<ruleImplementation>
+			<className>Declare_cursorContext</className>
+			<failIfFound>true</failIfFound>
+		</ruleImplementation>
+	</rule>
+	<rule>
+		<key>C004</key>
+		<name>SELECT * is used</name>
+		<internalKey>C004</internalKey>
+		<descriptionFormat>HTML</descriptionFormat>
+		<description>
+			<![CDATA[<h2>SELECT * is used</h2><p>SELECT * is used.</p>]]>
+		</description>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<remediationFunction>LINEAR</remediationFunction>
+		<remediationFunctionBaseEffort/>
+		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+		<tag>best-practise</tag>
+		<ruleImplementation>
+			<className>Select_statementContext</className>
+			<failIfFound>true</failIfFound>
+			<textToFind>
+						<textItem>*</textItem>
+			</textToFind>
+		</ruleImplementation>
+	</rule>
+</sql-rules>

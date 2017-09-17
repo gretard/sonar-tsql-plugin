@@ -6,6 +6,7 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.languages.TSQLQualityProfile;
 import org.sonar.plugins.tsql.rules.definitions.CodeGuardRulesDefinition;
+import org.sonar.plugins.tsql.rules.definitions.CustomRulesDefinition;
 import org.sonar.plugins.tsql.rules.definitions.MsRulesDefinition;
 import org.sonar.plugins.tsql.sensors.CodeGuardIssuesLoaderSensor;
 import org.sonar.plugins.tsql.sensors.HighlightingSensor;
@@ -36,8 +37,14 @@ public class TSQLPlugin implements Plugin {
 				.description("Flag whether to disable code duplication detection").defaultValue("false")
 				.type(PropertyType.BOOLEAN).build());
 
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PATH)
+				.name("Path to the custom rules path").description("A comma separated list of custom rules files")
+				.defaultValue("").type(PropertyType.STRING).build());
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PREFIX)
+				.name("Custom rules file name prefix")
+				.defaultValue(".rules").type(PropertyType.STRING).build());
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
-		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class, MsIssuesLoaderSensor.class,
+		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class,CustomRulesDefinition.class, MsIssuesLoaderSensor.class,
 				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class);
 
 	}
