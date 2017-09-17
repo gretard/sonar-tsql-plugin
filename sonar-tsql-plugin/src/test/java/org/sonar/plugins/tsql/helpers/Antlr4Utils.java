@@ -1,5 +1,7 @@
 package org.sonar.plugins.tsql.helpers;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
 
@@ -56,12 +58,26 @@ public class Antlr4Utils {
 		result.setTree(tree);
 		return result;
 	}
-
+	public static AntrlResult getFull(InputStream stream) throws IOException {
+		final CharStream charStream = CharStreams.fromStream(stream);
+		final tsqlLexer lexer = new tsqlLexer(charStream);
+		final CommonTokenStream tokens = new CommonTokenStream(lexer);
+		tokens.fill();
+		final tsqlParser parser = new tsqlParser(tokens);
+		final Tsql_fileContext tree = parser.tsql_file();
+		AntrlResult result = new AntrlResult();
+		result.setStream(tokens);
+		result.setTree(tree);
+		return result;
+	}
 	public static String ruleToString(Rule... rules) {
 
 		String xmlString = "";
 		try {
 			CustomRules customRules = new CustomRules();
+			customRules.setRepoKey("CustomRepo1");
+			customRules.setRepoName("Custom rules");
+			
 			customRules.getRule().addAll(Arrays.asList(rules));
 			JAXBContext context = JAXBContext.newInstance(CustomRules.class);
 			Marshaller m = context.createMarshaller();
@@ -236,9 +252,10 @@ public class Antlr4Utils {
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("Column number is used in order by clause");
+		child2.setRuleViolationMessage("It is better to use sp_execute for dynamic queries.");
+			
 		RuleImplementation impl = new RuleImplementation();
-
+		impl.getChildrenRules().getRuleImplementation().add(child2);
 		impl.getNames().getTextItem().add(Execute_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
@@ -286,17 +303,24 @@ public class Antlr4Utils {
 		child2.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
 		child2.getTextToFind().getTextItem().add("CLOSE");
 		child2.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
-		child2.setTimes(1);
 		child2.setRuleMatchType(RuleMatchType.STRICT);
-		child2.setRuleViolationMessage("Cursor was closed in a control statement");
+		child2.setRuleViolationMessage("Cursor was closed in a  different control statement");
+	
+		RuleImplementation child3 = new RuleImplementation();
+		child3.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
+		child3.getTextToFind().getTextItem().add("DEALLOCATE");
+		child3.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		child3.setRuleMatchType(RuleMatchType.STRICT);
+		child3.setRuleViolationMessage("Cursor was deallocated in a different control statement");
 
 		RuleImplementation parent0 = new RuleImplementation();
 		parent0.getNames().getTextItem().add(Declare_cursorContext.class.getSimpleName());
 		parent0.setRuleResultType(RuleResultType.DEFAULT);
-		parent0.setRuleMatchType(RuleMatchType.DEFAULT);
+		parent0.setRuleMatchType(RuleMatchType.FULL);
 		parent0.setRuleViolationMessage("");
 
 		parent0.getUsesRules().getRuleImplementation().add(child2);
+		parent0.getUsesRules().getRuleImplementation().add(child3);
 
 		RuleImplementation parent = new RuleImplementation();
 		parent.getNames().getTextItem().add(Cursor_nameContext.class.getSimpleName());

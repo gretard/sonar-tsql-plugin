@@ -54,7 +54,7 @@ public class HighlightingSensorTest {
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
 		ctxTester.fileSystem().add(file1);
 		ctxTester.fileSystem().add(file2);
-		HighlightingSensor sensor = new HighlightingSensor(settings);
+		HighlightingSensor sensor = new HighlightingSensor( settings);
 		sensor.execute(ctxTester);
 		Collection<Issue> issues = ctxTester.allIssues();
 		for (Issue is : issues) {

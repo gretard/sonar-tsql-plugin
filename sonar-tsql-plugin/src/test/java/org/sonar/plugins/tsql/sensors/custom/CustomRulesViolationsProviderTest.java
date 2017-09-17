@@ -1,5 +1,8 @@
 package org.sonar.plugins.tsql.sensors.custom;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Assert;
 import org.junit.Test;
@@ -74,7 +77,20 @@ public class CustomRulesViolationsProviderTest {
 
 		Assert.assertEquals(1, issues.length);
 	}
+	@Test
+	public void testExecRule() {
 
+		CustomRules customRules = new CustomRules();
+		customRules.setRepoKey("test");
+		customRules.getRule().add(Antlr4Utils.getExecRule());
+
+		AntrlResult result = Antlr4Utils.getFull("exec ('select 1'); EXEC Sales.usp_GetSalesYTD;");
+		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
+		ParseTree root = result.getTree();
+		TsqlIssue[] issues = provider.getIssues(root, customRules);
+
+		Assert.assertEquals(1, issues.length);
+	}
 	@Test
 	public void testGetOrderByFalse() {
 		CustomRules customRules = new CustomRules();
@@ -124,6 +140,21 @@ public class CustomRulesViolationsProviderTest {
 
 		AntrlResult result = Antlr4Utils.getFull(
 				"DECLARE vendor_cursor CURSOR FOR SELECT Vendor ID, Name  FROM Purchasing.Vendor; BEGIN  CLOSE vendor_cursor; END;  ");
+		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
+		ParseTree root = result.getTree();
+		TsqlIssue[] issues = provider.getIssues(root, customRules);
+		Assert.assertEquals(1, issues.length);
+	}
+	
+	@Test
+	public void testGetSameParent2() throws IOException {
+		final InputStream stream = this.getClass().getResourceAsStream("/testFiles/cursorFlow.sql");
+
+		CustomRules customRules = new CustomRules();
+		customRules.setRepoKey("test");
+		customRules.getRule().add(Antlr4Utils.getSameFlow());
+
+		AntrlResult result = Antlr4Utils.getFull(				stream);
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
 		ParseTree root = result.getTree();
 		TsqlIssue[] issues = provider.getIssues(root, customRules);

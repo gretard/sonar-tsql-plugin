@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
@@ -28,7 +29,7 @@ public class CustomRulesDefinition implements RulesDefinition {
 
 	private void defineRulesForLanguage(final Context context) {
 
-		final Map<String, CustomRules> rules = provider.getRules(this.settings);
+		final Map<String, CustomRules> rules = provider.getRules(null, this.settings);
 
 		for (final String key : rules.keySet()) {
 

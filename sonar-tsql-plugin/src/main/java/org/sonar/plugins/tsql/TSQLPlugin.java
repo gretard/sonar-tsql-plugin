@@ -42,7 +42,7 @@ public class TSQLPlugin implements Plugin {
 				.defaultValue("").type(PropertyType.STRING).build());
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PREFIX)
 				.name("Custom rules file name prefix")
-				.defaultValue(".rules").type(PropertyType.STRING).build());
+				.defaultValue(".customRules").type(PropertyType.STRING).build());
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
 		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class,CustomRulesDefinition.class, MsIssuesLoaderSensor.class,
 				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class);

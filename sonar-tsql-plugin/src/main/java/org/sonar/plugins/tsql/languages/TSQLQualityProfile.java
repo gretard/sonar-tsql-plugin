@@ -37,8 +37,8 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 		activeRules(profile, Constants.CG_REPO_KEY, Constants.CG_RULES_FILE);
 		activeRules(profile, Constants.MS_REPO_KEY, Constants.MS_RULES_FILE);
 
-		final Map<String, org.sonar.plugins.tsql.rules.custom.CustomRules> rules = customRulesProvider
-				.getRules(this.settings);
+		final Map<String, org.sonar.plugins.tsql.rules.custom.CustomRules> rules = customRulesProvider.getRules(null,
+				this.settings);
 
 		for (String key : rules.keySet()) {
 			try {

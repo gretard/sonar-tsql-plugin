@@ -24,14 +24,17 @@ import org.sonar.plugins.tsql.rules.custom.CustomRules;
 public class CustomRulesProvider {
 	private static final Logger LOGGER = Loggers.get(CustomRulesProvider.class);
 
-	public Map<String, CustomRules> getRules(final Settings settings) {
+	public Map<String, CustomRules> getRules(String baseDir, final Settings settings) {
 
 		final HashMap<String, CustomRules> rulesRepositories = new HashMap<String, CustomRules>();
 		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
 		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
 		final List<String> updatedPaths = new LinkedList<String>();
 		for (final String path : paths) {
-			final File f = new File(path);
+			File f = new File(path);
+			if (baseDir != null && !f.isAbsolute()) {
+				f = new File(baseDir, path);
+			}
 			if (f.isDirectory()) {
 
 				f.listFiles(new FileFilter() {

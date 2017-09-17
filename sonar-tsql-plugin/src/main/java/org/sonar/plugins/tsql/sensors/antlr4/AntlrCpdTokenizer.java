@@ -31,7 +31,7 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 		for (final Token token : alltokens) {
 			try {
 
-				cpdTokens.addToken(((DefaultInputFile) file).newRange(token.getStartIndex(), token.getStopIndex()),
+				cpdTokens.addToken(((DefaultInputFile) file).newRange(token.getStartIndex(), token.getStopIndex()+1),
 						token.getText());
 
 			} catch (final Throwable e) {

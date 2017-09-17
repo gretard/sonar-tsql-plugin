@@ -23,7 +23,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 	}
 
 	public TsqlIssue[] getIssues(ParsedNode... nodes) {
-		LOGGER.info(String.format("Have %s nodes for checking", nodes.length));
+		LOGGER.debug(String.format("Have %s nodes for checking", nodes.length));
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
 
 		for (final ParsedNode node : nodes) {
@@ -39,7 +39,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 				RuleImplementation rrule = st.getKey();
 				List<ParsedNode> vNodes = st.getValue();
 				int found = vNodes.size();
-
+				
 				switch (rrule.getRuleResultType()) {
 				case DEFAULT:
 					break;
@@ -86,12 +86,12 @@ public class CustomViolationsProvider implements IViolationsProvider {
 				}
 
 			}
-			LOGGER.info(String.format("Found %s violations for %s on rule %s", violated.size(), node.getText(),
-					rule.getRuleViolationMessage()));
+			LOGGER.debug(String.format("Found %s violations on rule %s for %s", violated.size(), 
+					ruleDefinition.getKey(), node.getText()));
 
 			if (!shouldSkip && violated.size() > 0) {
 
-				TsqlIssue issue = new TsqlIssue();
+				final TsqlIssue issue = new TsqlIssue();
 				issue.setDescription(sb.toString());
 				issue.setType(ruleDefinition.getKey());
 				issue.setLine(this.linesProvider.getLine(node));

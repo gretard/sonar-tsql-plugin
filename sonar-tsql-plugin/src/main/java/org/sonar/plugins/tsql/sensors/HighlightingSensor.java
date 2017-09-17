@@ -24,16 +24,11 @@ import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
 public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 	private static final Logger LOGGER = Loggers.get(HighlightingSensor.class);
-	private final IAntlrSensor[] sensors;
 	protected final Settings settings;
 	CustomRulesProvider provider = new CustomRulesProvider();
 
 	public HighlightingSensor(final Settings settings) {
 		this.settings = settings;
-		final CustomRules[] rules = this.provider.getRules(settings).values().toArray(new CustomRules[0]);
-		sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
-
-				new AntlrCustomRulesSensor(rules) };
 	}
 
 	@Override
@@ -43,7 +38,10 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 	@Override
 	public void execute(final org.sonar.api.batch.sensor.SensorContext context) {
+		final CustomRules[] rules = provider.getRules(context.fileSystem().baseDir().getAbsolutePath(), settings).values().toArray(new CustomRules[0]);
+		IAntlrSensor[] sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
 
+				new AntlrCustomRulesSensor(rules) };
 		final boolean skipAnalysis = this.settings.getBoolean(Constants.PLUGIN_SKIP);
 
 		if (skipAnalysis) {
