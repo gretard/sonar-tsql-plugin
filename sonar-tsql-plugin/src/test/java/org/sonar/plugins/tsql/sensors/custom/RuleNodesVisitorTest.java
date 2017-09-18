@@ -1,7 +1,5 @@
 package org.sonar.plugins.tsql.sensors.custom;
 
-import static org.junit.Assert.*;
-
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -47,7 +45,7 @@ public class RuleNodesVisitorTest {
 		final Tsql_fileContext tree = parser.tsql_file();
 		Rule rule = new Rule();
 		RuleImplementation impl = new RuleImplementation();
-		//impl.setInSameFlow(true);
+		// impl.setInSameFlow(true);
 		impl.setRuleMode(RuleMode.GROUP);
 		impl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		// impl.setClassName(Select_statementContext.class.getSimpleName());

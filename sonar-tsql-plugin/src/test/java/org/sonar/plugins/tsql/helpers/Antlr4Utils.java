@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -58,6 +59,7 @@ public class Antlr4Utils {
 		result.setTree(tree);
 		return result;
 	}
+
 	public static AntrlResult getFull(InputStream stream) throws IOException {
 		final CharStream charStream = CharStreams.fromStream(stream);
 		final tsqlLexer lexer = new tsqlLexer(charStream);
@@ -70,15 +72,36 @@ public class Antlr4Utils {
 		result.setTree(tree);
 		return result;
 	}
-	public static String ruleToString(Rule... rules) {
 
+	public static String ruleToString(CustomRules customRules) {
+
+		for (Rule r: customRules.getRule()) {
+			List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
+			List<String> violating = r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample();
+			if (compliant.isEmpty() && violating.isEmpty()){
+				continue;
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append(r.getDescription());
+			sb.append("<h2>Code examples</h2>");
+			if (!violating.isEmpty()) {
+				sb.append("<h3>Non-compliant</h3>");
+				for (String x : violating) {
+					sb.append("<code>"+x+"</code>");
+				}
+			}
+			
+			if (!compliant.isEmpty()) {
+				sb.append("<h3>Compliant</h3>");
+				for (String x : compliant) {
+					sb.append("<code>"+x+"</code>");
+				}
+			}
+			r.setDescription(sb.toString());
+		
+		}
 		String xmlString = "";
 		try {
-			CustomRules customRules = new CustomRules();
-			customRules.setRepoKey("tsqlDemoRepo");
-			customRules.setRepoName("Demo rules");
-			
-			customRules.getRule().addAll(Arrays.asList(rules));
 			JAXBContext context = JAXBContext.newInstance(CustomRules.class);
 			Marshaller m = context.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To
@@ -91,6 +114,16 @@ public class Antlr4Utils {
 		}
 
 		return xmlString;
+	}
+
+	public static CustomRules getCustomRules() {
+		CustomRules customRules = new CustomRules();
+		customRules.setRepoKey("tsqlDemoRepo");
+		customRules.setRepoName("Demo rules");
+
+		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getCursorRule(),
+				getInsertRule(), getOrderByRule(), getExecRule(), getMultipleDeclarations(), getSameFlow()));
+		return customRules;
 	}
 
 	public static Rule getWaitForRule() {
@@ -107,13 +140,14 @@ public class Antlr4Utils {
 		rule.setRuleImplementation(impl);
 		return rule;
 	}
-	
+
 	public static Rule getSelectAllRule() {
 		Rule rule = new Rule();
 		rule.setKey("C002");
 		rule.setInternalKey("C002");
 		rule.setName("SELECT * is used");
-		rule.setDescription("<h2>Description</h2><p>SELECT * is used. Please list names.</p><h2>Examples</h2><h3>Non-compliant</h3><code>SELECT * from dbo.test;</code><h3>Compliant</h3><code>SELECT name from dbo.test;</code>");
+		rule.setDescription(
+				"<h2>Description</h2><p>SELECT * is used. Please list names.</p>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Select_list_elemContext.class.getSimpleName());
@@ -129,6 +163,8 @@ public class Antlr4Utils {
 		impl.getNames().getTextItem().add(Select_listContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.DEFAULT);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test;");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT name, surname from dbo.test;");
 		rule.setRuleImplementation(impl);
 
 		return rule;
@@ -190,7 +226,8 @@ public class Antlr4Utils {
 		rule.setKey("C004");
 		rule.setInternalKey("C004");
 		rule.setName("INSERT statement does not have columns listed");
-		rule.setDescription("<h2>Description</h2><p>Always use a column list in your INSERT statements.</p><h2>Examples</h2><h3>Non-compliant</h3><code>INSERT INTO dbo.test VALUES (1,2)</code><h3>Compliant</h3><code>INSERT INTO dbo.test (a,b) VALUES (1,2)</code>");
+		rule.setDescription(
+				"<h2>Description</h2><p>Always use a column list in your INSERT statements.</p>");
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Column_name_listContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
@@ -204,6 +241,10 @@ public class Antlr4Utils {
 		impl.getNames().getTextItem().add(Insert_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.DEFAULT);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
+		
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("INSERT INTO dbo.test VALUES (1,2);");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("INSERT INTO dbo.test (a,b) VALUES (1,2);");
+		
 		rule.setRuleImplementation(impl);
 
 		return rule;
@@ -214,7 +255,8 @@ public class Antlr4Utils {
 		rule.setKey("C005");
 		rule.setInternalKey("C005");
 		rule.setName("Do not use column numbers in the ORDER BY clause");
-		rule.setDescription("<h2>Description</h2><p>Always use column names in an order by clause. Avoid positional references.</p><h2>Examples</h2><h3>Non-compliant</h3><code>SELECT * from dbo.test order by 1;</code><h3>Compliant</h3><code>SELECT name from dbo.test order by name;</code>");
+		rule.setDescription(
+				"<h2>Description</h2><p>Always use column names in an order by clause. Avoid positional references.</p>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
@@ -230,6 +272,9 @@ public class Antlr4Utils {
 		impl.setRuleMatchType(RuleMatchType.DEFAULT);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
 		impl.setRuleViolationMessage("");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by 1;");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by name;");
+	
 		rule.setRuleImplementation(impl);
 		return rule;
 	}
@@ -240,23 +285,35 @@ public class Antlr4Utils {
 		rule.setInternalKey("C006");
 		rule.setName("Execute/exec for dynamic query was used");
 		rule.setDescription(".");
-		rule.setDescription("<h2>Description</h2><p>Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p><h2>Examples</h2><h3>Non-compliant</h3><code>EXEC ('SELECT 1');</code><h3>Compliant</h3><code>EXECUTE sp_executesql N'select 1';</code>");
+		rule.setDescription(
+				"<h2>Description</h2><p>Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.");
-			
-		
-		
+		child2.setRuleViolationMessage(
+				"Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.");
+
+		RuleImplementation skipSubRule = new RuleImplementation();
+		skipSubRule.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
+		skipSubRule.setTextCheckType(TextCheckType.CONTAINS);
+		skipSubRule.getTextToFind().getTextItem().add("sp_executesql");
+		skipSubRule.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
+		skipSubRule.setRuleMatchType(RuleMatchType.TEXT_ONLY);
+		skipSubRule.setRuleViolationMessage("Sp_executesql was found.");
+
 		RuleImplementation impl = new RuleImplementation();
 		impl.getChildrenRules().getRuleImplementation().add(child2);
+		impl.getChildrenRules().getRuleImplementation().add(skipSubRule);
 		impl.getNames().getTextItem().add(Execute_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC ('SELECT 1');");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("EXECUTE sp_executesql N'select 1';");
 		rule.setRuleImplementation(impl);
+
 		return rule;
 	}
 
@@ -300,7 +357,7 @@ public class Antlr4Utils {
 		child2.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child2.setRuleMatchType(RuleMatchType.STRICT);
 		child2.setRuleViolationMessage("Cursor was closed in a different control statement.");
-	
+
 		RuleImplementation child3 = new RuleImplementation();
 		child3.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
 		child3.getTextToFind().getTextItem().add("DEALLOCATE");
@@ -330,8 +387,7 @@ public class Antlr4Utils {
 
 	public static void main(String[] args) {
 
-		System.out.println(ruleToString(getWaitForRule(), getSelectAllRule(), getCursorRule(), getInsertRule(),
-				getOrderByRule(), getExecRule(), getMultipleDeclarations(), getSameFlow()));
+		System.out.println(ruleToString(getCustomRules()));
 
 	}
 }

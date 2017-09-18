@@ -1,6 +1,7 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="textItem" type="xs:string"/>
   <xs:element name="className" type="xs:string"/>
+  <xs:element name="ruleCodeExample" type="xs:string"/>
   <xs:element name="distance" type="xs:int"/>
   <xs:simpleType name="ruleResultType" final="restriction" >
     <xs:restriction base="xs:string">
@@ -46,6 +47,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+
   <xs:element name="names">
     <xs:complexType mixed="false">
       <xs:sequence>
@@ -69,9 +71,27 @@
         <xs:element name="ruleMatchType" type="ruleMatchType" />
         <xs:element name="ruleResultType" type="ruleResultType" />
         <xs:element name="textCheckType" type="textCheckType" />
+          <xs:element ref="violatingRulesCodeExamples"/>
+            <xs:element ref="compliantRulesCodeExamples"/>
+        
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+   <xs:element name="violatingRulesCodeExamples">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ruleCodeExample" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+     <xs:element name="compliantRulesCodeExamples">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ruleCodeExample" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
   <xs:element name="parentRules">
     <xs:complexType>
       <xs:sequence>
