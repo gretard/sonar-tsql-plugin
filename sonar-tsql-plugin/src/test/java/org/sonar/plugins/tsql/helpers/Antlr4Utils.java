@@ -22,6 +22,7 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Declare_cursorContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Execute_statementContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Func_proc_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Insert_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_listContext;
@@ -297,11 +298,11 @@ public class Antlr4Utils {
 				"Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.");
 
 		RuleImplementation skipSubRule = new RuleImplementation();
-		skipSubRule.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
+		skipSubRule.getNames().getTextItem().add(Func_proc_nameContext.class.getSimpleName());
 		skipSubRule.setTextCheckType(TextCheckType.CONTAINS);
 		skipSubRule.getTextToFind().getTextItem().add("sp_executesql");
 		skipSubRule.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
-		skipSubRule.setRuleMatchType(RuleMatchType.TEXT_ONLY);
+		skipSubRule.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		skipSubRule.setRuleViolationMessage("Sp_executesql was found.");
 
 		RuleImplementation impl = new RuleImplementation();
