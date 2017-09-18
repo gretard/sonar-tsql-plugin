@@ -25,7 +25,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 	private static final Logger LOGGER = Loggers.get(HighlightingSensor.class);
 	protected final Settings settings;
-	CustomRulesProvider provider = new CustomRulesProvider();
+	private final CustomRulesProvider provider = new CustomRulesProvider();
 
 	public HighlightingSensor(final Settings settings) {
 		this.settings = settings;
@@ -38,16 +38,16 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 	@Override
 	public void execute(final org.sonar.api.batch.sensor.SensorContext context) {
-		final CustomRules[] rules = provider.getRules(context.fileSystem().baseDir().getAbsolutePath(), settings).values().toArray(new CustomRules[0]);
-		IAntlrSensor[] sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
-
-				new AntlrCustomRulesSensor(rules) };
 		final boolean skipAnalysis = this.settings.getBoolean(Constants.PLUGIN_SKIP);
 
 		if (skipAnalysis) {
 			LOGGER.debug("Skipping plugin as skip flag is set");
 			return;
 		}
+		final CustomRules[] rules = provider.getRules(context.fileSystem().baseDir().getAbsolutePath(), settings)
+				.values().toArray(new CustomRules[0]);
+		final IAntlrSensor[] sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
+				new AntlrCustomRulesSensor(rules) };
 
 		final FileSystem fs = context.fileSystem();
 		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));

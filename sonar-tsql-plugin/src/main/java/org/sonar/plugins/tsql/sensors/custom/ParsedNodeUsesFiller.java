@@ -8,13 +8,13 @@ import org.sonar.plugins.tsql.rules.custom.RuleMode;
 
 public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 
-	private ParseTree tree;
+	private final ParseTree tree;
 
 	public ParsedNodeUsesFiller(ParseTree tree) {
 		this.tree = tree;
 	}
 
-	UsesFindRule main = new UsesFindRule();
+	final UsesFindRule main = new UsesFindRule();
 	private ParsedNode[] nodes;
 	private Rule rule;
 
@@ -41,7 +41,7 @@ public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 	}
 
 	@Override
-	public void fill(Rule rule, ParsedNode... nodes) {
+	public void fill(final Rule rule, final ParsedNode... nodes) {
 		if (rule.getRuleImplementation().getRuleMode() == RuleMode.GROUP) {
 			this.nodes = nodes;
 			this.rule = rule;

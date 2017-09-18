@@ -34,12 +34,12 @@ public class AntlrHighlighter implements IAntlrSensor {
 				}
 
 				if (token.getType() == tsqlParser.COMMENT || token.getType() == tsqlParser.LINE_COMMENT) {
-					newHighlightning.highlight(token.getStartIndex(), token.getStopIndex(), TypeOfText.COMMENT);
+					newHighlightning.highlight(token.getStartIndex(), token.getStopIndex()+1, TypeOfText.COMMENT);
 					continue;
 				}
 
 				if (token.getType() == tsqlParser.STRING) {
-					newHighlightning.highlight(token.getStartIndex(), token.getStopIndex(), TypeOfText.STRING);
+					newHighlightning.highlight(token.getStartIndex(), token.getStopIndex()+1, TypeOfText.STRING);
 					continue;
 				}
 
@@ -48,7 +48,7 @@ public class AntlrHighlighter implements IAntlrSensor {
 				}
 
 				if (this.keywordsProvider.isKeyword(tsqlParser.VOCABULARY.getSymbolicName(token.getType()))) {
-					newHighlightning.highlight(token.getStartIndex(), token.getStopIndex(), TypeOfText.KEYWORD);
+					newHighlightning.highlight(token.getStartIndex(), token.getStopIndex()+1, TypeOfText.KEYWORD);
 				}
 			} catch (final Throwable e) {
 				LOGGER.debug(format("Unexpected error adding highlightings/tokens on file %s", file.absolutePath()), e);

@@ -18,7 +18,7 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 	private static final Logger LOGGER = Loggers.get(AntlrCpdTokenizer.class);
 
 	@Override
-	public void work(SensorContext context, CommonTokenStream stream, InputFile file) {
+	public void work(final SensorContext context, final CommonTokenStream stream, InputFile file) {
 		final boolean skipCpdAnalysis = context.settings().getBoolean(Constants.PLUGIN_SKIP_CPD);
 
 		if (skipCpdAnalysis || !(file instanceof DefaultInputFile)) {

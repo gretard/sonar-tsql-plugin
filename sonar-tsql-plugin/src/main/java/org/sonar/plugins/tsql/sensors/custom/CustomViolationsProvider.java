@@ -22,7 +22,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 		this.linesProvider = linesProvider;
 	}
 
-	public TsqlIssue[] getIssues(ParsedNode... nodes) {
+	public TsqlIssue[] getIssues(final ParsedNode... nodes) {
 		LOGGER.debug(String.format("Have %s nodes for checking", nodes.length));
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
 
@@ -34,11 +34,11 @@ public class CustomViolationsProvider implements IViolationsProvider {
 
 			final StringBuilder sb = new StringBuilder();
 			boolean shouldSkip = false;
-			List<RuleImplementation> violated = new LinkedList<>();
+			final List<RuleImplementation> violated = new LinkedList<>();
 			for (Entry<RuleImplementation, List<ParsedNode>> st : statuses.entrySet()) {
-				RuleImplementation rrule = st.getKey();
-				List<ParsedNode> vNodes = st.getValue();
-				int found = vNodes.size();
+				final RuleImplementation rrule = st.getKey();
+				final List<ParsedNode> vNodes = st.getValue();
+				final int found = vNodes.size();
 				
 				switch (rrule.getRuleResultType()) {
 				case DEFAULT:
@@ -180,7 +180,6 @@ public class CustomViolationsProvider implements IViolationsProvider {
 
 		for (final RuleImplementation siblingRule : rule.getSiblingsRules().getRuleImplementation()) {
 			visit(ruleDefinition, siblingRule, rule, root, Direction.SIBLING, statuses);
-
 		}
 		for (final RuleImplementation parentRule : rule.getParentRules().getRuleImplementation()) {
 			visit(ruleDefinition, parentRule, rule, root, Direction.PARENT, statuses);

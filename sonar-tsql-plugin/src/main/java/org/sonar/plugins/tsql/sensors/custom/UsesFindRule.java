@@ -7,9 +7,9 @@ import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 public class UsesFindRule{
 
 	
-	public boolean root(ParsedNode item, ParseTree candidate, Rule rule) {
+	public boolean root(final ParsedNode item, final ParseTree candidate,final  Rule rule) {
 
-		RuleImplementation impl = rule.getRuleImplementation();
+		final RuleImplementation impl = rule.getRuleImplementation();
 		if (impl == null || candidate == null || item.getItem() == candidate 
 				|| !candidate.getText().contains(item.getName())) {
 			return false;

@@ -18,7 +18,7 @@ public class CodeGuardExecutingReportsProvider implements IReporsProvider {
 
 	private final TempFolder folder;
 
-	private Settings settings;
+	private final Settings settings;
 
 	public CodeGuardExecutingReportsProvider(final Settings settings, final TempFolder folder) {
 		this.settings = settings;

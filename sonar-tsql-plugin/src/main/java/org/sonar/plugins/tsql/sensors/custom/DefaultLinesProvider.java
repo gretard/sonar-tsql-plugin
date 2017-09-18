@@ -6,16 +6,16 @@ import org.antlr.v4.runtime.misc.Interval;
 
 public class DefaultLinesProvider implements ILinesProvider {
 
-	private CommonTokenStream stream;
+	private final CommonTokenStream stream;
 
-	public DefaultLinesProvider(CommonTokenStream stream) {
+	public DefaultLinesProvider(final CommonTokenStream stream) {
 		this.stream = stream;
 	}
 
 	@Override
 	public int getLine(ParsedNode node) {
-		Interval sourceInterval = node.getItem().getSourceInterval();
-		Token firstToken = stream.get(sourceInterval.a);
+		final Interval sourceInterval = node.getItem().getSourceInterval();
+		final Token firstToken = stream.get(sourceInterval.a);
 		int line = firstToken.getLine();
 		return line;
 	}

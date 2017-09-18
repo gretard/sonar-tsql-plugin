@@ -75,18 +75,13 @@ public class Antlr4Utils {
 		String xmlString = "";
 		try {
 			CustomRules customRules = new CustomRules();
-			customRules.setRepoKey("CustomRepo1");
-			customRules.setRepoName("Custom rules");
+			customRules.setRepoKey("tsqlDemoRepo");
+			customRules.setRepoName("Demo rules");
 			
 			customRules.getRule().addAll(Arrays.asList(rules));
 			JAXBContext context = JAXBContext.newInstance(CustomRules.class);
 			Marshaller m = context.createMarshaller();
-
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To
-			// m.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION,
-			// Boolean.FALSE); // format
-			// XML
-
 			StringWriter sw = new StringWriter();
 			m.marshal(customRules, sw);
 			xmlString = sw.toString();
@@ -102,23 +97,23 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C001");
 		rule.setInternalKey("C001");
-		rule.setDescription("WAITFOR is used");
-		rule.setName("WAITFOR is used");
+		rule.setDescription("Waitfor is used");
+		rule.setName("Waitfor is used.");
 		RuleImplementation impl = new RuleImplementation();
 		impl.getNames().getTextItem().add(Waitfor_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
-		impl.setRuleViolationMessage("Waitfor is used");
+		impl.setRuleViolationMessage("Waitfor is used.");
 		rule.setRuleImplementation(impl);
 		return rule;
 	}
-
+	
 	public static Rule getSelectAllRule() {
 		Rule rule = new Rule();
 		rule.setKey("C002");
 		rule.setInternalKey("C002");
 		rule.setName("SELECT * is used");
-		rule.setDescription("SELECT * is used");
+		rule.setDescription("<h2>Description</h2><p>SELECT * is used. Please list names.</p><h2>Examples</h2><h3>Non-compliant</h3><code>SELECT * from dbo.test;</code><h3>Compliant</h3><code>SELECT name from dbo.test;</code>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Select_list_elemContext.class.getSimpleName());
@@ -134,7 +129,6 @@ public class Antlr4Utils {
 		impl.getNames().getTextItem().add(Select_listContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.DEFAULT);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
-		impl.setRuleViolationMessage("SELECT IS USED");
 		rule.setRuleImplementation(impl);
 
 		return rule;
@@ -159,28 +153,28 @@ public class Antlr4Utils {
 		child.getTextToFind().getTextItem().add("OPEN");
 		child.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child.setRuleMatchType(RuleMatchType.FULL);
-		child.setRuleViolationMessage("Cursor was not opened");
+		child.setRuleViolationMessage("Cursor was not opened.");
 
 		RuleImplementation childClose = new RuleImplementation();
 		childClose.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
 		childClose.getTextToFind().getTextItem().add("CLOSE");
 		childClose.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		childClose.setRuleMatchType(RuleMatchType.FULL);
-		childClose.setRuleViolationMessage("Cursor was not closed");
+		childClose.setRuleViolationMessage("Cursor was not closed.");
 
 		RuleImplementation childDeallocate = new RuleImplementation();
 		childDeallocate.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
 		childDeallocate.getTextToFind().getTextItem().add("DEALLOCATE");
 		childDeallocate.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		childDeallocate.setRuleMatchType(RuleMatchType.FULL);
-		childDeallocate.setRuleViolationMessage("Cursor was not deallocated");
+		childDeallocate.setRuleViolationMessage("Cursor was not deallocated.");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
 		child2.getTextToFind().getTextItem().add("DECLARE");
 		child2.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child2.setRuleMatchType(RuleMatchType.FULL);
-		child2.setRuleViolationMessage("Cursor was not declared");
+		child2.setRuleViolationMessage("Cursor was not declared.");
 
 		impl.getUsesRules().getRuleImplementation().add(child);
 		impl.getUsesRules().getRuleImplementation().add(child2);
@@ -196,7 +190,7 @@ public class Antlr4Utils {
 		rule.setKey("C004");
 		rule.setInternalKey("C004");
 		rule.setName("INSERT statement does not have columns listed");
-		rule.setDescription("Always use a column list in your INSERT statements");
+		rule.setDescription("<h2>Description</h2><p>Always use a column list in your INSERT statements.</p><h2>Examples</h2><h3>Non-compliant</h3><code>INSERT INTO dbo.test VALUES (1,2)</code><h3>Compliant</h3><code>INSERT INTO dbo.test (a,b) VALUES (1,2)</code>");
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Column_name_listContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
@@ -220,14 +214,14 @@ public class Antlr4Utils {
 		rule.setKey("C005");
 		rule.setInternalKey("C005");
 		rule.setName("Do not use column numbers in the ORDER BY clause");
-		rule.setDescription("Always use column names in an order by clause. Avoid positional references.");
+		rule.setDescription("<h2>Description</h2><p>Always use column names in an order by clause. Avoid positional references.</p><h2>Examples</h2><h3>Non-compliant</h3><code>SELECT * from dbo.test order by 1;</code><h3>Compliant</h3><code>SELECT name from dbo.test order by name;</code>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("Column number is used in order by clause");
+		child2.setRuleViolationMessage("Column number is used instead of name in order by clause");
 
 		RuleImplementation impl = new RuleImplementation();
 
@@ -244,22 +238,24 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C006");
 		rule.setInternalKey("C006");
-		rule.setName("Bad practice");
-		rule.setDescription("Better use sp_execute.");
+		rule.setName("Execute/exec for dynamic query was used");
+		rule.setDescription(".");
+		rule.setDescription("<h2>Description</h2><p>Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p><h2>Examples</h2><h3>Non-compliant</h3><code>EXEC ('SELECT 1');</code><h3>Compliant</h3><code>EXECUTE sp_executesql N'select 1';</code>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("It is better to use sp_execute for dynamic queries.");
+		child2.setRuleViolationMessage("Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.");
 			
+		
+		
 		RuleImplementation impl = new RuleImplementation();
 		impl.getChildrenRules().getRuleImplementation().add(child2);
 		impl.getNames().getTextItem().add(Execute_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
-		impl.setRuleViolationMessage("Execute was used");
 		rule.setRuleImplementation(impl);
 		return rule;
 	}
@@ -268,7 +264,7 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C007");
 		rule.setInternalKey("C007");
-		rule.setName("Multiple  cursor declarations found");
+		rule.setName("Multiple cursor declarations found");
 		rule.setDescription("Multiple cursor declarations found");
 
 		RuleImplementation child2 = new RuleImplementation();
@@ -277,7 +273,7 @@ public class Antlr4Utils {
 		child2.setRuleResultType(RuleResultType.FAIL_IF_MORE_FOUND);
 		child2.setTimes(1);
 		child2.setRuleMatchType(RuleMatchType.FULL);
-		child2.setRuleViolationMessage("Cursor was declared multiple times");
+		child2.setRuleViolationMessage("Cursor was declared multiple times.");
 
 		RuleImplementation parent = new RuleImplementation();
 		parent.getNames().getTextItem().add(Cursor_nameContext.class.getSimpleName());
@@ -285,7 +281,6 @@ public class Antlr4Utils {
 		parent.setRuleResultType(RuleResultType.DEFAULT);
 		parent.setRuleMatchType(RuleMatchType.DEFAULT);
 		parent.setRuleMode(RuleMode.GROUP);
-		parent.setRuleViolationMessage("Multiple declarations of same cursor found");
 
 		parent.getUsesRules().getRuleImplementation().add(child2);
 		rule.setRuleImplementation(parent);
@@ -296,28 +291,27 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C008");
 		rule.setInternalKey("C008");
-		rule.setName("Cursor was closed in a control statement");
-		rule.setDescription("Cursor was closed in a control statement");
+		rule.setName("Cursor was closed in a different control statement");
+		rule.setDescription("Cursor was closed or deallocated in a different control statement than declared.");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
 		child2.getTextToFind().getTextItem().add("CLOSE");
 		child2.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child2.setRuleMatchType(RuleMatchType.STRICT);
-		child2.setRuleViolationMessage("Cursor was closed in a  different control statement");
+		child2.setRuleViolationMessage("Cursor was closed in a different control statement.");
 	
 		RuleImplementation child3 = new RuleImplementation();
 		child3.getNames().getTextItem().add(Cursor_statementContext.class.getSimpleName());
 		child3.getTextToFind().getTextItem().add("DEALLOCATE");
 		child3.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child3.setRuleMatchType(RuleMatchType.STRICT);
-		child3.setRuleViolationMessage("Cursor was deallocated in a different control statement");
+		child3.setRuleViolationMessage("Cursor was deallocated in a different control statement.");
 
 		RuleImplementation parent0 = new RuleImplementation();
 		parent0.getNames().getTextItem().add(Declare_cursorContext.class.getSimpleName());
 		parent0.setRuleResultType(RuleResultType.DEFAULT);
 		parent0.setRuleMatchType(RuleMatchType.FULL);
-		parent0.setRuleViolationMessage("");
 
 		parent0.getUsesRules().getRuleImplementation().add(child2);
 		parent0.getUsesRules().getRuleImplementation().add(child3);
@@ -328,7 +322,6 @@ public class Antlr4Utils {
 		parent.setRuleResultType(RuleResultType.DEFAULT);
 		parent.setRuleMatchType(RuleMatchType.DEFAULT);
 		parent.setRuleMode(RuleMode.GROUP);
-		parent.setRuleViolationMessage("");
 
 		parent.getUsesRules().getRuleImplementation().add(parent0);
 		rule.setRuleImplementation(parent);

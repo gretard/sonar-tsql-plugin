@@ -11,13 +11,13 @@ import org.sonar.plugins.tsql.rules.custom.TextCheckType;
 public class DefaultNamesChecker implements INamesChecker {
 
 	@Override
-	public boolean containsName(RuleImplementation rule, String text) {
-		List<String> textToFind = rule.getTextToFind().getTextItem();
-		TextCheckType type = rule.getTextCheckType();
+	public boolean containsName(final RuleImplementation rule, final String text) {
+		final List<String> textToFind = rule.getTextToFind().getTextItem();
+		final TextCheckType type = rule.getTextCheckType();
 		if (StringUtils.isEmpty(text)) {
 			return false;
 		}
-		for (String s : textToFind) {
+		for (final String s : textToFind) {
 			switch (type) {
 			case DEFAULT:
 			case CONTAINS:
@@ -45,8 +45,8 @@ public class DefaultNamesChecker implements INamesChecker {
 	}
 
 	@Override
-	public boolean containsClassName(RuleImplementation rule, String text) {
-		for (String name : rule.getNames().getTextItem()) {
+	public boolean containsClassName(final RuleImplementation rule, final String text) {
+		for (final String name : rule.getNames().getTextItem()) {
 			if (text.equalsIgnoreCase(name)) {
 				return true;
 			}

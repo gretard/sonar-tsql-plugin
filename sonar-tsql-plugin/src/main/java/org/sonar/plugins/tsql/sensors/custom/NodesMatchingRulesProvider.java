@@ -9,9 +9,9 @@ import org.sonar.plugins.tsql.rules.custom.Rule;
 
 public class NodesMatchingRulesProvider implements IParsedNodesProvider {
 
-	public ParsedNode[] getNodes(String repoKey, ParseTree root, Rule... rules) {
+	public ParsedNode[] getNodes(final String repoKey, final ParseTree root, final Rule... rules) {
 		final List<ParsedNode> candidates = new LinkedList<>();
-		IFiller[] fillers = new IFiller[] { new ParsedNodeUsesFiller(root), new ParentsFiller(), new ChildrenFiller() };
+		final IFiller[] fillers = new IFiller[] { new ParsedNodeUsesFiller(root), new ParentsFiller(), new ChildrenFiller(), new SiblingsFiller() };
 
 		for (final Rule rule : rules) {
 			if (rule.getRuleImplementation() == null) {
@@ -20,8 +20,8 @@ public class NodesMatchingRulesProvider implements IParsedNodesProvider {
 			final RuleNodesVisitor visitor = new org.sonar.plugins.tsql.sensors.custom.RuleNodesVisitor(rule, repoKey);
 			visitor.visit(root);
 
-			ParsedNode[] foundCandidates = visitor.getNodes();
-			for (IFiller filler : fillers) {
+			final ParsedNode[] foundCandidates = visitor.getNodes();
+			for (final IFiller filler : fillers) {
 				filler.fill(rule, foundCandidates);
 			}
 			candidates.addAll(Arrays.asList(foundCandidates));

@@ -16,8 +16,10 @@ import org.sonar.plugins.tsql.rules.custom.RuleMode;
 public class RuleNodesVisitor extends tsqlBaseVisitor {
 	private final Rule rule;
 	private final RuleImplementation ruleImplemention;
-	private String key;
-	final INamesChecker namesChecker = new DefaultNamesChecker();
+	private final String key;
+	private final INamesChecker namesChecker = new DefaultNamesChecker();
+	private final Map<String, org.sonar.plugins.tsql.sensors.custom.ParsedNode> groupedNodes = new HashMap<String, org.sonar.plugins.tsql.sensors.custom.ParsedNode>();
+	private final List<ParsedNode> singleNodes = new LinkedList<ParsedNode>();
 
 	public RuleNodesVisitor(final Rule rule, final String key) {
 		this.rule = rule;
@@ -25,14 +27,10 @@ public class RuleNodesVisitor extends tsqlBaseVisitor {
 		this.ruleImplemention = rule.getRuleImplementation();
 	}
 
-	final Map<String, org.sonar.plugins.tsql.sensors.custom.ParsedNode> nodes = new HashMap<String, org.sonar.plugins.tsql.sensors.custom.ParsedNode>();
-
 	public org.sonar.plugins.tsql.sensors.custom.ParsedNode[] getNodes() {
-		diff.addAll(nodes.values());
-		return diff.toArray(new org.sonar.plugins.tsql.sensors.custom.ParsedNode[0]);
+		singleNodes.addAll(groupedNodes.values());
+		return singleNodes.toArray(new org.sonar.plugins.tsql.sensors.custom.ParsedNode[0]);
 	}
-
-	private final List<ParsedNode> diff = new LinkedList<ParsedNode>();
 
 	@Override
 	public Object visitChildren(final RuleNode node) {
@@ -40,13 +38,14 @@ public class RuleNodesVisitor extends tsqlBaseVisitor {
 		final int n = node.getChildCount();
 		final String name = node.getText();
 		if ((namesChecker.containsClassName(ruleImplemention, node)
-				|| (ruleImplemention.getNames().getTextItem().isEmpty() && namesChecker.containsName(ruleImplemention, name)))) {
+				|| (ruleImplemention.getNames().getTextItem().isEmpty()
+						&& namesChecker.containsName(ruleImplemention, name)))) {
 			final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.ParsedNode(node, rule, key);
-	
+
 			if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
-				nodes.putIfAbsent(name, parsedNode);
+				groupedNodes.putIfAbsent(name, parsedNode);
 			} else {
-				diff.add(parsedNode);
+				singleNodes.add(parsedNode);
 			}
 
 		}

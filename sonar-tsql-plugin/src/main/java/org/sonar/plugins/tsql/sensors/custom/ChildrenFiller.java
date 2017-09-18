@@ -19,7 +19,7 @@ public class ChildrenFiller implements IFiller {
 	@Override
 	public void fill(final Rule rule, final ParsedNode... nodes) {
 		for (final ParsedNode node : nodes) {
-			ParseTree item = node.getItem();
+			final ParseTree item = node.getItem();
 			if (item == null) {
 				return;
 			}

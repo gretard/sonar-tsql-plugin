@@ -29,7 +29,7 @@ public class CustomRulesProviderTest {
 		CustomRulesProvider provider = new CustomRulesProvider();
 		Map<String, CustomRules> rules = provider.getRules(null, settings);
 		Assert.assertEquals(1, rules.size());
-		Assert.assertEquals(4, rules.values().toArray(new CustomRules[0])[0].getRule().size());
+		Assert.assertEquals(8, rules.values().toArray(new CustomRules[0])[0].getRule().size());
 	}
 	@Test
 	public void testNoRules() throws IOException {

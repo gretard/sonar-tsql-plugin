@@ -21,13 +21,12 @@ import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
 
 public final class TSQLQualityProfile extends ProfileDefinition {
 
-	private final Settings settings;
-	private CustomRulesProvider customRulesProvider = new CustomRulesProvider();
 	private static final Logger LOGGER = Loggers.get(TSQLQualityProfile.class);
+	private final Settings settings;
+	private final CustomRulesProvider customRulesProvider = new CustomRulesProvider();
 
 	public TSQLQualityProfile(Settings settings) {
 		this.settings = settings;
-
 	}
 
 	@Override
