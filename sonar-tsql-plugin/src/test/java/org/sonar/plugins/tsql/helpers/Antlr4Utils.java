@@ -177,13 +177,13 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C001");
 		rule.setInternalKey("C001");
-		rule.setDescription("Waitfor is used.");
-		rule.setName("Waitfor is used.");
+		rule.setDescription("WAITFOR is used.");
+		rule.setName("WAITFOR is used");
 		RuleImplementation impl = new RuleImplementation();
 		impl.getNames().getTextItem().add(Waitfor_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
-		impl.setRuleViolationMessage("Waitfor is used.");
+		impl.setRuleViolationMessage("WAITFOR is used.");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("WAITFOR '10:00:00';");
 	
 		rule.setRuleImplementation(impl);
@@ -203,7 +203,7 @@ public class Antlr4Utils {
 		child2.setTextCheckType(TextCheckType.STRICT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
-		child2.setRuleViolationMessage("SELECT * is used");
+		child2.setRuleViolationMessage("SELECT * is used.");
 
 		RuleImplementation impl = new RuleImplementation();
 
@@ -223,14 +223,14 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C003");
 		rule.setInternalKey("C003");
-		rule.setName("INSERT statement does not have columns listed");
-		rule.setDescription("<h2>Description</h2><p>Always use a column list in your INSERT statements.</p>");
+		rule.setName("INSERT statement without columns listed");
+		rule.setDescription("<h2>Description</h2><p>INSERT statement does not have columns listed. Always use a column list in your INSERT statements.</p>");
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Column_name_listContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("Column list is not specified in an insert statement");
+		child2.setRuleViolationMessage("Column list is not specified in an insert statement.");
 
 		RuleImplementation impl = new RuleImplementation();
 
@@ -251,16 +251,16 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C004");
 		rule.setInternalKey("C004");
-		rule.setName("Do not use column numbers in the ORDER BY clause");
+		rule.setName("ORDER BY clause contains positional references");
 		rule.setDescription(
-				"<h2>Description</h2><p>Always use column names in an order by clause. Avoid positional references.</p>");
+				"<h2>Description</h2><p>Do not use column numbers in the ORDER BY clause. Always use column names in an order by clause. Avoid positional references.</p>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("Column number is used instead of name in order by clause");
+		child2.setRuleViolationMessage("Positional reference is used instead of column name in order by clause.");
 
 		RuleImplementation impl = new RuleImplementation();
 
@@ -280,10 +280,10 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C005");
 		rule.setInternalKey("C005");
-		rule.setName("Execute/exec for dynamic query was used");
+		rule.setName("EXECUTE/EXEC for dynamic query is used");
 		rule.setDescription(".");
 		rule.setDescription(
-				"<h2>Description</h2><p>Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p>");
+				"<h2>Description</h2><p>EXECUTE/EXEC for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p>");
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
@@ -291,7 +291,7 @@ public class Antlr4Utils {
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		child2.setRuleViolationMessage(
-				"Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.");
+				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
 
 		RuleImplementation skipSubRule = new RuleImplementation();
 		skipSubRule.getNames().getTextItem().add(Func_proc_nameContext.class.getSimpleName());
