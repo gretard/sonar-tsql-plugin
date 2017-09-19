@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sql-rules repoName="Demo rules" repoKey="tsqlDemoRepo">
     <rule>
-        <key>C001</key>
+        <key>CC001</key>
         <name>Waitfor is used.</name>
-        <internalKey>C001</internalKey>
-        <description>Waitfor is used</description>
+        <internalKey>CC001</internalKey>
+        <description>Waitfor is used.&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;WAITFOR '10:00:00';&lt;/code&gt;</description>
         <ruleImplementation>
             <names>
                 <textItem>Waitfor_statementContext</textItem>
@@ -19,15 +20,17 @@
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>FailIfFound</ruleResultType>
             <textCheckType>Default</textCheckType>
-            <violatingRulesCodeExamples/>
+            <violatingRulesCodeExamples>
+                <ruleCodeExample>WAITFOR '10:00:00';</ruleCodeExample>
+            </violatingRulesCodeExamples>
             <compliantRulesCodeExamples/>
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C002</key>
+        <key>CC002</key>
         <name>SELECT * is used</name>
-        <internalKey>C002</internalKey>
-        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;SELECT * is used. Please list names.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;SELECT * from dbo.test;&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;SELECT name, surname from dbo.test;&lt;/code&gt;</description>
+        <internalKey>CC002</internalKey>
+        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;SELECT * is used. Please list names.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;SELECT * from dbo.test;&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;SELECT name, surname from dbo.test;&lt;/code&gt;&lt;code&gt;SELECT name, surname, 1 * 3 from dbo.test;&lt;/code&gt;</description>
         <ruleImplementation>
             <names>
                 <textItem>Select_listContext</textItem>
@@ -68,13 +71,14 @@
             </violatingRulesCodeExamples>
             <compliantRulesCodeExamples>
                 <ruleCodeExample>SELECT name, surname from dbo.test;</ruleCodeExample>
+                <ruleCodeExample>SELECT name, surname, 1 * 3 from dbo.test;</ruleCodeExample>
             </compliantRulesCodeExamples>
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C003</key>
+        <key>CC003</key>
         <name>Cursor lifecycle is violated</name>
-        <internalKey>C003</internalKey>
+        <internalKey>CC003</internalKey>
         <description>Cursor lifecycle is violated. Cursor either is not opened, deallocated or closed.</description>
         <ruleImplementation>
             <names>
@@ -176,9 +180,9 @@
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C004</key>
+        <key>CC004</key>
         <name>INSERT statement does not have columns listed</name>
-        <internalKey>C004</internalKey>
+        <internalKey>CC004</internalKey>
         <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;Always use a column list in your INSERT statements.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;INSERT INTO dbo.test VALUES (1,2);&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;INSERT INTO dbo.test (a,b) VALUES (1,2);&lt;/code&gt;</description>
         <ruleImplementation>
             <names>
@@ -222,9 +226,9 @@
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C005</key>
+        <key>CC005</key>
         <name>Do not use column numbers in the ORDER BY clause</name>
-        <internalKey>C005</internalKey>
+        <internalKey>CC005</internalKey>
         <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;Always use column names in an order by clause. Avoid positional references.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;SELECT * from dbo.test order by 1;&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;SELECT * from dbo.test order by name;&lt;/code&gt;</description>
         <ruleImplementation>
             <names>
@@ -269,9 +273,9 @@
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C006</key>
+        <key>CC006</key>
         <name>Execute/exec for dynamic query was used</name>
-        <internalKey>C006</internalKey>
+        <internalKey>CC006</internalKey>
         <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;Execute/exec for dynamic query was used. It is better to use sp_executesql for dynamic queries.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;EXEC ('SELECT 1');&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;EXECUTE sp_executesql N'select 1';&lt;/code&gt;</description>
         <ruleImplementation>
             <names>
@@ -335,9 +339,9 @@
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C007</key>
+        <key>CC007</key>
         <name>Multiple cursor declarations found</name>
-        <internalKey>C007</internalKey>
+        <internalKey>CC007</internalKey>
         <description>Multiple cursor declarations found</description>
         <ruleImplementation>
             <names>
@@ -379,9 +383,9 @@
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C008</key>
+        <key>CC008</key>
         <name>Cursor was closed in a different control statement</name>
-        <internalKey>C008</internalKey>
+        <internalKey>CC008</internalKey>
         <description>Cursor was closed or deallocated in a different control statement than declared.</description>
         <ruleImplementation>
             <names>
