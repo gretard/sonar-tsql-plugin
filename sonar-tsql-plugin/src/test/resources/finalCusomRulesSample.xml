@@ -1,0 +1,187 @@
+<sql-rules repoName="CustomRules" repoKey="CustomRepo1" reportFile="">
+	
+	<rule>
+		<key>C001</key>
+		<name>WAITFOR is used</name>
+		<internalKey>C001</internalKey>
+		<descriptionFormat>HTML</descriptionFormat>
+		<description>
+			<![CDATA[<h2>WAITFOR is used</h2><p>WAITFOR is used.</p>]]>
+		</description>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<remediationFunction>LINEAR</remediationFunction>
+		<remediationFunctionBaseEffort/>
+		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+		<tag>best-practise</tag>
+ <ruleImplementation>
+        <className>Waitfor_statementContext</className>
+        <distance>0</distance>
+        <textToFind/>
+        <parentRules/>
+        <childrenRules/>
+        <siblingsRules/>
+        <usesRules/>
+        <ruleViolationMessage>WAIT FOR IS USED</ruleViolationMessage>
+        <failIfFound>false</failIfFound>
+        <inSameFlow>false</inSameFlow>
+        <ruleMatchType>ClassOnly</ruleMatchType>
+        <ruleResultType>FailIfFound</ruleResultType>
+        <textCheckType>Contains</textCheckType>
+    </ruleImplementation>
+	</rule>
+
+	
+	<rule>
+		<key>C002</key>
+		<name>SELECT * is used</name>
+		<internalKey>C002</internalKey>
+		<descriptionFormat>HTML</descriptionFormat>
+		<description>
+			<![CDATA[<h2>SELECT * is used</h2><p>SELECT * is used.</p>]]>
+		</description>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<remediationFunction>LINEAR</remediationFunction>
+		<remediationFunctionBaseEffort/>
+		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+		<tag>best-practise</tag>
+		 <ruleImplementation>
+        <className>Select_listContext</className>
+        <distance>0</distance>
+        <textToFind/>
+        <parentRules/>
+        <childrenRules>
+            <ruleImplementation>
+                <className>Select_list_elemContext</className>
+                <distance>0</distance>
+                <textToFind>
+                    <textItem>*</textItem>
+                </textToFind>
+                <parentRules/>
+                <childrenRules/>
+                <siblingsRules/>
+                <usesRules/>
+                <ruleViolationMessage>SELECT * IS used</ruleViolationMessage>
+                <failIfFound>false</failIfFound>
+                <inSameFlow>false</inSameFlow>
+                <ruleMatchType>TextAndClass</ruleMatchType>
+                <ruleResultType>FailIfFound</ruleResultType>
+                <textCheckType>Strict</textCheckType>
+            </ruleImplementation>
+        </childrenRules>
+        <siblingsRules/>
+        <usesRules/>
+        <ruleViolationMessage>SELECT IS USED</ruleViolationMessage>
+        <failIfFound>false</failIfFound>
+        <inSameFlow>false</inSameFlow>
+        <ruleMatchType>Default</ruleMatchType>
+        <ruleResultType>Default</ruleResultType>
+        <textCheckType>Contains</textCheckType>
+    </ruleImplementation>
+	</rule>
+	
+	
+	<rule>
+		<key>C003</key>
+		<name>Cursor lifecycle</name>
+		<internalKey>C003</internalKey>
+		<descriptionFormat>HTML</descriptionFormat>
+		<description>
+			<![CDATA[<h2>Cursor  is used</h2><p>Cursor is used.</p>]]>
+		</description>
+		<severity>MINOR</severity>
+		<cardinality>SINGLE</cardinality>
+		<status>READY</status>
+		<remediationFunction>LINEAR</remediationFunction>
+		<remediationFunctionBaseEffort/>
+		<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
+		<tag>best-practise</tag>
+		 <ruleImplementation>
+        <className>Cursor_nameContext</className>
+        <distance>0</distance>
+        <textToFind/>
+        <parentRules/>
+        <childrenRules/>
+        <siblingsRules/>
+        <usesRules>
+            <ruleImplementation>
+                <className>Cursor_statementContext</className>
+                <distance>0</distance>
+                <textToFind>
+                    <textItem>OPEN</textItem>
+                </textToFind>
+                <parentRules/>
+                <childrenRules/>
+                <siblingsRules/>
+                <usesRules/>
+                <ruleViolationMessage>Cursor was not opened</ruleViolationMessage>
+                <failIfFound>false</failIfFound>
+                <inSameFlow>false</inSameFlow>
+                <ruleMatchType>Full</ruleMatchType>
+                <ruleResultType>FailIfNotFound</ruleResultType>
+                <textCheckType>Contains</textCheckType>
+            </ruleImplementation>
+            <ruleImplementation>
+                <className>Cursor_statementContext</className>
+                <distance>0</distance>
+                <textToFind>
+                    <textItem>DECLARE</textItem>
+                </textToFind>
+                <parentRules/>
+                <childrenRules/>
+                <siblingsRules/>
+                <usesRules/>
+                <ruleViolationMessage>Cursor was not declared</ruleViolationMessage>
+                <failIfFound>false</failIfFound>
+                <inSameFlow>false</inSameFlow>
+                <ruleMatchType>Full</ruleMatchType>
+                <ruleResultType>FailIfNotFound</ruleResultType>
+                <textCheckType>Contains</textCheckType>
+            </ruleImplementation>
+            <ruleImplementation>
+                <className>Cursor_statementContext</className>
+                <distance>0</distance>
+                <textToFind>
+                    <textItem>CLOSE</textItem>
+                </textToFind>
+                <parentRules/>
+                <childrenRules/>
+                <siblingsRules/>
+                <usesRules/>
+                <ruleViolationMessage>Cursor was not closed</ruleViolationMessage>
+                <failIfFound>false</failIfFound>
+                <inSameFlow>false</inSameFlow>
+                <ruleMatchType>Full</ruleMatchType>
+                <ruleResultType>FailIfNotFound</ruleResultType>
+                <textCheckType>Contains</textCheckType>
+            </ruleImplementation>
+            <ruleImplementation>
+                <className>Cursor_statementContext</className>
+                <distance>0</distance>
+                <textToFind>
+                    <textItem>DEALLOCATE</textItem>
+                </textToFind>
+                <parentRules/>
+                <childrenRules/>
+                <siblingsRules/>
+                <usesRules/>
+                <ruleViolationMessage>Cursor was not deallocated</ruleViolationMessage>
+                <failIfFound>false</failIfFound>
+                <inSameFlow>false</inSameFlow>
+                <ruleMatchType>Full</ruleMatchType>
+                <ruleResultType>FailIfNotFound</ruleResultType>
+                <textCheckType>Contains</textCheckType>
+            </ruleImplementation>
+        </usesRules>
+        <ruleViolationMessage>CURSOR IS USED</ruleViolationMessage>
+        <failIfFound>false</failIfFound>
+        <inSameFlow>false</inSameFlow>
+        <ruleMatchType>Default</ruleMatchType>
+        <ruleResultType>Default</ruleResultType>
+        <textCheckType>Contains</textCheckType>
+    </ruleImplementation>
+		</rule>
+</sql-rules>

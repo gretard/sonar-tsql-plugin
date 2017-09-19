@@ -21,7 +21,7 @@ public class BaseReportsProviderTest {
 
 		BaseReportsProvider cut = new BaseReportsProvider(".xml");
 		File[] files = cut.get(file);
-		Assert.assertEquals(2, files.length);
+		Assert.assertEquals(5, files.length);
 	}
 
 	@Test
