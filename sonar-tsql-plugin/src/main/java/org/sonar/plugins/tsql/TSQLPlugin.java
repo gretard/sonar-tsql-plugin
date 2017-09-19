@@ -6,6 +6,7 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.languages.TSQLQualityProfile;
 import org.sonar.plugins.tsql.rules.definitions.CodeGuardRulesDefinition;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginRulesDefinition;
 import org.sonar.plugins.tsql.rules.definitions.CustomRulesDefinition;
 import org.sonar.plugins.tsql.rules.definitions.MsRulesDefinition;
 import org.sonar.plugins.tsql.sensors.CodeGuardIssuesLoaderSensor;
@@ -36,15 +37,18 @@ public class TSQLPlugin implements Plugin {
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_CPD).name("Disable duplication detection")
 				.description("Flag whether to disable code duplication detection").defaultValue("false")
 				.type(PropertyType.BOOLEAN).build());
-
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_CUSTOM_RULES)
+				.name("Disable custom violations detection")
+				.description("Flag whether to disable issues detection against custom rules.").defaultValue("false")
+				.type(PropertyType.BOOLEAN).build()); 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PATH)
 				.name("Path to the custom rules path").description("A comma separated list of custom rules files")
 				.defaultValue("").type(PropertyType.STRING).build());
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PREFIX)
-				.name("Custom rules file name prefix")
-				.defaultValue(".customRules").type(PropertyType.STRING).build());
+				.name("Custom rules file name prefix").defaultValue(".customRules").type(PropertyType.STRING).build());
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
-		context.addExtensions(MsRulesDefinition.class, CodeGuardRulesDefinition.class,CustomRulesDefinition.class, MsIssuesLoaderSensor.class,
+		context.addExtensions(MsRulesDefinition.class, CustomPluginRulesDefinition.class,
+				CodeGuardRulesDefinition.class, CustomRulesDefinition.class, MsIssuesLoaderSensor.class,
 				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class);
 
 	}

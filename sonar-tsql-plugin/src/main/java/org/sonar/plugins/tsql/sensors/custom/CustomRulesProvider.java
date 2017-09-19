@@ -15,20 +15,17 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.rules.custom.CustomRules;
 
 public class CustomRulesProvider {
 	private static final Logger LOGGER = Loggers.get(CustomRulesProvider.class);
 
-	public Map<String, CustomRules> getRules(String baseDir, final Settings settings) {
+	public Map<String, CustomRules> getRules(final String baseDir, final String prefix, final String... paths) {
 
 		final HashMap<String, CustomRules> rulesRepositories = new HashMap<String, CustomRules>();
-		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
-		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
+
 		final List<String> updatedPaths = new LinkedList<String>();
 		for (final String path : paths) {
 			File f = new File(path);
@@ -41,7 +38,7 @@ public class CustomRulesProvider {
 
 					@Override
 					public boolean accept(File pathname) {
-						if (pathname.isFile() && pathname.getName().contains(rulesPrefix)) {
+						if (pathname.isFile() && pathname.getName().contains(prefix)) {
 							updatedPaths.add(pathname.getAbsolutePath());
 						}
 
@@ -51,7 +48,7 @@ public class CustomRulesProvider {
 				continue;
 			}
 
-			if (f.getName().contains(rulesPrefix)) {
+			if (f.getName().contains(prefix)) {
 				updatedPaths.add(f.getAbsolutePath());
 			}
 		}

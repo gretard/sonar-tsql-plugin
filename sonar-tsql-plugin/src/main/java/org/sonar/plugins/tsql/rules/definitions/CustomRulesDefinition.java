@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.rules.custom.CustomRules;
 import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
@@ -28,8 +28,9 @@ public class CustomRulesDefinition implements RulesDefinition {
 	}
 
 	private void defineRulesForLanguage(final Context context) {
-
-		final Map<String, CustomRules> rules = provider.getRules(null, this.settings);
+		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
+		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
+		final Map<String, CustomRules> rules = provider.getRules(null, rulesPrefix, paths);
 
 		for (final String key : rules.keySet()) {
 

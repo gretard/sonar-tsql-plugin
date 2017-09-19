@@ -27,7 +27,7 @@ public class CustomRulesProviderTest {
 		settings.setProperty(Constants.PLUGIN_CUSTOM_RULES_PREFIX, "rules");
 			
 		CustomRulesProvider provider = new CustomRulesProvider();
-		Map<String, CustomRules> rules = provider.getRules(null, settings);
+		Map<String, CustomRules> rules = provider.getRules(null, "rules", baseFile.getParentFile().getAbsolutePath());
 		Assert.assertEquals(1, rules.size());
 		Assert.assertEquals(8, rules.values().toArray(new CustomRules[0])[0].getRule().size());
 	}
@@ -41,7 +41,7 @@ public class CustomRulesProviderTest {
 		settings.setProperty(Constants.PLUGIN_CUSTOM_RULES_PREFIX, "rules");
 			
 		CustomRulesProvider provider = new CustomRulesProvider();
-		Map<String, CustomRules> rules = provider.getRules(null, settings);
+		Map<String, CustomRules> rules = provider.getRules(null, "rules",  baseFile.getParentFile().getAbsolutePath());
 		Assert.assertEquals(0, rules.size());
 	}
 }

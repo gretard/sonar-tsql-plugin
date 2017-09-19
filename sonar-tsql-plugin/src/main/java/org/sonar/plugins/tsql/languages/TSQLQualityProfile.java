@@ -17,6 +17,8 @@ import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.sensors.custom.CustomPluginRulesProvider;
 import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
 
 public final class TSQLQualityProfile extends ProfileDefinition {
@@ -25,27 +27,32 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 	private final Settings settings;
 	private final CustomRulesProvider customRulesProvider = new CustomRulesProvider();
 
+	private final CustomPluginRulesProvider pluginRulesProvider = new CustomPluginRulesProvider();
+	
 	public TSQLQualityProfile(Settings settings) {
 		this.settings = settings;
 	}
-
+	
 	@Override
 	public RulesProfile createProfile(final ValidationMessages validation) {
 
 		final RulesProfile profile = RulesProfile.create(Constants.PROFILE_NAME, TSQLLanguage.KEY);
 		activeRules(profile, Constants.CG_REPO_KEY, Constants.CG_RULES_FILE);
 		activeRules(profile, Constants.MS_REPO_KEY, Constants.MS_RULES_FILE);
-
+		activeRules(profile, Constants.PLUGIN_REPO_KEY, Constants.PLUGIN_RULES_FILE);
+		
+		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
+		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
 		final Map<String, org.sonar.plugins.tsql.rules.custom.CustomRules> rules = customRulesProvider.getRules(null,
-				this.settings);
-
-		for (String key : rules.keySet()) {
+				rulesPrefix, paths);
+		
+		for (final String key : rules.keySet()) {
 			try {
 				org.sonar.plugins.tsql.rules.custom.CustomRules set = rules.get(key);
 				FileInputStream st = new FileInputStream(key);
 				activeRules(profile, set.getRepoKey(), st);
 				st.close();
-			} catch (FileNotFoundException e) {
+			} catch (final FileNotFoundException e) {
 				LOGGER.info("File was not found at " + key);
 			} catch (IOException e) {
 				LOGGER.info("Error occured reading file at " + key);

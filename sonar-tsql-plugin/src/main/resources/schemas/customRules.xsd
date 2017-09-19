@@ -2,7 +2,6 @@
   <xs:element name="textItem" type="xs:string"/>
   <xs:element name="className" type="xs:string"/>
   <xs:element name="ruleCodeExample" type="xs:string"/>
-  <xs:element name="distance" type="xs:int"/>
   <xs:simpleType name="ruleResultType" final="restriction" >
     <xs:restriction base="xs:string">
         <xs:enumeration value="Default" />

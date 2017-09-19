@@ -50,8 +50,8 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 						}
 						newIssue.at(loc).save();
 					}
-				} catch (Throwable e) {
-					LOGGER.info("Unexpected error while reading/adding issues for: " + file.absolutePath());
+				} catch (final Throwable e) {
+					LOGGER.warn("Unexpected error while reading/adding issues for: " + file.absolutePath(), e);
 				}
 			}
 		} catch (Throwable e) {

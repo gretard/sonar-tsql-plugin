@@ -15,6 +15,8 @@ public final class Constants {
 
 	public static final String PLUGIN_SKIP_CPD = "sonar.tsql.skip.cpd";
 
+	public static final String PLUGIN_SKIP_CUSTOM_RULES = "sonar.tsql.skip.custom.rules";
+
 	public static final String CG_REPO_KEY = TSQLLanguage.KEY.toLowerCase() + "-sqlcodeguard";
 
 	public static final String CG_REPO_NAME = TSQLLanguage.KEY.toLowerCase() + " SQL Code Guard";
@@ -26,8 +28,14 @@ public final class Constants {
 	public static final String MS_REPO_NAME = TSQLLanguage.KEY.toLowerCase() + " Microsoft T-SQL";
 
 	public static final String MS_RULES_FILE = "/rules/vssql-rules.xml";
-	
+
 	public static final String PLUGIN_CUSTOM_RULES_PATH = "sonar.tsql.customrules.paths";
 
 	public static final String PLUGIN_CUSTOM_RULES_PREFIX = "sonar.tsql.customrules.prefix";
+
+	public static final String PLUGIN_RULES_FILE = "/rules/plugin-rules.xml";
+
+	public static final String PLUGIN_REPO_NAME = TSQLLanguage.KEY.toLowerCase() +" plugin custom rules";
+
+	public static final String PLUGIN_REPO_KEY = "tsqlPluginRepo";
 }

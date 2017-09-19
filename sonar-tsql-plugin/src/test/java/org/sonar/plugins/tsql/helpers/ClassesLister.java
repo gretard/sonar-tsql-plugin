@@ -13,7 +13,7 @@ public class ClassesLister {
 
 		Set<Class<? extends ParseTree>> subTypes = reflections.getSubTypesOf(ParseTree.class);
 		TreeSet<String> ordered = new TreeSet<>();
-		for (Class c : subTypes) {
+		for (@SuppressWarnings("rawtypes") Class c : subTypes) {
 			ordered.add(c.getSimpleName());
 		}
 		for (String x : ordered) {
