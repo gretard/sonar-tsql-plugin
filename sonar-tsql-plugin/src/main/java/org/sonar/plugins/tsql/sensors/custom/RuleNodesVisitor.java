@@ -18,8 +18,8 @@ public class RuleNodesVisitor extends tsqlBaseVisitor {
 	private final RuleImplementation ruleImplemention;
 	private final String key;
 	private final INamesChecker namesChecker = new DefaultNamesChecker();
-	private final Map<String, org.sonar.plugins.tsql.sensors.custom.ParsedNode> groupedNodes = new HashMap<String, org.sonar.plugins.tsql.sensors.custom.ParsedNode>();
-	private final List<ParsedNode> singleNodes = new LinkedList<ParsedNode>();
+	private final Map<String, org.sonar.plugins.tsql.sensors.custom.ParsedNode> groupedNodes = new HashMap<>();
+	private final List<ParsedNode> singleNodes = new LinkedList<>();
 
 	public RuleNodesVisitor(final Rule rule, final String key) {
 		this.rule = rule;

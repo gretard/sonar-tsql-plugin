@@ -32,8 +32,9 @@ public class RulesHelperTool {
 		}
 		if ("print".equalsIgnoreCase(action)) {
 			System.out.println("Printing tree:\r\n");
-			ParseTree tree = Antlr4Utils.get(text);
-			Antlr4Utils.print(tree, 0);
+			AntrlResult result = Antlr4Utils.getFull(text);
+
+			Antlr4Utils.print(result.getTree(), 0, result.getStream());
 			return;
 
 		}

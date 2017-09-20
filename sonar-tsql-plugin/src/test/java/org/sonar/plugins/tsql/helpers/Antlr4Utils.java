@@ -13,6 +13,8 @@ import javax.xml.bind.Marshaller;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.tsql.Constants;
@@ -27,6 +29,7 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Execute_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Func_proc_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Insert_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_listContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
@@ -67,7 +70,34 @@ public class Antlr4Utils {
 
 		}
 	}
+	public static void print(final ParseTree node, final int level, CommonTokenStream stream) {
+		final Interval sourceInterval = node.getSourceInterval();
+		
+		final Token firstToken = stream.get(sourceInterval.a);
+		
+		
+		int line = firstToken.getLine();
+		int charStart = firstToken.getCharPositionInLine();
+		
+		int endLine = line;
+		int endChar = charStart+firstToken.getText().length();
+		
+	
+		String data = "@("+line+":"+charStart+","+endLine+":"+endChar+") with text: "+firstToken.getText();
+		final int tmp = level + 1;
+		final StringBuilder sb = new StringBuilder();
+		sb.append(StringUtils.repeat("\t", level));
+		sb.append(node.getClass().getSimpleName() + ": "+data+" :" + node.getText());
+		System.out.println(sb.toString());
+		final int n = node.getChildCount();
+		for (int i = 0; i < n; i++) {
 
+			final ParseTree c = node.getChild(i);
+			print(c, tmp, stream);
+
+		}
+	}
+	
 	public static boolean verify(Rule rule, String text) {
 		AntrlResult result = Antlr4Utils.getFull(text);
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
@@ -287,19 +317,23 @@ public class Antlr4Utils {
 
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
+		child2.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		child2.setRuleViolationMessage(
 				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
+		
+
+	
 
 		RuleImplementation skipSubRule = new RuleImplementation();
 		skipSubRule.getNames().getTextItem().add(Func_proc_nameContext.class.getSimpleName());
-		skipSubRule.setTextCheckType(TextCheckType.CONTAINS);
-		skipSubRule.getTextToFind().getTextItem().add("sp_executesql");
+		skipSubRule.setTextCheckType(TextCheckType.DEFAULT);
 		skipSubRule.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
-		skipSubRule.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
-		skipSubRule.setRuleViolationMessage("Sp_executesql was found.");
+		skipSubRule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		skipSubRule.setRuleViolationMessage("EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
+	
 
 		RuleImplementation impl = new RuleImplementation();
 		impl.getChildrenRules().getRuleImplementation().add(child2);
@@ -308,7 +342,12 @@ public class Antlr4Utils {
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC ('SELECT 1');");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC (@sQueryText);");
+		
+	
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("EXECUTE sp_executesql N'select 1';");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("exec sys.sp_test  @test = 'Publisher';");
+
 		rule.setRuleImplementation(impl);
 
 		return rule;

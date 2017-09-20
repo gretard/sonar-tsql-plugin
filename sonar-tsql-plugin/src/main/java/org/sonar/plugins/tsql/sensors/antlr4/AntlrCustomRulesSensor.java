@@ -51,11 +51,12 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 						newIssue.at(loc).save();
 					}
 				} catch (final Throwable e) {
-					LOGGER.warn("Unexpected error while reading/adding issues for: " + file.absolutePath(), e);
+					LOGGER.warn(String.format("Unexpected error while reading/adding issues for: %s file for %s repo",
+							file.absolutePath(), rule.getRepoName()), e);
 				}
 			}
 		} catch (Throwable e) {
-			LOGGER.info("Unexpected error while parsing issues for: " + file.absolutePath());
+			LOGGER.warn("Unexpected error while parsing issues for: " + file.absolutePath());
 		}
 	}
 

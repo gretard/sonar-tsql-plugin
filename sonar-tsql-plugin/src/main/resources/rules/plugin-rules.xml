@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sql-rules repoName="tsql plugin custom rules" repoKey="tsqlPluginRepo">
     <rule>
         <key>C001</key>
@@ -171,7 +172,7 @@
         <key>C005</key>
         <name>EXECUTE/EXEC for dynamic query is used</name>
         <internalKey>C005</internalKey>
-        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;EXECUTE/EXEC for dynamic query was used. It is better to use sp_executesql for dynamic queries.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;EXEC ('SELECT 1');&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;EXECUTE sp_executesql N'select 1';&lt;/code&gt;</description>
+        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;EXECUTE/EXEC for dynamic query was used. It is better to use sp_executesql for dynamic queries.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;EXEC ('SELECT 1');&lt;/code&gt;&lt;code&gt;EXEC (@sQueryText);&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;EXECUTE sp_executesql N'select 1';&lt;/code&gt;&lt;code&gt;exec sys.sp_test  @test = 'Publisher';&lt;/code&gt;</description>
         <ruleImplementation>
             <names>
                 <textItem>Execute_statementContext</textItem>
@@ -182,6 +183,7 @@
                 <ruleImplementation>
                     <names>
                         <textItem>ConstantContext</textItem>
+                        <textItem>Primitive_expressionContext</textItem>
                     </names>
                     <textToFind/>
                     <parentRules/>
@@ -201,19 +203,17 @@
                     <names>
                         <textItem>Func_proc_nameContext</textItem>
                     </names>
-                    <textToFind>
-                        <textItem>sp_executesql</textItem>
-                    </textToFind>
+                    <textToFind/>
                     <parentRules/>
                     <childrenRules/>
                     <siblingsRules/>
                     <usesRules/>
-                    <ruleViolationMessage>Sp_executesql was found.</ruleViolationMessage>
+                    <ruleViolationMessage>EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.</ruleViolationMessage>
                     <times>0</times>
                     <ruleMode>Single</ruleMode>
-                    <ruleMatchType>TextAndClass</ruleMatchType>
+                    <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>SkipIfFound</ruleResultType>
-                    <textCheckType>Contains</textCheckType>
+                    <textCheckType>Default</textCheckType>
                     <violatingRulesCodeExamples/>
                     <compliantRulesCodeExamples/>
                 </ruleImplementation>
@@ -227,9 +227,11 @@
             <textCheckType>Default</textCheckType>
             <violatingRulesCodeExamples>
                 <ruleCodeExample>EXEC ('SELECT 1');</ruleCodeExample>
+                <ruleCodeExample>EXEC (@sQueryText);</ruleCodeExample>
             </violatingRulesCodeExamples>
             <compliantRulesCodeExamples>
                 <ruleCodeExample>EXECUTE sp_executesql N'select 1';</ruleCodeExample>
+                <ruleCodeExample>exec sys.sp_test  @test = 'Publisher';</ruleCodeExample>
             </compliantRulesCodeExamples>
         </ruleImplementation>
     </rule>
