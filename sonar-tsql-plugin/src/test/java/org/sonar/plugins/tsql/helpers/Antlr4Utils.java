@@ -113,9 +113,11 @@ public class Antlr4Utils {
 	public static AntrlResult getFull(String text) {
 		final CharStream charStream = CharStreams.fromString(text);
 		final tsqlLexer lexer = new tsqlLexer(charStream);
+		lexer.removeErrorListeners();
 		final CommonTokenStream tokens = new CommonTokenStream(lexer);
 		tokens.fill();
 		final tsqlParser parser = new tsqlParser(tokens);
+		parser.removeErrorListeners();
 		final Tsql_fileContext tree = parser.tsql_file();
 		AntrlResult result = new AntrlResult();
 		result.setStream(tokens);

@@ -22,7 +22,18 @@ public class ParsedNodeUsesFillerTest {
 
 		filler.fill(rule, node);
 	}
+	@Test
+	public void testSingle2() {
+		ParseTree tree = Antlr4Utils.get("select name from dbo.test;select name from dbo.test;");
+		Rule rule = new Rule();
+		RuleImplementation impl = new RuleImplementation();
+		impl.setRuleMode(RuleMode.SINGLE);
+		rule.setRuleImplementation(impl);
+		ParsedNode node = new ParsedNode("name", tree, rule, "a");
+		ParsedNodeUsesFiller filler = new ParsedNodeUsesFiller(tree);
 
+		filler.fill(rule, node);
+	}
 	@Test
 	public void testGroup() {
 		ParseTree tree = Antlr4Utils.get("select * from dbo.test");
@@ -31,9 +42,22 @@ public class ParsedNodeUsesFillerTest {
 		impl.setRuleMode(RuleMode.GROUP);
 		rule.setRuleImplementation(impl);
 		ParsedNodeUsesFiller filler = new ParsedNodeUsesFiller(tree);
-		ParsedNode node = new ParsedNode(tree, rule, "a");
+		ParsedNode node = new ParsedNode("aa", tree, rule, "a");
 		filler.fill(rule, node);
 		Assert.assertEquals(0, node.getUses().size());
+	}
+
+	@Test
+	public void testGroup2() {
+		ParseTree tree = Antlr4Utils.get("select name from dbo.test; select name from dbo.test");
+		Rule rule = new Rule();
+		RuleImplementation impl = new RuleImplementation();
+		impl.setRuleMode(RuleMode.GROUP);
+		rule.setRuleImplementation(impl);
+		ParsedNodeUsesFiller filler = new ParsedNodeUsesFiller(tree);
+		ParsedNode node = new ParsedNode("name", tree, rule, "a");
+		filler.fill(rule, node);
+		Assert.assertEquals(24, node.getUses().size());
 	}
 
 	@Test

@@ -8,14 +8,17 @@ public class UsesFindRule{
 
 	
 	public boolean root(final ParsedNode item, final ParseTree candidate,final  Rule rule) {
-		
+		String text = item.getName();
+		if (text==null) {
+			text = item.getText();
+		}
 		final RuleImplementation impl = rule.getRuleImplementation();
 		if (impl == null || candidate == null || item.getItem() == candidate 
-				|| !candidate.getText().contains(item.getName())) {
+				|| !candidate.getText().contains(text)) {
 			return false;
 		}
 
-		item.getUses().add(new ParsedNode(item.getName(), candidate, candidate.getClass().getSimpleName(), rule,
+		item.getUses().add(new ParsedNode(text, candidate, candidate.getClass().getSimpleName(), rule,
 				item.getRepository()));
 		return true;
 
