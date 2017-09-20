@@ -8,7 +8,7 @@ public class UsesFindRule{
 
 	
 	public boolean root(final ParsedNode item, final ParseTree candidate,final  Rule rule) {
-
+		
 		final RuleImplementation impl = rule.getRuleImplementation();
 		if (impl == null || candidate == null || item.getItem() == candidate 
 				|| !candidate.getText().contains(item.getName())) {

@@ -365,6 +365,7 @@ public class Antlr4Utils {
 		impl.getNames().getTextItem().add(Cursor_nameContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.DEFAULT);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.setRuleMode(RuleMode.GROUP);
 		rule.setRuleImplementation(impl);
 	
 		RuleImplementation child = new RuleImplementation();
@@ -399,8 +400,10 @@ public class Antlr4Utils {
 		impl.getUsesRules().getRuleImplementation().add(child2);
 		impl.getUsesRules().getRuleImplementation().add(childClose);
 		impl.getUsesRules().getRuleImplementation().add(childDeallocate);
-		impl.setRuleMode(RuleMode.GROUP);
 	
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; FETCH NEXT FROM vend_cursor; SELECT * FROM Purchasing.Vendor; DEALLOCATE vendor_cursor; ");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; FETCH NEXT FROM vend_cursor; SELECT * FROM Purchasing.Vendor; CLOSE vend_cursor; DEALLOCATE vend_cursor; ");
+		
 		return rule;
 	}
 
@@ -427,7 +430,11 @@ public class Antlr4Utils {
 		parent.setRuleMode(RuleMode.GROUP);
 
 		parent.getUsesRules().getRuleImplementation().add(child2);
+		parent.getViolatingRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor;DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; BEGIN FETCH NEXT FROM vend_cursor; END SELECT * FROM Purchasing.Vendor; BEGIN CLOSE vend_cursor; END DEALLOCATE vend_cursor; ");
+		parent.getCompliantRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; FETCH NEXT FROM vend_cursor; SELECT * FROM Purchasing.Vendor; CLOSE vend_cursor; DEALLOCATE vend_cursor; ");
+
 		rule.setRuleImplementation(parent);
+	
 		return rule;
 	}
 
@@ -468,7 +475,11 @@ public class Antlr4Utils {
 		parent.setRuleMode(RuleMode.GROUP);
 
 		parent.getUsesRules().getRuleImplementation().add(parent0);
+		parent.getViolatingRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; BEGIN FETCH NEXT FROM vend_cursor; END SELECT * FROM Purchasing.Vendor; BEGIN CLOSE vend_cursor; END DEALLOCATE vend_cursor; ");
+			parent.getCompliantRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; FETCH NEXT FROM vend_cursor; SELECT * FROM Purchasing.Vendor; CLOSE vend_cursor; DEALLOCATE vend_cursor; ");
+	
 		rule.setRuleImplementation(parent);
+		
 		return rule;
 	}
 

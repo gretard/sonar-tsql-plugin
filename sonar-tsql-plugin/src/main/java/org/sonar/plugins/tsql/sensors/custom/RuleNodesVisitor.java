@@ -40,8 +40,8 @@ public class RuleNodesVisitor extends tsqlBaseVisitor {
 		if ((namesChecker.containsClassName(ruleImplemention, node)
 				|| (ruleImplemention.getNames().getTextItem().isEmpty()
 						&& namesChecker.containsName(ruleImplemention, name)))) {
-			final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.ParsedNode(node, rule, key);
-
+			final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.ParsedNode(name, node, rule, key);
+			
 			if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
 				groupedNodes.putIfAbsent(name, parsedNode);
 			} else {
