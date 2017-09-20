@@ -11,7 +11,7 @@ public class ChildrenFiller implements IFiller {
 		for (int i = 0; i < c; i++) {
 			final ParseTree child = tree.getChild(i);
 			root.getChildren()
-					.add(new ParsedNode(root.getName(), child, child.getClass().getName(), rule, root.getRepository()));
+					.add(new ParsedNode(child,  rule, root.getRepository()));
 			visit(child, root, rule);
 		}
 	}

@@ -12,7 +12,7 @@ public class ParsedNode {
 	private final Rule rule;
 
 	private final String repositoryKey;
-	private final String name;
+	private String name;
 
 	private int distance;
 
@@ -38,7 +38,7 @@ public class ParsedNode {
 	}
 
 	public ParsedNode(final ParseTree item, final Rule rule, final String repositoryKey) {
-		this.name = item.getText();
+		this.name = null;
 		this.item = item;
 		this.rule = rule;
 		this.className = item.getClass().getSimpleName();
@@ -63,7 +63,7 @@ public class ParsedNode {
 
 	public ParsedNode(final String name, final ParseTree item, final String className, final Rule rule,
 			final String repositoryKey, int distance) {
-		this.name = name;
+		// this.name = name;
 		this.item = item;
 		this.rule = rule;
 		this.repositoryKey = repositoryKey;

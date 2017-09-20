@@ -1,5 +1,6 @@
 package org.sonar.plugins.tsql.sensors.custom;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +22,9 @@ public class CustomViolationsProvider implements IViolationsProvider {
 	public CustomViolationsProvider(final ILinesProvider linesProvider) {
 		this.linesProvider = linesProvider;
 	}
-
+	final INodesProvider siblingsProvider = new SiblingsNodesProvider();
+	final INodesProvider childrenProvider =new ChildrenNodesProvider();
+	final INodesProvider parentsProvider = new ParentNodesProvider();
 	public TsqlIssue[] getIssues(final ParsedNode... nodes) {
 		LOGGER.debug(String.format("Have %s nodes for checking", nodes.length));
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
@@ -108,13 +111,32 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			nodesToCheck.add(root);
 		}
 		if (dir == Direction.CHILD) {
-			nodesToCheck.addAll(root.getChildren());
+			final List<ParsedNode> items = root.getChildren();
+			if (!items.isEmpty()) {
+				nodesToCheck.addAll(items);
+			}else {
+				nodesToCheck.addAll(Arrays.asList(this.childrenProvider.getNodes(root)));
+			}
+			
 		}
 		if (dir == Direction.PARENT) {
-			nodesToCheck.addAll(root.getParents());
+			final List<ParsedNode> items = root.getParents();
+			if (!items.isEmpty()) {
+				nodesToCheck.addAll(items);
+			}else {
+				nodesToCheck.addAll(Arrays.asList(this.parentsProvider.getNodes(root)));
+				
+			}
 		}
 		if (dir == Direction.SIBLING) {
-			nodesToCheck.addAll(root.getSiblings());
+			
+			final List<ParsedNode> items = root.getSiblings();
+			if (!items.isEmpty()) {
+				nodesToCheck.addAll(items);
+			}else {
+				nodesToCheck.addAll(Arrays.asList(this.siblingsProvider.getNodes(root)));
+			}
+
 		}
 		if (dir == Direction.USE) {
 			nodesToCheck.addAll(root.getUses());
@@ -135,7 +157,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			boolean shouldAdd = false;
 			boolean classNameMatch = checker.containsClassName(rule, className);
 			boolean textIsFound = checker.containsName(rule, txt);
-			boolean nodeContainsName = txt.contains(root.getName());
+			boolean nodeContainsName = txt.contains(root.getText());
 			boolean parentsMatch = checker.checkParent(node, root);
 			switch (rule.getRuleMatchType()) {
 			case CLASS_ONLY:

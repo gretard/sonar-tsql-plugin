@@ -22,7 +22,7 @@ public class SiblingsFiller implements IFiller {
 				if (sibling == item) {
 					continue;
 				}
-				node.getParents().add(new ParsedNode(node.getName(), sibling, sibling.getClass().getSimpleName(), rule,
+				node.getParents().add(new ParsedNode(sibling,  rule,
 						node.getRepository()));
 			}
 
