@@ -17,14 +17,14 @@ public class ChildrenFiller implements IFiller {
 	}
 
 	@Override
-	public void fill(final Rule rule, final ParsedNode... nodes) {
+	public void fill(final ParsedNode... nodes) {
 		for (final ParsedNode node : nodes) {
 			final ParseTree item = node.getItem();
 			if (item == null) {
 				return;
 			}
 
-			visit(item, node, rule);
+			visit(item, node, node.getRule());
 		}
 
 	}

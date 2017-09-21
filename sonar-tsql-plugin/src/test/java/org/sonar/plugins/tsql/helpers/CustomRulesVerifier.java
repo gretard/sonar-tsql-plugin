@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.rules.custom.CustomRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
+import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomRulesVerifier {
 
@@ -16,20 +17,28 @@ public class CustomRulesVerifier {
 			List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
 
 			for (String s : compliant) {
-				boolean res = Antlr4Utils.verify(r, s);
+				TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
+				boolean res = 	(issues.length == 0);
 				if (!res) {
 					AntrlResult rr = Antlr4Utils.getFull(s);
 					Antlr4Utils.print(rr.getTree(), 0, rr.getStream());
+				}
+				for (TsqlIssue i : issues) {
+					System.out.println(i.getDescription());
 				}
 				Assert.assertTrue(String.format("%s Expected compliant code for %s", r.getKey(), s), res);
 			}
 			List<String> nonCompliant = r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample();
 			for (String s : nonCompliant) {
-				boolean res = Antlr4Utils.verify(r, s);
-				if (res) {
+				TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
+				boolean res = 	(issues.length > 0);
+				if (!res) {
 					Antlr4Utils.print(Antlr4Utils.get(s), 0);
 				}
-				Assert.assertFalse(String.format("%s Expected violating code for %s", r.getKey(), s), res);
+				for (TsqlIssue i : issues) {
+					System.out.println(i.getDescription());
+				}
+				Assert.assertTrue(String.format("%s Expected violating code for %s", r.getKey(), s), res);
 
 			}
 		}

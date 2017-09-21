@@ -11,7 +11,7 @@ public class NodesMatchingRulesProvider implements IParsedNodesProvider {
 
 	public ParsedNode[] getNodes(final String repoKey, final ParseTree root, final Rule... rules) {
 		final List<ParsedNode> candidates = new LinkedList<>();
-		final IFiller[] fillers = new IFiller[] { new ParsedNodeUsesFiller(root), new ParentsFiller(), new ChildrenFiller(), new SiblingsFiller() };
+		final IFiller[] fillers = new IFiller[] { new ParsedNodeUsesFiller(root) };
 
 		for (final Rule rule : rules) {
 			if (rule.getRuleImplementation() == null) {
@@ -21,12 +21,14 @@ public class NodesMatchingRulesProvider implements IParsedNodesProvider {
 			visitor.visit(root);
 
 			final ParsedNode[] foundCandidates = visitor.getNodes();
-			for (final IFiller filler : fillers) {
-				filler.fill(rule, foundCandidates);
-			}
+		
 			candidates.addAll(Arrays.asList(foundCandidates));
 		}
-
-		return candidates.toArray(new ParsedNode[0]);
+		final ParsedNode[] finalCandidates = candidates.toArray(new ParsedNode[0]);
+		for (final IFiller filler : fillers) {
+			filler.fill(finalCandidates);
+		}
+		
+		return finalCandidates;
 	}
 }

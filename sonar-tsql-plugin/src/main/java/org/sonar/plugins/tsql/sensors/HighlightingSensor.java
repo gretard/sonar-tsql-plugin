@@ -61,7 +61,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 		}
 
 		rules.addAll(provider.getRules(context.fileSystem().baseDir().getAbsolutePath(), rulesPrefix, paths).values());
-		LOGGER.debug(String.format("Total %s custom rules repositories", rules.size()));
+		LOGGER.info(String.format("Total %s custom rules repositories", rules.size()));
 		CustomRules[] finalRules = rules.toArray(new CustomRules[0]);
 		final IAntlrSensor[] sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
 				new AntlrCustomRulesSensor(finalRules) };
@@ -71,7 +71,8 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 		for (final InputFile file : files) {
 			try {
-				final CharStream charStream = CharStreams.fromFileName(file.absolutePath());
+				final String path = file.absolutePath();
+				final CharStream charStream = CharStreams.fromFileName(path);
 				final tsqlLexer lexer = new tsqlLexer(charStream);
 				if (!LOGGER.isDebugEnabled()) {
 					lexer.removeErrorListeners();
@@ -81,6 +82,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 				for (final IAntlrSensor sensor : sensors) {
 					sensor.work(context, stream, file);
 				}
+				LOGGER.info(String.format("Finished working on %s file", path));
 			} catch (final Throwable e) {
 				LOGGER.warn(format("Unexpected error parsing file %s", file.absolutePath()), e);
 			}

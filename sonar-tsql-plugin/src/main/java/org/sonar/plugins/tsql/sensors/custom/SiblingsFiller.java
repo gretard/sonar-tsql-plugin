@@ -6,7 +6,7 @@ import org.sonar.plugins.tsql.rules.custom.Rule;
 public class SiblingsFiller implements IFiller {
 
 	@Override
-	public void fill(final Rule rule, final ParsedNode... nodes) {
+	public void fill(final ParsedNode... nodes) {
 		for (final ParsedNode node : nodes) {
 			final ParseTree item = node.getItem();
 			if (item == null) {
@@ -22,7 +22,7 @@ public class SiblingsFiller implements IFiller {
 				if (sibling == item) {
 					continue;
 				}
-				node.getParents().add(new ParsedNode(sibling,  rule,
+				node.getSiblings().add(new ParsedNode(sibling,  node.getRule(),
 						node.getRepository()));
 			}
 

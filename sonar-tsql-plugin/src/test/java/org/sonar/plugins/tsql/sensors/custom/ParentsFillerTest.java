@@ -15,7 +15,7 @@ public class ParentsFillerTest {
 		Rule rule = new Rule();
 		ParentsFiller filler = new ParentsFiller();
 		ParsedNode node = new ParsedNode(tree.getChild(0), rule, "test");
-		filler.fill(rule, node);
+		filler.fill(node);
 		Assert.assertEquals(1, node.getParents().size());
 		Assert.assertEquals(0, node.getChildren().size());
 	}
@@ -27,7 +27,7 @@ public class ParentsFillerTest {
 		Rule rule = new Rule();
 		ParentsFiller filler = new ParentsFiller();
 		ParsedNode node = new ParsedNode(tree, rule, "test");
-		filler.fill(rule, node);
+		filler.fill(node);
 		Assert.assertEquals(0, node.getParents().size());
 		Assert.assertEquals(0, node.getChildren().size());
 	}

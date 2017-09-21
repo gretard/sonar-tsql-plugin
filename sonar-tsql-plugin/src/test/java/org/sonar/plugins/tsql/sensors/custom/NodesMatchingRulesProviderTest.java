@@ -25,5 +25,7 @@ public class NodesMatchingRulesProviderTest {
 		rule.getRuleImplementation().setRuleMode(RuleMode.GROUP);
 		ParsedNode[] results = provider.getNodes("test", root, rule);
 		Assert.assertEquals(1, results.length);
+		ParsedNode f = results[0];
+		//Assert.assertEquals(1, f.getUses().size());
 	}
 }

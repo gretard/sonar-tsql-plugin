@@ -109,7 +109,17 @@ public class Antlr4Utils {
 		TsqlIssue[] issues = provider.getIssues(root, customRules);
 		return issues.length == 0;
 	}
-
+	public static TsqlIssue[] verify2(Rule rule, String text) {
+		AntrlResult result = Antlr4Utils.getFull(text);
+		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
+		ParseTree root = result.getTree();
+		CustomRules customRules = new CustomRules();
+		customRules.setRepoKey("test");
+		customRules.setRepoName("test");
+		customRules.getRule().add(rule);
+		TsqlIssue[] issues = provider.getIssues(root, customRules);
+		return issues;
+	}
 	public static AntrlResult getFull(String text) {
 		final CharStream charStream = CharStreams.fromString(text);
 		final tsqlLexer lexer = new tsqlLexer(charStream);
@@ -466,8 +476,7 @@ public class Antlr4Utils {
 		parent0.setRuleResultType(RuleResultType.DEFAULT);
 		parent0.setRuleMatchType(RuleMatchType.FULL);
 
-		parent0.getUsesRules().getRuleImplementation().add(child2);
-		parent0.getUsesRules().getRuleImplementation().add(child3);
+		
 
 		RuleImplementation parent = new RuleImplementation();
 		parent.getNames().getTextItem().add(Cursor_nameContext.class.getSimpleName());
@@ -476,6 +485,9 @@ public class Antlr4Utils {
 		parent.setRuleMatchType(RuleMatchType.DEFAULT);
 		parent.setRuleMode(RuleMode.GROUP);
 
+		parent.getUsesRules().getRuleImplementation().add(child2);
+		parent.getUsesRules().getRuleImplementation().add(child3);
+		
 		parent.getUsesRules().getRuleImplementation().add(parent0);
 		parent.getViolatingRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; BEGIN FETCH NEXT FROM vend_cursor; END SELECT * FROM Purchasing.Vendor; BEGIN CLOSE vend_cursor; END DEALLOCATE vend_cursor; ");
 			parent.getCompliantRulesCodeExamples().getRuleCodeExample().add("DECLARE vend_cursor CURSOR      FOR SELECT * FROM Purchasing.Vendor; OPEN vend_cursor; FETCH NEXT FROM vend_cursor; SELECT * FROM Purchasing.Vendor; CLOSE vend_cursor; DEALLOCATE vend_cursor; ");

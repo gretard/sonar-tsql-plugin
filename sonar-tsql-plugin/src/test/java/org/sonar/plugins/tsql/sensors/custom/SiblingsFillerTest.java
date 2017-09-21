@@ -14,7 +14,7 @@ public class SiblingsFillerTest {
 		Rule rule = new Rule();
 		SiblingsFiller filler = new SiblingsFiller();
 		ParsedNode node = new ParsedNode(tree.getChild(0).getChild(0), rule, "test");
-		filler.fill(rule, node);
+		filler.fill(node);
 		Assert.assertEquals(0, node.getSiblings().size());
 		Assert.assertEquals(0, node.getChildren().size());
 	}

@@ -26,15 +26,16 @@ public class CustomRulesViolationsProvider implements ICustomRulesViolationsProv
 	final IParsedNodesProvider test;
 
 	public TsqlIssue[] getIssues(final ParseTree root, final CustomRules... customRules) {
-		final List<TsqlIssue> foundIssues = new LinkedList<>();
+
+		final List<ParsedNode> c = new LinkedList<>();
 		for (final CustomRules rules : customRules) {
 
 			final ParsedNode[] candidates = test.getNodes(rules.getRepoKey(), root,
 					rules.getRule().toArray(new Rule[0]));
+			c.addAll(Arrays.asList(candidates));
 
-			final TsqlIssue[] issues = provider.getIssues(candidates);
-			foundIssues.addAll(Arrays.asList(issues));
 		}
-		return foundIssues.toArray(new TsqlIssue[0]);
+		final TsqlIssue[] issues = provider.getIssues(c.toArray(new ParsedNode[0]));
+		return issues;
 	}
 }

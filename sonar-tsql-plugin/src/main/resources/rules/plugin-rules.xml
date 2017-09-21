@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sql-rules repoName="tsql plugin custom rules" repoKey="tsqlPluginRepo">
     <rule>
         <key>C001</key>

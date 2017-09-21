@@ -44,6 +44,14 @@ public class ParsedNode {
 		this.className = item.getClass().getSimpleName();
 		this.repositoryKey = repositoryKey;
 	}
+	public ParsedNode(final ParseTree item, final Rule rule, final String repositoryKey, int d) {
+		this.name = null;
+		this.item = item;
+		this.rule = rule;
+		this.className = item.getClass().getSimpleName();
+		this.repositoryKey = repositoryKey;
+		this.distance = d;
+	}
 
 	public ParsedNode(final String name, final ParseTree item, final String className, final Rule rule,
 			final String repositoryKey) {
