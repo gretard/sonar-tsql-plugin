@@ -18,13 +18,15 @@ public class CustomViolationsProvider implements IViolationsProvider {
 	private final ILinesProvider linesProvider;
 	private final INamesChecker checker = new DefaultNamesChecker();
 	private static final Logger LOGGER = Loggers.get(CustomViolationsProvider.class);
+	private final INodesProvider siblingsProvider = new SiblingsNodesProvider();
+	private final INodesProvider childrenProvider = new ChildrenNodesProvider();
+	private final INodesProvider parentsProvider = new ParentNodesProvider();
+	private boolean isDebug = LOGGER.isDebugEnabled();
 
 	public CustomViolationsProvider(final ILinesProvider linesProvider) {
 		this.linesProvider = linesProvider;
 	}
-	final INodesProvider siblingsProvider = new SiblingsNodesProvider();
-	final INodesProvider childrenProvider =new ChildrenNodesProvider();
-	final INodesProvider parentsProvider = new ParentNodesProvider();
+
 	public TsqlIssue[] getIssues(final ParsedNode... nodes) {
 		LOGGER.debug(String.format("Have %s nodes for checking", nodes.length));
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
@@ -42,7 +44,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 				final RuleImplementation rrule = st.getKey();
 				final List<ParsedNode> vNodes = st.getValue();
 				final int found = vNodes.size();
-				
+
 				switch (rrule.getRuleResultType()) {
 				case DEFAULT:
 					break;
@@ -89,8 +91,10 @@ public class CustomViolationsProvider implements IViolationsProvider {
 				}
 
 			}
-			LOGGER.debug(String.format("Found %s violations on rule %s for %s", violated.size(), 
-					ruleDefinition.getKey(), node.getText()));
+			if (isDebug) {
+				LOGGER.debug(String.format("Found %s violations on rule %s for %s", violated.size(),
+						ruleDefinition.getKey(), node.getText()));
+			}
 
 			if (!shouldSkip && violated.size() > 0) {
 
@@ -114,26 +118,26 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			final List<ParsedNode> items = root.getChildren();
 			if (!items.isEmpty()) {
 				nodesToCheck.addAll(items);
-			}else {
+			} else {
 				nodesToCheck.addAll(Arrays.asList(this.childrenProvider.getNodes(root)));
 			}
-			
+
 		}
 		if (dir == Direction.PARENT) {
 			final List<ParsedNode> items = root.getParents();
 			if (!items.isEmpty()) {
 				nodesToCheck.addAll(items);
-			}else {
+			} else {
 				nodesToCheck.addAll(Arrays.asList(this.parentsProvider.getNodes(root)));
-				
+
 			}
 		}
 		if (dir == Direction.SIBLING) {
-			
+
 			final List<ParsedNode> items = root.getSiblings();
 			if (!items.isEmpty()) {
 				nodesToCheck.addAll(items);
-			}else {
+			} else {
 				nodesToCheck.addAll(Arrays.asList(this.siblingsProvider.getNodes(root)));
 			}
 

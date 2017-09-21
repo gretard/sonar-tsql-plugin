@@ -11,6 +11,8 @@ import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomRulesViolationsProvider implements ICustomRulesViolationsProvider {
+	final IViolationsProvider provider;
+	final IParsedNodesProvider test;
 
 	public CustomRulesViolationsProvider(final CommonTokenStream stream) {
 		this(new NodesMatchingRulesProvider(), new CustomViolationsProvider(new DefaultLinesProvider(stream)));
@@ -21,9 +23,6 @@ public class CustomRulesViolationsProvider implements ICustomRulesViolationsProv
 		this.provider = provider;
 		this.test = parsedNodesProvider;
 	}
-
-	final IViolationsProvider provider;
-	final IParsedNodesProvider test;
 
 	public TsqlIssue[] getIssues(final ParseTree root, final CustomRules... customRules) {
 

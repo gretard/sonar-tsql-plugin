@@ -11,20 +11,19 @@ import org.sonar.plugins.tsql.rules.custom.RuleMode;
 public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 
 	private final ParseTree tree;
+	private final UsesFindRule main = new UsesFindRule();
+	private ParsedNode[] nodes;
 
-	public ParsedNodeUsesFiller(ParseTree tree) {
+	public ParsedNodeUsesFiller(final ParseTree tree) {
 		this.tree = tree;
 	}
-
-	final UsesFindRule main = new UsesFindRule();
-	private ParsedNode[] nodes;
 
 	@Override
 	public Object visitChildren(final RuleNode node) {
 
 		final int n = node.getChildCount();
 
-		for (ParsedNode x : this.nodes) {
+		for (final ParsedNode x : this.nodes) {
 
 			main.root(x, node, x.getRule());
 
@@ -51,11 +50,11 @@ public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 					tmp.add(n);
 				}
 			}
-
-			this.nodes = tmp.toArray(new ParsedNode[0]);
-			if (this.nodes.length > 0) {
-				visit(this.tree);
+			if (tmp.isEmpty()) {
+				return;
 			}
+			this.nodes = tmp.toArray(new ParsedNode[0]);
+			visit(this.tree);
 
 		}
 	}

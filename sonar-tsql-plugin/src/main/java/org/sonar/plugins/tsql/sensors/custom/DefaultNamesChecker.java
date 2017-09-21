@@ -55,30 +55,30 @@ public class DefaultNamesChecker implements INamesChecker {
 	}
 
 	@Override
-	public boolean containsClassName(RuleImplementation rule, ParseTree node) {
+	public boolean containsClassName(final RuleImplementation rule, final ParseTree node) {
 		final String className = node.getClass().getSimpleName();
 
 		return containsClassName(rule, className);
 	}
 
 	@Override
-	public boolean containsClassName(RuleImplementation rule, ParsedNode node) {
+	public boolean containsClassName(final RuleImplementation rule, final ParsedNode node) {
 		final String className = node.getClassName();
 
 		return containsClassName(rule, className);
 	}
 
 	@Override
-	public boolean checkParent(ParsedNode node, ParsedNode root) {
-		ParseTree parent1 = getParent(node);
-		ParseTree parent2 = getParent(root);
+	public boolean checkParent(final ParsedNode node, final ParsedNode root) {
+		final ParseTree parent1 = getParent(node);
+		final ParseTree parent2 = getParent(root);
 		if (parent1 == parent2) {
 			return true;
 		}
 		return false;
 	}
 
-	private ParseTree getParent(ParsedNode node) {
+	private ParseTree getParent(final ParsedNode node) {
 		ParseTree parent1 = node.getItem().getParent();
 		while (parent1 != null) {
 			if (parent1 instanceof Cfl_statementContext) {

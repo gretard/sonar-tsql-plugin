@@ -13,10 +13,10 @@ public class DefaultLinesProvider implements ILinesProvider {
 	}
 
 	@Override
-	public int getLine(ParsedNode node) {
+	public int getLine(final ParsedNode node) {
 		final Interval sourceInterval = node.getItem().getSourceInterval();
 		final Token firstToken = stream.get(sourceInterval.a);
-		int line = firstToken.getLine();
+		final int line = firstToken.getLine();
 		return line;
 	}
 
