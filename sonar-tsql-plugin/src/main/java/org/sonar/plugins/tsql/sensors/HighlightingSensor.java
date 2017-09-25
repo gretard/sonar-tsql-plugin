@@ -17,7 +17,7 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrCpdTokenizer;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrCustomRulesSensor;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrHighlighter;
@@ -52,9 +52,9 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
 		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
-		final List<CustomRules> rules = new ArrayList<>();
+		final List<SqlRules> rules = new ArrayList<>();
 		if (!skipCustomRules) {
-			final CustomRules customRules = new CustomPluginRulesProvider().getRules();
+			final SqlRules customRules = new CustomPluginRulesProvider().getRules();
 			if (customRules != null) {
 				rules.add(customRules);
 			}
@@ -62,7 +62,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 		rules.addAll(provider.getRules(context.fileSystem().baseDir().getAbsolutePath(), rulesPrefix, paths).values());
 		LOGGER.info(String.format("Total %s custom rules repositories", rules.size()));
-		CustomRules[] finalRules = rules.toArray(new CustomRules[0]);
+		SqlRules[] finalRules = rules.toArray(new SqlRules[0]);
 		final IAntlrSensor[] sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
 				new AntlrCustomRulesSensor(finalRules) };
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
@@ -12,7 +12,7 @@ public class CustomRulesVerifier {
 
 	@Test
 	public void test() {
-		CustomRules rules = Antlr4Utils.getCustomRules();
+		SqlRules rules = Antlr4Utils.getCustomRules();
 		for (Rule r : rules.getRule()) {
 			List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
 

@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
 import org.sonar.plugins.tsql.helpers.AntrlResult;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleResultType;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
@@ -18,7 +18,7 @@ public class CustomRulesViolationsProviderTest {
 	@Test
 	public void testGetIssuesInsertTrue() {
 
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getInsertRule());
 
@@ -33,7 +33,7 @@ public class CustomRulesViolationsProviderTest {
 	@Test
 	public void testGetIssuesInsertSkipRule() {
 
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		Rule rule = Antlr4Utils.getInsertRule();
 		rule.getRuleImplementation().getChildrenRules().getRuleImplementation().get(0)
@@ -51,7 +51,7 @@ public class CustomRulesViolationsProviderTest {
 	@Test
 	public void testGetIssuesInsertFalse() {
 
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getInsertRule());
 
@@ -66,7 +66,7 @@ public class CustomRulesViolationsProviderTest {
 	@Test
 	public void testGetOrderBy() {
 
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getOrderByRule());
 
@@ -80,7 +80,7 @@ public class CustomRulesViolationsProviderTest {
 	@Test
 	public void testExecRule() {
 
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getExecRule());
 
@@ -93,7 +93,7 @@ public class CustomRulesViolationsProviderTest {
 	}
 	@Test
 	public void testGetOrderByFalse() {
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getOrderByRule());
 
@@ -106,7 +106,7 @@ public class CustomRulesViolationsProviderTest {
 
 	@Test
 	public void testGetMultipleDeclarations() {
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getMultipleDeclarations());
 
@@ -120,7 +120,7 @@ public class CustomRulesViolationsProviderTest {
 
 	@Test
 	public void testGetMultipleDeclarationsFalse() {
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getMultipleDeclarations());
 
@@ -134,7 +134,7 @@ public class CustomRulesViolationsProviderTest {
 
 	@Test
 	public void testGetSameParent() {
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getSameFlow());
 
@@ -150,7 +150,7 @@ public class CustomRulesViolationsProviderTest {
 	public void testGetSameParent2() throws IOException {
 		final InputStream stream = this.getClass().getResourceAsStream("/testFiles/cursorFlow.sql");
 
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.getRule().add(Antlr4Utils.getSameFlow());
 

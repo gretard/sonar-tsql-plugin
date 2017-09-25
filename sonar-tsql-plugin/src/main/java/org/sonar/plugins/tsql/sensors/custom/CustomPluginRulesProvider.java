@@ -6,17 +6,17 @@ import javax.xml.bind.Unmarshaller;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 
 public class CustomPluginRulesProvider {
 	private static final Logger LOGGER = Loggers.get(CustomPluginRulesProvider.class);
 
-	public CustomRules getRules() {
+	public SqlRules getRules() {
 
 		try {
-			final JAXBContext jaxbContext = JAXBContext.newInstance(CustomRules.class);
+			final JAXBContext jaxbContext = JAXBContext.newInstance(SqlRules.class);
 			final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			return (CustomRules) jaxbUnmarshaller
+			return (SqlRules) jaxbUnmarshaller
 					.unmarshal(this.getClass().getResourceAsStream(Constants.PLUGIN_RULES_FILE));
 
 		} catch (final Throwable e) {

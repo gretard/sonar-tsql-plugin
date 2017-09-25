@@ -17,14 +17,14 @@ import javax.xml.bind.Unmarshaller;
 
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 
 public class CustomRulesProvider {
 	private static final Logger LOGGER = Loggers.get(CustomRulesProvider.class);
 
-	public Map<String, CustomRules> getRules(final String baseDir, final String prefix, final String... paths) {
+	public Map<String, SqlRules> getRules(final String baseDir, final String prefix, final String... paths) {
 
-		final HashMap<String, CustomRules> rulesRepositories = new HashMap<String, CustomRules>();
+		final HashMap<String, SqlRules> rulesRepositories = new HashMap<String, SqlRules>();
 
 		final List<String> updatedPaths = new LinkedList<String>();
 		for (final String path : paths) {
@@ -57,9 +57,9 @@ public class CustomRulesProvider {
 
 			try {
 				final InputStream file = new FileInputStream(path);
-				final JAXBContext jaxbContext = JAXBContext.newInstance(CustomRules.class);
+				final JAXBContext jaxbContext = JAXBContext.newInstance(SqlRules.class);
 				final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-				rulesRepositories.put(path, (CustomRules) jaxbUnmarshaller.unmarshal(file));
+				rulesRepositories.put(path, (SqlRules) jaxbUnmarshaller.unmarshal(file));
 				file.close();
 				LOGGER.info("Read rules ok at: " + path);
 			} catch (final FileNotFoundException e) {

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
@@ -24,10 +24,10 @@ public class CustomRulesViolationsProvider implements ICustomRulesViolationsProv
 		this.test = parsedNodesProvider;
 	}
 
-	public TsqlIssue[] getIssues(final ParseTree root, final CustomRules... customRules) {
+	public TsqlIssue[] getIssues(final ParseTree root, final SqlRules... customRules) {
 
 		final List<ParsedNode> c = new LinkedList<>();
-		for (final CustomRules rules : customRules) {
+		for (final SqlRules rules : customRules) {
 
 			final ParsedNode[] candidates = test.getNodes(rules.getRepoKey(), root,
 					rules.getRule().toArray(new Rule[0]));

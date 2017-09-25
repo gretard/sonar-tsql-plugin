@@ -32,9 +32,11 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_listContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_sourceContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Waitfor_statementContext;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
@@ -102,7 +104,7 @@ public class Antlr4Utils {
 		AntrlResult result = Antlr4Utils.getFull(text);
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
 		ParseTree root = result.getTree();
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
@@ -113,7 +115,7 @@ public class Antlr4Utils {
 		AntrlResult result = Antlr4Utils.getFull(text);
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
 		ParseTree root = result.getTree();
-		CustomRules customRules = new CustomRules();
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
@@ -148,7 +150,7 @@ public class Antlr4Utils {
 		return result;
 	}
 
-	public static String ruleToString(CustomRules customRules) {
+	public static String ruleToString(SqlRules customRules) {
 
 		for (Rule r : customRules.getRule()) {
 			List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
@@ -177,7 +179,7 @@ public class Antlr4Utils {
 		}
 		String xmlString = "";
 		try {
-			JAXBContext context = JAXBContext.newInstance(CustomRules.class);
+			JAXBContext context = JAXBContext.newInstance(SqlRules.class);
 			Marshaller m = context.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To
 			StringWriter sw = new StringWriter();
@@ -191,22 +193,22 @@ public class Antlr4Utils {
 		return xmlString;
 	}
 
-	public static CustomRules[] read(String path) {
+	public static SqlRules[] read(String path) {
 		CustomRulesProvider provider = new CustomRulesProvider();
-		return provider.getRules(null, "", path).values().toArray(new CustomRules[0]);
+		return provider.getRules(null, "", path).values().toArray(new SqlRules[0]);
 	}
 
-	public static CustomRules getCustomRules() {
-		CustomRules customRules = new CustomRules();
+	public static SqlRules getCustomRules() {
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("tsqlDemoRepo");
 		customRules.setRepoName("Demo rules");
 
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getCursorRule(),
-				getInsertRule(), getOrderByRule(), getExecRule(), getMultipleDeclarations(), getSameFlow()));
+				getInsertRule(), getOrderByRule(), getExecRule(), getMultipleDeclarations(), getSameFlow(), getSchemaRule()));
 		return customRules;
 	}
-	public static CustomRules getCustomMainRules() {
-		CustomRules customRules = new CustomRules();
+	public static SqlRules getCustomMainRules() {
+		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey(Constants.PLUGIN_REPO_KEY);
 		customRules.setRepoName(Constants.PLUGIN_REPO_NAME);
 
@@ -317,7 +319,65 @@ public class Antlr4Utils {
 		rule.setRuleImplementation(impl);
 		return rule;
 	}
+	public static Rule getSchemaRule() {
+		Rule rule = new Rule();
+		rule.setKey("C005");
+		rule.setInternalKey("C005");
+		rule.setName("Non schema qualified object name");
+		rule.setDescription(
+				"<h2>Description</h2><p>Always use schema-qualified object names to speed up resolution and improve query plan reuse.</p>");
 
+		RuleImplementation child2 = new RuleImplementation();
+		child2.getNames().getTextItem().add(Simple_idContext.class.getSimpleName());
+		child2.setTextCheckType(TextCheckType.DEFAULT);
+		child2.setRuleResultType(RuleResultType.FAIL_IF_LESS_FOUND);
+		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child2.setTimes(2);
+		child2.setRuleViolationMessage("Always use schema-qualified object names");
+
+		RuleImplementation impl = new RuleImplementation();
+
+		impl.getChildrenRules().getRuleImplementation().add(child2);
+		impl.getNames().getTextItem().add(Table_sourceContext.class.getSimpleName());
+		impl.setRuleMatchType(RuleMatchType.DEFAULT);
+		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.setRuleViolationMessage("");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from test order by 1;");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by name;");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from main.dbo.test order by name;");
+		rule.setRuleImplementation(impl);
+		return rule;
+	}
+	
+	public static Rule getSARGRULE() {
+		Rule rule = new Rule();
+		rule.setKey("C005");
+		rule.setInternalKey("C005");
+		rule.setName("Non schema qualified object name");
+		rule.setDescription(
+				"<h2>Description</h2><p>Always use schema-qualified object names to speed up resolution and improve query plan reuse.</p>");
+
+		RuleImplementation child2 = new RuleImplementation();
+		child2.getNames().getTextItem().add(Simple_idContext.class.getSimpleName());
+		child2.setTextCheckType(TextCheckType.DEFAULT);
+		child2.setRuleResultType(RuleResultType.FAIL_IF_LESS_FOUND);
+		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child2.setTimes(2);
+		child2.setRuleViolationMessage("Always use schema-qualified object names");
+
+		RuleImplementation impl = new RuleImplementation();
+
+		impl.getChildrenRules().getRuleImplementation().add(child2);
+		impl.getNames().getTextItem().add(Table_sourceContext.class.getSimpleName());
+		impl.setRuleMatchType(RuleMatchType.DEFAULT);
+		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.setRuleViolationMessage("");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from test WHERE Year(myDate) = 2008  or 1 = 1 order by 1;");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where  name like '%test';");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from main.dbo.test order by name;");
+		rule.setRuleImplementation(impl);
+		return rule;
+	}
 	public static Rule getExecRule() {
 		Rule rule = new Rule();
 		rule.setKey("C005");

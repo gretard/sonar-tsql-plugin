@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.io.IOUtils;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 
 public class RulesHelperTool {
@@ -39,9 +39,9 @@ public class RulesHelperTool {
 
 		}
 		System.out.println("text");
-		CustomRules[] rules = Antlr4Utils.read(value);
+		SqlRules[] rules = Antlr4Utils.read(value);
 
-		for (CustomRules rule : rules) {
+		for (SqlRules rule : rules) {
 			System.out.println("Checking repository: " + rule.getRepoName());
 			for (Rule r : rule.getRule()) {
 				System.out.println("Checking rule: " + r.getKey());

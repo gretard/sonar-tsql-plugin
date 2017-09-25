@@ -10,7 +10,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 import org.sonar.plugins.tsql.sensors.custom.CustomRulesViolationsProvider;
 import org.sonar.plugins.tsql.sensors.custom.ICustomRulesViolationsProvider;
@@ -18,9 +18,9 @@ import org.sonar.plugins.tsql.sensors.custom.ICustomRulesViolationsProvider;
 public class AntlrCustomRulesSensor implements IAntlrSensor {
 	private static final Logger LOGGER = Loggers.get(AntlrCustomRulesSensor.class);
 
-	private CustomRules[] rules;
+	private SqlRules[] rules;
 
-	public AntlrCustomRulesSensor(CustomRules[] rules) {
+	public AntlrCustomRulesSensor(SqlRules[] rules) {
 		this.rules = rules;
 	}
 
@@ -34,7 +34,7 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 				parser.removeErrorListeners();
 			}
 			final Tsql_fileContext ct = parser.tsql_file();
-			for (final CustomRules rule : this.rules) {
+			for (final SqlRules rule : this.rules) {
 				try {
 					final TsqlIssue[] issues = customRulesViolationsProvider.getIssues(ct, this.rules);
 

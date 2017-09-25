@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.sonar.api.config.Settings;
 import org.sonar.api.utils.internal.JUnitTempFolder;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
 
 public class CustomRulesProviderTest {
@@ -27,9 +27,9 @@ public class CustomRulesProviderTest {
 		settings.setProperty(Constants.PLUGIN_CUSTOM_RULES_PREFIX, "rules");
 			
 		CustomRulesProvider provider = new CustomRulesProvider();
-		Map<String, CustomRules> rules = provider.getRules(null, "rules", baseFile.getParentFile().getAbsolutePath());
+		Map<String, SqlRules> rules = provider.getRules(null, "rules", baseFile.getParentFile().getAbsolutePath());
 		Assert.assertEquals(1, rules.size());
-		Assert.assertEquals(8, rules.values().toArray(new CustomRules[0])[0].getRule().size());
+		Assert.assertEquals(8, rules.values().toArray(new SqlRules[0])[0].getRule().size());
 	}
 	@Test
 	public void testNoRules() throws IOException {
@@ -41,7 +41,7 @@ public class CustomRulesProviderTest {
 		settings.setProperty(Constants.PLUGIN_CUSTOM_RULES_PREFIX, "rules");
 			
 		CustomRulesProvider provider = new CustomRulesProvider();
-		Map<String, CustomRules> rules = provider.getRules(null, "rules",  baseFile.getParentFile().getAbsolutePath());
+		Map<String, SqlRules> rules = provider.getRules(null, "rules",  baseFile.getParentFile().getAbsolutePath());
 		Assert.assertEquals(0, rules.size());
 	}
 }

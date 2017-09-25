@@ -137,11 +137,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CustomRules }
+     * Create an instance of {@link SqlRules }
      * 
      */
-    public CustomRules createCustomRules() {
-        return new CustomRules();
+    public SqlRules createCustomRules() {
+        return new SqlRules();
     }
 
     /**
