@@ -16,4 +16,10 @@ public class Antlr4UtilsTest {
 		AntrlResult res= Antlr4Utils.getFull("SELECT * from test WHERE Year(myDate) = 2008 or myDate between '2012-01-01' and '2019-10-10'");
 		Antlr4Utils.print(res.getTree(), 0);
 	}
+	
+	@Test
+	public void testGetFullString3() {
+		AntrlResult res= Antlr4Utils.getFull("SELECT * from test WITH (nolock)");
+		Antlr4Utils.print(res.getTree(), 0);
+	}
 }

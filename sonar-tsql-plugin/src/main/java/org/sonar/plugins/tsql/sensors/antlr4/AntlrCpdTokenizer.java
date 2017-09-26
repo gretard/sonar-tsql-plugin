@@ -2,8 +2,6 @@ package org.sonar.plugins.tsql.sensors.antlr4;
 
 import static java.lang.String.format;
 
-import java.util.List;
-
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.sonar.api.batch.fs.InputFile;
@@ -16,7 +14,7 @@ import org.sonar.plugins.tsql.Constants;
 
 public class AntlrCpdTokenizer implements IAntlrSensor {
 	private static final Logger LOGGER = Loggers.get(AntlrCpdTokenizer.class);
-	boolean debugEnabled = LOGGER.isDebugEnabled();
+
 	@Override
 	public void work(final SensorContext context, final CommonTokenStream stream, InputFile file) {
 		final boolean skipCpdAnalysis = context.settings().getBoolean(Constants.PLUGIN_SKIP_CPD);
@@ -27,7 +25,7 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 		}
 		final NewCpdTokens cpdTokens = context.newCpdTokens().onFile(file);
 
-		final List<Token> alltokens = stream.getTokens();
+		final Token[] alltokens = stream.getTokens().toArray(new Token[0]);
 		for (final Token token : alltokens) {
 			int startLine = token.getLine();
 			int startLineOffset = token.getCharPositionInLine();
@@ -44,7 +42,7 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 				}
 				cpdTokens.addToken(startLine, startLineOffset, endLine, endLineOffset, text);
 			} catch (final Throwable e) {
-				if (debugEnabled) {
+				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug(
 							format("Unexpected error adding cpd tokens on file %s for token %s on (%s, %s) -  (%s, %s)",
 									file.absolutePath(), text, startLine, startLineOffset, endLine, endLineOffset),

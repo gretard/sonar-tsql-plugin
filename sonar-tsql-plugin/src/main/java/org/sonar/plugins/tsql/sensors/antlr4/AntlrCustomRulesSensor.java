@@ -55,7 +55,7 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 							file.absolutePath(), rule.getRepoName()), e);
 				}
 			}
-		} catch (Throwable e) {
+		} catch (final Throwable e) {
 			LOGGER.warn("Unexpected error while parsing issues for: " + file.absolutePath());
 		}
 	}

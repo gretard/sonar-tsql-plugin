@@ -33,9 +33,11 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_listContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_hintContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_sourceContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Waitfor_statementContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.With_table_hintsContext;
 import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
@@ -174,6 +176,10 @@ public class Antlr4Utils {
 					sb.append("<code>" + x + "</code>");
 				}
 			}
+			if (r.getSource() !=null && !r.getSource().isEmpty()) {
+				sb.append("<h4>Source</h4>");
+				sb.append(String.format("<a href='%s'>%s</a>", r.getSource(), r.getSource()));
+			}
 			r.setDescription(sb.toString());
 
 		}
@@ -204,7 +210,7 @@ public class Antlr4Utils {
 		customRules.setRepoName("Demo rules");
 
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getCursorRule(),
-				getInsertRule(), getOrderByRule(), getExecRule(), getMultipleDeclarations(), getSameFlow(), getSchemaRule()));
+				getInsertRule(), getOrderByRule(), getNoLockRule(), getExecRule(), getMultipleDeclarations(), getSameFlow(), getSchemaRule()));
 		return customRules;
 	}
 	public static SqlRules getCustomMainRules() {
@@ -213,7 +219,7 @@ public class Antlr4Utils {
 		customRules.setRepoName(Constants.PLUGIN_REPO_NAME);
 
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), 
-				getInsertRule(), getOrderByRule(), getExecRule()));
+				getInsertRule(), getOrderByRule(), getExecRule(), getSchemaRule(), getNoLockRule()));
 		return customRules;
 	}
 
@@ -321,8 +327,8 @@ public class Antlr4Utils {
 	}
 	public static Rule getSchemaRule() {
 		Rule rule = new Rule();
-		rule.setKey("C005");
-		rule.setInternalKey("C005");
+		rule.setKey("C006");
+		rule.setInternalKey("C006");
 		rule.setName("Non schema qualified object name");
 		rule.setDescription(
 				"<h2>Description</h2><p>Always use schema-qualified object names to speed up resolution and improve query plan reuse.</p>");
@@ -346,6 +352,7 @@ public class Antlr4Utils {
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by name;");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from main.dbo.test order by name;");
 		rule.setRuleImplementation(impl);
+		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
 		return rule;
 	}
 	
@@ -420,6 +427,29 @@ public class Antlr4Utils {
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("EXECUTE sp_executesql N'select 1';");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("exec sys.sp_test  @test = 'Publisher';");
 
+		rule.setRuleImplementation(impl);
+
+		return rule;
+	}
+	public static Rule getNoLockRule() {
+		Rule rule = new Rule();
+		rule.setKey("C007");
+		rule.setInternalKey("C007");
+		rule.setName("NOLOCK hint used");
+		rule.setDescription("<h2>Description</h2><p>Use of NOLOCK might cause data inconsistency problems.</p>");
+		
+		RuleImplementation impl = new RuleImplementation();
+
+
+		impl.getTextToFind().getTextItem().add("NOLOCK");
+		impl.setTextCheckType(TextCheckType.CONTAINS);
+		impl.getNames().getTextItem().add(Table_hintContext.class.getSimpleName());
+		impl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		impl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
+
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT name, surnam from dbo.test WITH (NOLOCK);");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT name, surnam from dbo.test;");
+		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
 		rule.setRuleImplementation(impl);
 
 		return rule;
@@ -560,6 +590,11 @@ public class Antlr4Utils {
 	public static void main(String[] args) {
 
 		System.out.println(ruleToString(getCustomMainRules()));
+		
+		SqlRules rules = getCustomMainRules();
+		for (Rule r : rules.getRule()) {
+			System.out.println(r.getKey()+" - "+r.getName());
+		}
 
 	}
 }

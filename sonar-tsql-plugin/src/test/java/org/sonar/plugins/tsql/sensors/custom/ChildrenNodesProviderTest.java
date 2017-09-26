@@ -6,17 +6,21 @@ import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 
-public class ChildrenFillerTest {
+public class ChildrenNodesProviderTest {
 
 	@Test
 	public void test() {
+		ChildrenNodesProvider provider = new ChildrenNodesProvider();
+		Assert.assertEquals(0, provider.getNodes(null).length);
+	}
+
+	@Test
+	public void test2() {
 		ParseTree tree = Antlr4Utils.get("select * from dbo.test");
 		Rule rule = new Rule();
-		ChildrenFiller filler = new ChildrenFiller();
+		ChildrenNodesProvider provider = new ChildrenNodesProvider();
 		ParsedNode node = new ParsedNode(tree, rule, "test");
-		filler.fill(node);
-		Assert.assertEquals(0, node.getParents().size());
-		Assert.assertEquals(26, node.getChildren().size());
+		Assert.assertEquals(26, provider.getNodes(node).length);
 	}
 
 }

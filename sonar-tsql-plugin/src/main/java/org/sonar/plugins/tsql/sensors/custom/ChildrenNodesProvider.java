@@ -15,7 +15,11 @@ public class ChildrenNodesProvider implements INodesProvider {
 	}
 
 	void visit(List<ParsedNode> nodes, final ParsedNode root) {
+		if (root  == null || root.getItem() == null) {
+			return;
+		}
 		final ParseTree tree = root.getItem();
+		
 		final int c = root.getItem().getChildCount();
 
 		for (int i = 0; i < c; i++) {

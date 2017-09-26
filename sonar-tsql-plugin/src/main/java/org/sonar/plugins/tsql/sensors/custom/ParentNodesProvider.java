@@ -11,6 +11,10 @@ public class ParentNodesProvider implements INodesProvider {
 	public ParsedNode[] getNodes(final ParsedNode node) {
 		final List<ParsedNode> nodes = new ArrayList<ParsedNode>();
 
+		if (node == null || node.getItem() == null) {
+			return nodes.toArray(new ParsedNode[0]);
+		}
+
 		final ParseTree item = node.getItem();
 
 		ParseTree parent = item.getParent();

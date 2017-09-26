@@ -70,8 +70,8 @@
         <xs:element name="ruleMatchType" type="ruleMatchType" />
         <xs:element name="ruleResultType" type="ruleResultType" />
         <xs:element name="textCheckType" type="textCheckType" />
-          <xs:element ref="violatingRulesCodeExamples"/>
-            <xs:element ref="compliantRulesCodeExamples"/>
+        <xs:element ref="violatingRulesCodeExamples"/>
+        <xs:element ref="compliantRulesCodeExamples"/>
         
       </xs:sequence>
     </xs:complexType>
@@ -131,6 +131,7 @@
   <xs:element name="remediationFunctionBaseEffort" type="xs:string"/>
   <xs:element name="debtRemediationFunctionCoefficient" type="xs:string"/>
   <xs:element name="tag" type="xs:string"/>
+  <xs:element name="source" type="xs:string"/>
   <xs:element name="rule">
     <xs:complexType>
       <xs:sequence>
@@ -147,10 +148,12 @@
         <xs:element ref="debtRemediationFunctionCoefficient"/>
         <xs:element ref="tag"/>
         <xs:element ref="ruleImplementation"/>
+        <xs:element ref="source"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="customRules">
+  <xs:element name="sql-rules">
+  
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="rule" maxOccurs="unbounded" minOccurs="0"/>
