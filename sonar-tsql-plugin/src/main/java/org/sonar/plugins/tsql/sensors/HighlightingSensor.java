@@ -82,7 +82,9 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 				for (final IAntlrSensor sensor : sensors) {
 					sensor.work(context, stream, file);
 				}
+				
 				LOGGER.info(String.format("Finished working on %s file", path));
+				
 			} catch (final Throwable e) {
 				LOGGER.warn(format("Unexpected error parsing file %s", file.absolutePath()), e);
 			}

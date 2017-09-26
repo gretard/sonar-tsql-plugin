@@ -11,6 +11,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
+import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomViolationsProvider implements IViolationsProvider {
@@ -145,25 +146,24 @@ public class CustomViolationsProvider implements IViolationsProvider {
 		if (dir == Direction.USE) {
 			nodesToCheck.addAll(root.getUses());
 		}
+		
 		if (nodesToCheck.isEmpty()) {
 			return;
 		}
 
 		final ParsedNode[] candidates = nodesToCheck.toArray(new ParsedNode[0]);
 
-		List<ParsedNode> violatingNodes = new LinkedList<ParsedNode>();
+		final List<ParsedNode> violatingNodes = new LinkedList<ParsedNode>();
 		for (final ParsedNode node : candidates) {
 			if (node.getItem() == null) {
 				continue;
 			}
 			final String className = node.getItem().getClass().getSimpleName();
-			final String txt = node.getText();
 			boolean shouldAdd = false;
 			boolean classNameMatch = checker.containsClassName(rule, className);
-			boolean textIsFound = checker.containsName(rule, txt);
-			boolean nodeContainsName = txt.contains(root.getText());
-			boolean parentsMatch = checker.checkParent(node, root);
-			switch (rule.getRuleMatchType()) {
+			
+			final RuleMatchType type = rule.getRuleMatchType();
+			switch (type) {
 			case CLASS_ONLY:
 				if (classNameMatch) {
 					shouldAdd = true;
@@ -172,28 +172,31 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			case DEFAULT:
 				break;
 			case FULL:
-				if (classNameMatch && textIsFound && nodeContainsName) {
-					shouldAdd = true;
-				}
-				break;
-			case STRICT:
-				if (parentsMatch && classNameMatch && textIsFound && nodeContainsName) {
-					shouldAdd = true;
-				}
-				break;
-			case TEXT_ONLY:
-				if (textIsFound) {
-					shouldAdd = true;
-				}
-				break;
 			case TEXT_AND_CLASS:
-				if (textIsFound && classNameMatch) {
+			case STRICT:
+			case TEXT_ONLY:
+				final String txt = node.getText();
+				final boolean textIsFound = checker.containsName(rule, txt);
+				final boolean nodeContainsName = txt.contains(root.getText());
+				final boolean parentsMatch = checker.checkParent(node, root);
+				if (type == RuleMatchType.FULL && classNameMatch && textIsFound && nodeContainsName) {
+					shouldAdd = true;
+				}
+			
+				if (type == RuleMatchType.STRICT && parentsMatch && classNameMatch && textIsFound && nodeContainsName) {
+					shouldAdd = true;
+				}
+			
+				if (type == RuleMatchType.TEXT_ONLY && textIsFound) {
+					shouldAdd = true;
+				}
+
+				if (type == RuleMatchType.TEXT_AND_CLASS && textIsFound && classNameMatch) {
 					shouldAdd = true;
 				}
 				break;
 			default:
 				break;
-
 			}
 
 			if (shouldAdd) {
