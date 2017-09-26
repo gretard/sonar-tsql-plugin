@@ -236,55 +236,6 @@
         </ruleImplementation>
     </rule>
     <rule>
-        <key>C006</key>
-        <name>Non schema qualified object name</name>
-        <internalKey>C006</internalKey>
-        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;Always use schema-qualified object names to speed up resolution and improve query plan reuse.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;code&gt;SELECT * from test order by 1;&lt;/code&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;code&gt;SELECT * from dbo.test order by name;&lt;/code&gt;&lt;code&gt;SELECT * from main.dbo.test order by name;&lt;/code&gt;&lt;h4&gt;Source&lt;/h4&gt;&lt;a href='http://sqlmag.com/t-sql/t-sql-best-practices-part-1'&gt;http://sqlmag.com/t-sql/t-sql-best-practices-part-1&lt;/a&gt;</description>
-        <ruleImplementation>
-            <names>
-                <textItem>Table_sourceContext</textItem>
-            </names>
-            <textToFind/>
-            <parentRules/>
-            <childrenRules>
-                <ruleImplementation>
-                    <names>
-                        <textItem>Simple_idContext</textItem>
-                    </names>
-                    <textToFind/>
-                    <parentRules/>
-                    <childrenRules/>
-                    <siblingsRules/>
-                    <usesRules/>
-                    <ruleViolationMessage>Always use schema-qualified object names</ruleViolationMessage>
-                    <times>2</times>
-                    <ruleMode>Default</ruleMode>
-                    <ruleMatchType>ClassOnly</ruleMatchType>
-                    <ruleResultType>FailIfLessFound</ruleResultType>
-                    <textCheckType>Default</textCheckType>
-                    <violatingRulesCodeExamples/>
-                    <compliantRulesCodeExamples/>
-                </ruleImplementation>
-            </childrenRules>
-            <siblingsRules/>
-            <usesRules/>
-            <ruleViolationMessage></ruleViolationMessage>
-            <times>0</times>
-            <ruleMode>Default</ruleMode>
-            <ruleMatchType>Default</ruleMatchType>
-            <ruleResultType>Default</ruleResultType>
-            <textCheckType>Default</textCheckType>
-            <violatingRulesCodeExamples>
-                <ruleCodeExample>SELECT * from test order by 1;</ruleCodeExample>
-            </violatingRulesCodeExamples>
-            <compliantRulesCodeExamples>
-                <ruleCodeExample>SELECT * from dbo.test order by name;</ruleCodeExample>
-                <ruleCodeExample>SELECT * from main.dbo.test order by name;</ruleCodeExample>
-            </compliantRulesCodeExamples>
-        </ruleImplementation>
-        <source>http://sqlmag.com/t-sql/t-sql-best-practices-part-1</source>
-    </rule>
-    <rule>
         <key>C007</key>
         <name>NOLOCK hint used</name>
         <internalKey>C007</internalKey>

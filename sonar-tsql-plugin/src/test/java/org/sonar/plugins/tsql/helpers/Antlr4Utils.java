@@ -219,7 +219,7 @@ public class Antlr4Utils {
 		customRules.setRepoName(Constants.PLUGIN_REPO_NAME);
 
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), 
-				getInsertRule(), getOrderByRule(), getExecRule(), getSchemaRule(), getNoLockRule()));
+				getInsertRule(), getOrderByRule(), getExecRule(),  getNoLockRule()));
 		return customRules;
 	}
 
