@@ -13,7 +13,9 @@ public class CustomRulesVerifier {
 	@Test
 	public void test() {
 		SqlRules rules = Antlr4Utils.getCustomRules();
-		for (Rule r : rules.getRule()) {
+		for (Rule r : rules.getRule()) 
+		//Rule r = Antlr4Utils.getSelectAllRule();
+		{
 			List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
 
 			for (String s : compliant) {
@@ -45,7 +47,11 @@ public class CustomRulesVerifier {
 	}
 	@Test
 	public void test2() {
-		AntrlResult rr = Antlr4Utils.getFull("SELECT * FROM dbo.test");
-		Antlr4Utils.print(rr.getTree(), 0, rr.getStream());
+		String regex = "N?'%(.*?)'";
+		String s1 = "'%ffdsf'";
+		System.out.println(s1.matches(regex));
+		 
+		//AntrlResult rr = Antlr4Utils.getFull("SELECT * FROM dbo.test");
+		//Antlr4Utils.print(rr.getTree(), 0, rr.getStream());
 	}
 }

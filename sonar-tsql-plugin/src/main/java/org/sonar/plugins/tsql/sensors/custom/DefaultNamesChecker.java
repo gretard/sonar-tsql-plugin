@@ -21,7 +21,7 @@ public class DefaultNamesChecker implements INamesChecker {
 			switch (type) {
 			case DEFAULT:
 			case CONTAINS:
-				if (text.contains(s)) {
+				if (StringUtils.containsIgnoreCase(text, s)) {
 					return true;
 				}
 				break;
