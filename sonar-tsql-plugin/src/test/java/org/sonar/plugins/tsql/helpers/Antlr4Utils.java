@@ -42,6 +42,7 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_hintContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_name_with_hintContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_sourceContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Waitfor_statementContext;
@@ -131,7 +132,7 @@ public class Antlr4Utils {
 		customRules.getRule().add(rule);
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
 		ParseTree root = result.getTree();
-		
+
 		TsqlIssue[] issues = provider.getIssues(root);
 		return issues;
 	}
@@ -225,7 +226,8 @@ public class Antlr4Utils {
 				.addAll(Arrays.asList(getSargRule(), getWaitForRule(), getSelectAllRule(), // getCursorRule(),
 						getInsertRule(), getOrderByRule(), getNoLockRule(), getExecRule(), // getMultipleDeclarations(),
 						// getSameFlow(),
-						getSchemaRule(), getSargRule()));
+						//getSchemaRule(),
+						getSargRule()));
 		return customRules;
 	}
 
@@ -361,7 +363,7 @@ public class Antlr4Utils {
 		parent0.getChildrenRules().getRuleImplementation().add(parent0Child);
 
 		RuleImplementation parent1 = new RuleImplementation();
-		parent1.getNames().getTextItem().add(Select_statementContext.class.getSimpleName());
+		parent1.getNames().getTextItem().add(Table_name_with_hintContext.class.getSimpleName());
 		parent1.setTextCheckType(TextCheckType.DEFAULT);
 		parent1.setRuleResultType(RuleResultType.DEFAULT);
 		parent1.setRuleMatchType(RuleMatchType.CLASS_ONLY);
@@ -379,7 +381,7 @@ public class Antlr4Utils {
 
 		RuleImplementation impl = new RuleImplementation();
 
-		impl.getParentRules().getRuleImplementation().add(parent0);
+		//impl.getParentRules().getRuleImplementation().add(parent0);
 		impl.getParentRules().getRuleImplementation().add(parent1);
 		impl.getNames().getTextItem().add(Table_sourceContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
@@ -388,6 +390,7 @@ public class Antlr4Utils {
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
 				.add("with cte as(select a, b,c from dbo.test) SELECT a from cte; select * from test.dbo");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from test order by 1;");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT OrderID, OrderDate FROM Orders");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by name;");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from main.dbo.test order by name;");
 		rule.setRuleImplementation(impl);
@@ -395,7 +398,6 @@ public class Antlr4Utils {
 		return rule;
 	}
 
-	
 	public static Rule getExecRule() {
 		Rule rule = new Rule();
 		rule.setKey("C005");
@@ -603,6 +605,7 @@ public class Antlr4Utils {
 		Rule rule = new Rule();
 		rule.setKey("C009");
 		rule.setInternalKey("C009");
+		rule.setStatus("BETA");
 		rule.setName("Non-sargable statement used");
 		rule.setDescription(
 				"<h2>Description</h2><p>Use of non-sargeable arguments might cause performance problems.</p>");
@@ -611,37 +614,36 @@ public class Antlr4Utils {
 		functionCallContainsColRef.getNames().getTextItem().add(Column_ref_expressionContext.class.getSimpleName());
 		functionCallContainsColRef.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		functionCallContainsColRef.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
-		functionCallContainsColRef.setRuleViolationMessage("Non-sargeable argument found - column referenced in a function");
-		
-			
-		
+		functionCallContainsColRef
+				.setRuleViolationMessage("Non-sargeable argument found - column referenced in a function");
+
 		RuleImplementation ruleFunctionCall = new RuleImplementation();
 		ruleFunctionCall.getNames().getTextItem().add(Function_callContext.class.getSimpleName());
 		ruleFunctionCall.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		ruleFunctionCall.setRuleResultType(RuleResultType.DEFAULT);
 		ruleFunctionCall.getChildrenRules().getRuleImplementation().add(functionCallContainsColRef);
-		
-		
+
 		RuleImplementation predicateContextContainsLike = new RuleImplementation();
 		predicateContextContainsLike.getTextToFind().getTextItem().add("LIKE");
 		predicateContextContainsLike.setTextCheckType(TextCheckType.CONTAINS);
 		predicateContextContainsLike.getNames().getTextItem().add(PredicateContext.class.getSimpleName());
 		predicateContextContainsLike.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		predicateContextContainsLike.setRuleResultType(RuleResultType.DEFAULT);
-		
-		
+
 		RuleImplementation functionCallContainsLikeWildcard = new RuleImplementation();
-		functionCallContainsLikeWildcard.getTextToFind().getTextItem().add("N?'%(.*?)'");
+		functionCallContainsLikeWildcard.getTextToFind().getTextItem().add("N?[',‘]%(.*?)'");
 		functionCallContainsLikeWildcard.setTextCheckType(TextCheckType.REGEXP);
 		functionCallContainsLikeWildcard.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
 		functionCallContainsLikeWildcard.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		functionCallContainsLikeWildcard.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
-		functionCallContainsLikeWildcard.setRuleViolationMessage("Non-sargeable argument found - predicate starts with wildcard");
-		
-		
+		functionCallContainsLikeWildcard
+				.setRuleViolationMessage("Non-sargeable argument found - predicate starts with wildcard");
+
 		predicateContextContainsLike.getChildrenRules().getRuleImplementation().add(functionCallContainsLikeWildcard);
-		
+
 		RuleImplementation impl = new RuleImplementation();
+		impl.getChildrenRules().getRuleImplementation().add(ruleFunctionCall);
+		impl.getChildrenRules().getRuleImplementation().add(predicateContextContainsLike);
 
 		impl.getNames().getTextItem().add(Search_conditionContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
@@ -650,12 +652,13 @@ public class Antlr4Utils {
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT name, surname from dbo.test where year(date) > 2008");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
-		.add("SELECT name, surname from dbo.test where name like '%red' ");
+				.add("SELECT name, surname from dbo.test where name like '%red' ");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;");
-		impl.getChildrenRules().getRuleImplementation().add(ruleFunctionCall);
-		
-		impl.getChildrenRules().getRuleImplementation().add(predicateContextContainsLike);
+		//impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+		//		.add("IF @LanguageName LIKE N'%Chinese%' SET @LanguageName = N'Chinese';");
+
+		//
 		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
 		rule.setRuleImplementation(impl);
 

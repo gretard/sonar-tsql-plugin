@@ -79,6 +79,9 @@ public class DefaultNamesChecker implements INamesChecker {
 	}
 
 	private ParseTree getParent(final ParsedNode node) {
+		if (node == null) {
+			return null;
+		}
 		ParseTree parent1 = node.getItem().getParent();
 		while (parent1 != null) {
 			if (parent1 instanceof Cfl_statementContext) {

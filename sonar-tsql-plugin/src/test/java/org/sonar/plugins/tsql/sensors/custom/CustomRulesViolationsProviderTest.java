@@ -143,7 +143,7 @@ public class CustomRulesViolationsProviderTest {
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
 		ParseTree root = result.getTree();
 		TsqlIssue[] issues = provider.getIssues(root);
-		Assert.assertEquals(1, issues.length);
+		Assert.assertEquals(2, issues.length);
 	}
 	
 	@Test

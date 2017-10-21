@@ -47,11 +47,8 @@ public class CustomRulesVerifier {
 	}
 	@Test
 	public void test2() {
-		String regex = "N?'%(.*?)'";
-		String s1 = "'%ffdsf'";
-		System.out.println(s1.matches(regex));
 		 
-		//AntrlResult rr = Antlr4Utils.getFull("SELECT * FROM dbo.test");
-		//Antlr4Utils.print(rr.getTree(), 0, rr.getStream());
+		AntrlResult rr = Antlr4Utils.getFull("PASSWORD = N'SQLRocks!00';");
+		Antlr4Utils.print(rr.getTree(), 0, rr.getStream());
 	}
 }
