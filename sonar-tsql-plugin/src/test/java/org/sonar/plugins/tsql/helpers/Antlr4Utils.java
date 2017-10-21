@@ -21,15 +21,18 @@ import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Column_name_listContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Column_ref_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.ConstantContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Declare_cursorContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Execute_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Func_proc_nameContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Function_callContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Insert_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Search_conditionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_listContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
@@ -209,7 +212,7 @@ public class Antlr4Utils {
 		customRules.setRepoKey("tsqlDemoRepo");
 		customRules.setRepoName("Demo rules");
 
-		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getCursorRule(),
+		customRules.getRule().addAll(Arrays.asList(getSargRule(), getWaitForRule(), getSelectAllRule(), getCursorRule(),
 				getInsertRule(), getOrderByRule(), getNoLockRule(), getExecRule(), getMultipleDeclarations(), getSameFlow(), getSchemaRule()));
 		return customRules;
 	}
@@ -586,7 +589,39 @@ public class Antlr4Utils {
 		
 		return rule;
 	}
+	public static Rule getSargRule() {
+		Rule rule = new Rule();
+		rule.setKey("C009");
+		rule.setInternalKey("C009");
+		rule.setName("NonSARG argument used");
+		rule.setDescription("<h2>Description</h2><p>User of nonsargeable arguments might cause performance problems.</p>");
+	
+		RuleImplementation child0 = new RuleImplementation();
+		child0.getNames().getTextItem().add(Column_ref_expressionContext.class.getSimpleName());
+		child0.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child0.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
+		
+		RuleImplementation child = new RuleImplementation();
+		child.getNames().getTextItem().add(Function_callContext.class.getSimpleName());
+		child.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child.setRuleResultType(RuleResultType.DEFAULT);
+		
+		child.getChildrenRules().getRuleImplementation().add(child0);
+		RuleImplementation impl = new RuleImplementation();
 
+		impl.getNames().getTextItem().add(Search_conditionContext.class.getSimpleName());
+		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		impl.setRuleResultType(RuleResultType.DEFAULT);
+
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT name, surnam from dbo.test where year(date) > 2008");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT name, surnam from dbo.test where date between 2008-10-10 and 2010-10-10;");
+	
+		impl.getChildrenRules().getRuleImplementation().add(child);
+		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
+		rule.setRuleImplementation(impl);
+
+		return rule;
+	}
 	public static void main(String[] args) {
 
 		System.out.println(ruleToString(getCustomMainRules()));
