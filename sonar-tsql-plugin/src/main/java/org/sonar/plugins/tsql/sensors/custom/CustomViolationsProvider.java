@@ -34,6 +34,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 		for (final ParsedNode node : nodes) {
 			final Map<RuleImplementation, List<ParsedNode>> statuses = new HashMap<>();
 			final Rule ruleDefinition = node.getRule();
+			final String ruleKey = ruleDefinition.getKey();
 			final RuleImplementation rule = node.getRule().getRuleImplementation();
 			visit(ruleDefinition, rule, null, node, null, statuses);
 
@@ -41,6 +42,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			boolean shouldSkip = false;
 			final List<TsqlIssue> foundIssuesOnNode = new LinkedList<>();
 			final List<RuleImplementation> violated = new LinkedList<>();
+			
 			for (final Entry<RuleImplementation, List<ParsedNode>> st : statuses.entrySet()) {
 				final RuleImplementation rrule = st.getKey();
 				final List<ParsedNode> vNodes = st.getValue();
@@ -97,15 +99,19 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			}
 
 			if (!shouldSkip && violated.size() > 0) {
-
-				final TsqlIssue issue = new TsqlIssue();
-				issue.setDescription(sb.toString());
-				issue.setType(ruleDefinition.getKey());
-				issue.setLine(this.linesProvider.getLine(node));
-				finalIssues.add(issue);
+				add(finalIssues, node, ruleKey, rule, sb.toString());
 			}
 		}
 		return finalIssues.toArray(new TsqlIssue[0]);
+	}
+
+	private void add(final List<TsqlIssue> finalIssues, final ParsedNode node, final String key,
+			RuleImplementation violatedRule, String msg) {
+		final TsqlIssue issue = new TsqlIssue();
+		issue.setDescription(msg);
+		issue.setType(key);
+		issue.setLine(this.linesProvider.getLine(node));
+		finalIssues.add(issue);
 	}
 
 	private void visit(Rule ruleDefinition, RuleImplementation rule, RuleImplementation parent, ParsedNode node,
@@ -134,8 +140,8 @@ public class CustomViolationsProvider implements IViolationsProvider {
 		case TEXT_ONLY:
 			final String txt = node.getText();
 			final boolean textIsFound = checker.containsName(rule, txt);
-		//	final boolean nodeContainsName = txt.contains(node.getText());
-			if (type == RuleMatchType.FULL && parentNode !=null && classNameMatch && textIsFound) {
+			// final boolean nodeContainsName = txt.contains(node.getText());
+			if (type == RuleMatchType.FULL && parentNode != null && classNameMatch && textIsFound) {
 				shouldAdd = true;
 			}
 

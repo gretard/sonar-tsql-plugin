@@ -10,7 +10,6 @@ public class TsqlIssue {
 	private String description;
 
 	private String filePath;
-
 	private int line;
 
 	public String getType() {

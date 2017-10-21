@@ -5,5 +5,5 @@ import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public interface ICustomRulesViolationsProvider {
-	TsqlIssue[] getIssues(ParseTree root, SqlRules... customRules) ;
+	TsqlIssue[] getIssues(ParseTree root) ;
 }

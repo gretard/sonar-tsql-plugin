@@ -112,25 +112,27 @@ public class Antlr4Utils {
 
 	public static boolean verify(Rule rule, String text) {
 		AntrlResult result = Antlr4Utils.getFull(text);
-		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
-		ParseTree root = result.getTree();
 		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		TsqlIssue[] issues = provider.getIssues(root, customRules);
+		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
+		ParseTree root = result.getTree();
+
+		TsqlIssue[] issues = provider.getIssues(root);
 		return issues.length == 0;
 	}
 
 	public static TsqlIssue[] verify2(Rule rule, String text) {
 		AntrlResult result = Antlr4Utils.getFull(text);
-		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream());
-		ParseTree root = result.getTree();
 		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		TsqlIssue[] issues = provider.getIssues(root, customRules);
+		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
+		ParseTree root = result.getTree();
+		
+		TsqlIssue[] issues = provider.getIssues(root);
 		return issues;
 	}
 

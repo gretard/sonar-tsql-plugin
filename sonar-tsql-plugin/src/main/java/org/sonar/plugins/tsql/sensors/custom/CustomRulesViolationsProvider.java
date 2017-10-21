@@ -13,18 +13,20 @@ import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 public class CustomRulesViolationsProvider implements ICustomRulesViolationsProvider {
 	final IViolationsProvider customIssuesProvider;
 	final IParsedNodesProvider parsedNodesProvider;
+	private SqlRules[] customRules;
 
-	public CustomRulesViolationsProvider(final CommonTokenStream stream) {
-		this(new NodesMatchingRulesProvider(), new CustomViolationsProvider(new DefaultLinesProvider(stream)));
+	public CustomRulesViolationsProvider(final CommonTokenStream stream, final SqlRules... customRules) {
+		this(new NodesMatchingRulesProvider(), new CustomViolationsProvider(new DefaultLinesProvider(stream)), customRules);
 	}
 
 	public CustomRulesViolationsProvider(final IParsedNodesProvider parsedNodesProvider,
-			final IViolationsProvider provider) {
+			final IViolationsProvider provider, final SqlRules... customRules) {
 		this.customIssuesProvider = provider;
 		this.parsedNodesProvider = parsedNodesProvider;
+		this.customRules = customRules;
 	}
 
-	public TsqlIssue[] getIssues(final ParseTree root, final SqlRules... customRules) {
+	public TsqlIssue[] getIssues(final ParseTree root) {
 
 		final List<ParsedNode> foundCandidates = new LinkedList<>();
 		for (final SqlRules rules : customRules) {

@@ -10,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.config.Settings;
@@ -58,15 +57,18 @@ public class HighlightingSensorTest {
 		for (Issue is : issues) {
 			System.out.println(is.ruleKey() + " " + is.primaryLocation().message());
 		}
-		Assert.assertEquals(4, issues.size());
+		Assert.assertEquals(2, issues.size());
 
-		//Assert.assertEquals(1, ctxTester.highlightingTypeAt("test:test.sql", 1, 0).size());
-		//Assert.assertEquals(TypeOfText.KEYWORD, ctxTester.highlightingTypeAt("test:test.sql", 1, 0).get(0));
+		// Assert.assertEquals(1, ctxTester.highlightingTypeAt("test:test.sql",
+		// 1, 0).size());
+		// Assert.assertEquals(TypeOfText.KEYWORD,
+		// ctxTester.highlightingTypeAt("test:test.sql", 1, 0).get(0));
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 2, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 5, 0).size());
 		Assert.assertEquals(15, ctxTester.cpdTokens("test:test.sql").size());
 		for (TokensLine line : ctxTester.cpdTokens("test:test.sql")) {
-			System.out.println(" LINE "+line.getValue()+" "+line.getStartUnit()+" "+line.getEndUnit()+line.toString());
+			System.out.println(
+					" LINE " + line.getValue() + " " + line.getStartUnit() + " " + line.getEndUnit() + line.toString());
 		}
 
 	}
