@@ -11,8 +11,8 @@ import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomRulesViolationsProvider implements ICustomRulesViolationsProvider {
-	final IViolationsProvider provider;
-	final IParsedNodesProvider test;
+	final IViolationsProvider customIssuesProvider;
+	final IParsedNodesProvider parsedNodesProvider;
 
 	public CustomRulesViolationsProvider(final CommonTokenStream stream) {
 		this(new NodesMatchingRulesProvider(), new CustomViolationsProvider(new DefaultLinesProvider(stream)));
@@ -20,21 +20,21 @@ public class CustomRulesViolationsProvider implements ICustomRulesViolationsProv
 
 	public CustomRulesViolationsProvider(final IParsedNodesProvider parsedNodesProvider,
 			final IViolationsProvider provider) {
-		this.provider = provider;
-		this.test = parsedNodesProvider;
+		this.customIssuesProvider = provider;
+		this.parsedNodesProvider = parsedNodesProvider;
 	}
 
 	public TsqlIssue[] getIssues(final ParseTree root, final SqlRules... customRules) {
 
-		final List<ParsedNode> c = new LinkedList<>();
+		final List<ParsedNode> foundCandidates = new LinkedList<>();
 		for (final SqlRules rules : customRules) {
 
-			final ParsedNode[] candidates = test.getNodes(rules.getRepoKey(), root,
+			final ParsedNode[] candidates = parsedNodesProvider.getNodes(rules.getRepoKey(), root,
 					rules.getRule().toArray(new Rule[0]));
-			c.addAll(Arrays.asList(candidates));
+			foundCandidates.addAll(Arrays.asList(candidates));
 
 		}
-		final TsqlIssue[] issues = provider.getIssues(c.toArray(new ParsedNode[0]));
+		final TsqlIssue[] issues = customIssuesProvider.getIssues(foundCandidates.toArray(new ParsedNode[0]));
 		return issues;
 	}
 }
