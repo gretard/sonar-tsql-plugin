@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.sonar.plugins.tsql.antlr4.tsqlBaseVisitor;
 import org.sonar.plugins.tsql.rules.custom.RuleMode;
 
+@SuppressWarnings("rawtypes")
 public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 
 	private final ParseTree tree;
@@ -18,6 +19,7 @@ public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 		this.tree = tree;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object visitChildren(final RuleNode node) {
 

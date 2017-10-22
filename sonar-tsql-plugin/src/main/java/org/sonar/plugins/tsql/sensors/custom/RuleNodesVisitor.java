@@ -32,6 +32,7 @@ public class RuleNodesVisitor extends tsqlBaseVisitor {
 		return singleNodes.toArray(new org.sonar.plugins.tsql.sensors.custom.ParsedNode[0]);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object visitChildren(final RuleNode node) {
 
