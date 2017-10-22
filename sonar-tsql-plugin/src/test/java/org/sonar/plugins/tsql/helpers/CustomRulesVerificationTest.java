@@ -8,7 +8,7 @@ import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
-public class CustomRulesVerifier {
+public class CustomRulesVerificationTest {
 
 	@Test
 	public void test() {
@@ -26,7 +26,7 @@ public class CustomRulesVerifier {
 					Antlr4Utils.print(rr.getTree(), 0, rr.getStream());
 				}
 				for (TsqlIssue i : issues) {
-					System.out.println(i.getDescription());
+					System.out.println(i.getDescription()+" "+i.getLine());
 				}
 				Assert.assertTrue(String.format("%s Expected compliant code for %s", r.getKey(), s), res);
 			}
@@ -38,7 +38,7 @@ public class CustomRulesVerifier {
 					Antlr4Utils.print(Antlr4Utils.get(s), 0);
 				}
 				for (TsqlIssue i : issues) {
-					System.out.println(i.getDescription());
+					System.out.println(i.getDescription()+" "+i.getLine());
 				}
 				Assert.assertTrue(String.format("%s Expected violating code for %s", r.getKey(), s), res);
 

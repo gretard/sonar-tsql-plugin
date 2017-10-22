@@ -5,13 +5,13 @@ import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 
 public interface INamesChecker {
 	boolean containsName(RuleImplementation rule, String text);
-
+	boolean containsNames(RuleImplementation rule, IParsedNode node, IParsedNode parent);
 	boolean containsClassName(RuleImplementation rule, String text);
 
 	boolean containsClassName(RuleImplementation rule, ParseTree node);
 	
-	boolean containsClassName(RuleImplementation rule, ParsedNode node);
+	boolean containsClassName(RuleImplementation rule, IParsedNode node);
 
-	boolean checkParent(ParsedNode node, ParsedNode root);
+	boolean checkParent(IParsedNode node, IParsedNode root);
 
 }

@@ -5,32 +5,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
-import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomViolationsProvider implements IViolationsProvider {
 
 	private final ILinesProvider linesProvider;
-	private final INamesChecker checker = new DefaultNamesChecker();
 	private static final Logger LOGGER = Loggers.get(CustomViolationsProvider.class);
 	private final INodesProvider siblingsProvider = new SiblingsNodesProvider();
 	private final INodesProvider childrenProvider = new ChildrenNodesProvider();
 	private final INodesProvider parentsProvider = new ParentNodesProvider();
 	private boolean isDebug = LOGGER.isDebugEnabled();
+	private final RulesMatcher matcher = new RulesMatcher();
 
 	public CustomViolationsProvider(final ILinesProvider linesProvider) {
 		this.linesProvider = linesProvider;
 	}
 
 	public TsqlIssue[] getIssues(final ParsedNode... nodes) {
-		
+
 		LOGGER.debug(String.format("Have %s nodes for checking", nodes.length));
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
 
@@ -45,10 +42,10 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			final List<RuleImplementation> violated = new LinkedList<>();
 			final Map<RuleImplementation, ParsedNode> finalNodes = new HashMap<>();
 			for (final Entry<RuleImplementation, List<ParsedNode>> st : statuses.entrySet()) {
+
 				final RuleImplementation rrule = st.getKey();
 				final List<ParsedNode> vNodes = st.getValue();
 				final int found = vNodes.size();
-
 				switch (rrule.getRuleResultType()) {
 				case DEFAULT:
 					break;
@@ -74,7 +71,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 						sb.append(rrule.getRuleViolationMessage() + "\r\n");
 						if (found == 0) {
 							finalNodes.put(rrule, node);
-						}else {
+						} else {
 							finalNodes.put(rrule, vNodes.get(vNodes.size() - 1));
 						}
 					}
@@ -85,7 +82,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 						violated.add(rrule);
 						if (found == 0) {
 							finalNodes.put(rrule, node);
-						}else {
+						} else {
 							finalNodes.put(rrule, vNodes.get(vNodes.size() - 1));
 						}
 						sb.append(rrule.getRuleViolationMessage() + "\r\n");
@@ -96,10 +93,10 @@ public class CustomViolationsProvider implements IViolationsProvider {
 						violated.add(rrule);
 						if (found == 0) {
 							finalNodes.put(rrule, node);
-						}else {
+						} else {
 							finalNodes.put(rrule, vNodes.get(vNodes.size() - 1));
 						}
-					
+
 						sb.append(rrule.getRuleViolationMessage() + "\r\n");
 					}
 					break;
@@ -108,7 +105,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 						violated.add(rrule);
 						if (found == 0) {
 							finalNodes.put(rrule, node);
-						}else {
+						} else {
 							finalNodes.put(rrule, vNodes.get(vNodes.size() - 1));
 						}
 						sb.append(rrule.getRuleViolationMessage() + "\r\n");
@@ -146,46 +143,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 		final List<ParsedNode> violatingNodes = new LinkedList<ParsedNode>();
 		statuses.putIfAbsent(rule, violatingNodes);
 
-		final String className = node.getItem().getClass().getSimpleName();
-		boolean shouldAdd = false;
-
-		boolean classNameMatch = checker.containsClassName(rule, className);
-
-		final RuleMatchType type = rule.getRuleMatchType();
-		switch (type) {
-
-		case CLASS_ONLY:
-			if (classNameMatch) {
-				shouldAdd = true;
-			}
-			break;
-		case DEFAULT:
-			break;
-		case FULL:
-		case TEXT_AND_CLASS:
-		case STRICT:
-		case TEXT_ONLY:
-			final String txt = node.getText();
-			final boolean textIsFound = checker.containsName(rule, txt);
-			final boolean parentsMatch = checker.checkParent(node, parentNode);
-			// final boolean nodeContainsName = txt.contains(node.getText());
-			if (type == RuleMatchType.FULL && parentNode != null && classNameMatch && textIsFound) {
-				shouldAdd = true;
-			}
-			if (type == RuleMatchType.STRICT && parentNode != null && classNameMatch && textIsFound && parentsMatch) {
-				shouldAdd = true;
-			}
-			if (type == RuleMatchType.TEXT_ONLY && textIsFound) {
-				shouldAdd = true;
-			}
-
-			if (type == RuleMatchType.TEXT_AND_CLASS && textIsFound && classNameMatch) {
-				shouldAdd = true;
-			}
-			break;
-		default:
-			break;
-		}
+		boolean shouldAdd = matcher.matchesRule(rule, node, parentNode);
 
 		if (shouldAdd) {
 			statuses.get(rule).add(node);

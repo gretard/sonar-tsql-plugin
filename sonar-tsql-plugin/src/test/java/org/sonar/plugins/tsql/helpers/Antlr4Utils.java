@@ -36,12 +36,14 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Insert_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.PredicateContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Query_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Search_conditionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_listContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_hintContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_name_with_hintContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_sourceContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
@@ -179,14 +181,14 @@ public class Antlr4Utils {
 			if (!violating.isEmpty()) {
 				sb.append("<h3>Non-compliant</h3>");
 				for (String x : violating) {
-					sb.append("<code>" + x + "</code>");
+					sb.append("<pre><code>" + x + "</code></pre>");
 				}
 			}
 
 			if (!compliant.isEmpty()) {
 				sb.append("<h3>Compliant</h3>");
 				for (String x : compliant) {
-					sb.append("<code>" + x + "</code>");
+					sb.append("<pre><code>" + x + "</code></pre>");
 				}
 			}
 			if (r.getSource() != null && !r.getSource().isEmpty()) {
@@ -226,8 +228,11 @@ public class Antlr4Utils {
 				.addAll(Arrays.asList(getSargRule(), getWaitForRule(), getSelectAllRule(), // getCursorRule(),
 						getInsertRule(), getOrderByRule(), getNoLockRule(), getExecRule(), // getMultipleDeclarations(),
 						// getSameFlow(),
-						//getSchemaRule(),
-						getSargRule()));
+						 
+						
+						getSargRule()
+						//getSchemaRule()
+						));
 		return customRules;
 	}
 
@@ -348,26 +353,38 @@ public class Antlr4Utils {
 		rule.setDescription(
 				"<h2>Description</h2><p>Always use schema-qualified object names to speed up resolution and improve query plan reuse.</p>");
 
-		RuleImplementation parent0Child = new RuleImplementation();
-		parent0Child.getNames().getTextItem().add(Simple_idContext.class.getSimpleName());
-		parent0Child.setTextCheckType(TextCheckType.STRICT);
-		parent0Child.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
-		parent0Child.setRuleMatchType(RuleMatchType.FULL);
-
-		RuleImplementation parent0 = new RuleImplementation();
-		parent0.getNames().getTextItem().add(Common_table_expressionContext.class.getSimpleName());
-		parent0.setTextCheckType(TextCheckType.DEFAULT);
-		parent0.setRuleResultType(RuleResultType.DEFAULT);
-		parent0.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-
-		parent0.getChildrenRules().getRuleImplementation().add(parent0Child);
-
-		RuleImplementation parent1 = new RuleImplementation();
-		parent1.getNames().getTextItem().add(Table_name_with_hintContext.class.getSimpleName());
-		parent1.setTextCheckType(TextCheckType.DEFAULT);
-		parent1.setRuleResultType(RuleResultType.DEFAULT);
-		parent1.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-
+		//Query_expressionContext
+		
+		RuleImplementation parentCTEQuery = new RuleImplementation();
+		parentCTEQuery.getNames().getTextItem().add(Common_table_expressionContext.class.getSimpleName());
+		parentCTEQuery.setRuleResultType(RuleResultType.DEFAULT);
+		parentCTEQuery.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		parentCTEQuery.setRuleViolationMessage("TESTCTE");
+		
+		RuleImplementation parentCTEQueryName = new RuleImplementation();
+		parentCTEQueryName.getNames().getTextItem().add(Simple_idContext.class.getSimpleName());
+		parentCTEQueryName.setTextCheckType(TextCheckType.CONTAINS);
+		parentCTEQueryName.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
+		parentCTEQueryName.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		parentCTEQueryName.setRuleViolationMessage("TESTCTESimpl");
+		
+		
+		parentCTEQuery.getChildrenRules().getRuleImplementation().add(parentCTEQueryName);
+		
+		RuleImplementation parentQuery = new RuleImplementation();
+		parentQuery.getNames().getTextItem().add(Query_expressionContext.class.getSimpleName());
+		parentQuery.setRuleResultType(RuleResultType.DEFAULT);
+		parentQuery.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		parentQuery.setRuleViolationMessage("TEST");
+		
+		
+		RuleImplementation parentTableQuery = new RuleImplementation();
+		parentTableQuery.getNames().getTextItem().add(Table_nameContext.class.getSimpleName());
+		parentTableQuery.setRuleResultType(RuleResultType.DEFAULT);
+		parentTableQuery.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		parentTableQuery.setRuleViolationMessage("parentTableQuery");
+		
+		
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Simple_idContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
@@ -375,24 +392,24 @@ public class Antlr4Utils {
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		child2.setTimes(2);
 		child2.setRuleViolationMessage("Always use schema-qualified object names");
-		child2.getParentRules().getRuleImplementation().add(parent0);
 
-		parent1.getChildrenRules().getRuleImplementation().add(child2);
-
+		parentTableQuery.getChildrenRules().getRuleImplementation().add(child2);
+		parentQuery.getChildrenRules().getRuleImplementation().add(parentTableQuery);
 		RuleImplementation impl = new RuleImplementation();
 
-		//impl.getParentRules().getRuleImplementation().add(parent0);
-		impl.getParentRules().getRuleImplementation().add(parent1);
-		impl.getNames().getTextItem().add(Table_sourceContext.class.getSimpleName());
+		impl.getParentRules().getRuleImplementation().add(parentQuery);
+		impl.getParentRules().getRuleImplementation().add(parentCTEQuery);
+		impl.getNames().getTextItem().add(Table_nameContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
 		impl.setRuleViolationMessage("Always use schema-qualified object names");
-		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
-				.add("with cte as(select a, b,c from dbo.test) SELECT a from cte; select * from test.dbo");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from test order by 1;");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT OrderID, OrderDate FROM Orders");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by name;");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from main.dbo.test order by name;");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("with cte as(select a, b,c from dbo.test)\r\nSELECT a from cte; select * from test.dbo");
+
 		rule.setRuleImplementation(impl);
 		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
 		return rule;
@@ -655,8 +672,9 @@ public class Antlr4Utils {
 				.add("SELECT name, surname from dbo.test where name like '%red' ");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;");
-		//impl.getCompliantRulesCodeExamples().getRuleCodeExample()
-		//		.add("IF @LanguageName LIKE N'%Chinese%' SET @LanguageName = N'Chinese';");
+		// impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+		// .add("IF @LanguageName LIKE N'%Chinese%' SET @LanguageName =
+		// N'Chinese';");
 
 		//
 		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");

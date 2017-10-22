@@ -6,7 +6,7 @@ import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 
-public class ParsedNode {
+public class ParsedNode implements IParsedNode {
 	private final ParseTree item;
 
 	private final Rule rule;
@@ -44,6 +44,7 @@ public class ParsedNode {
 		this.className = item.getClass().getSimpleName();
 		this.repositoryKey = repositoryKey;
 	}
+
 	public ParsedNode(final ParseTree item, final Rule rule, final String repositoryKey, int d) {
 		this.name = null;
 		this.item = item;
@@ -113,6 +114,11 @@ public class ParsedNode {
 
 	public List<ParsedNode> getChildren() {
 		return children;
+	}
+
+	@Override
+	public int getDistance() {
+		return this.distance;
 	}
 
 }

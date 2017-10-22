@@ -17,6 +17,9 @@ public class DefaultNamesChecker implements INamesChecker {
 		if (StringUtils.isEmpty(text)) {
 			return false;
 		}
+		if (textToFind.isEmpty()) {
+			return true;
+		}
 		for (final String s : textToFind) {
 			switch (type) {
 			case DEFAULT:
@@ -46,6 +49,9 @@ public class DefaultNamesChecker implements INamesChecker {
 
 	@Override
 	public boolean containsClassName(final RuleImplementation rule, final String text) {
+		if (StringUtils.isEmpty(text)) {
+			return false;
+		}
 		for (final String name : rule.getNames().getTextItem()) {
 			if (text.equalsIgnoreCase(name)) {
 				return true;
@@ -62,14 +68,13 @@ public class DefaultNamesChecker implements INamesChecker {
 	}
 
 	@Override
-	public boolean containsClassName(final RuleImplementation rule, final ParsedNode node) {
+	public boolean containsClassName(final RuleImplementation rule, final IParsedNode node) {
 		final String className = node.getClassName();
-
 		return containsClassName(rule, className);
 	}
 
 	@Override
-	public boolean checkParent(final ParsedNode node, final ParsedNode root) {
+	public boolean checkParent(final IParsedNode node, final IParsedNode root) {
 		final ParseTree parent1 = getParent(node);
 		final ParseTree parent2 = getParent(root);
 		if (parent1 == parent2) {
@@ -78,8 +83,8 @@ public class DefaultNamesChecker implements INamesChecker {
 		return false;
 	}
 
-	private ParseTree getParent(final ParsedNode node) {
-		if (node == null) {
+	private ParseTree getParent(final IParsedNode node) {
+		if (node == null || node.getItem() == null) {
 			return null;
 		}
 		ParseTree parent1 = node.getItem().getParent();
@@ -90,6 +95,16 @@ public class DefaultNamesChecker implements INamesChecker {
 			parent1 = parent1.getParent();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean containsNames(final RuleImplementation rule, final IParsedNode node, final IParsedNode parent) {
+		if (parent == null || node == null) {
+			return false;
+		}
+		final String text1 = node.getText();
+		final String text2 = parent.getText();
+		return StringUtils.equals(text1, text2) || StringUtils.equals(text2, text1);
 	}
 
 }
