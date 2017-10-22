@@ -228,11 +228,10 @@ public class Antlr4Utils {
 				.addAll(Arrays.asList(getSargRule(), getWaitForRule(), getSelectAllRule(), // getCursorRule(),
 						getInsertRule(), getOrderByRule(), getNoLockRule(), getExecRule(), // getMultipleDeclarations(),
 						// getSameFlow(),
-						 
-						
+
 						getSargRule()
-						//getSchemaRule()
-						));
+		// getSchemaRule()
+		));
 		return customRules;
 	}
 
@@ -353,38 +352,19 @@ public class Antlr4Utils {
 		rule.setDescription(
 				"<h2>Description</h2><p>Always use schema-qualified object names to speed up resolution and improve query plan reuse.</p>");
 
-		//Query_expressionContext
-		
-		RuleImplementation parentCTEQuery = new RuleImplementation();
-		parentCTEQuery.getNames().getTextItem().add(Common_table_expressionContext.class.getSimpleName());
-		parentCTEQuery.setRuleResultType(RuleResultType.DEFAULT);
-		parentCTEQuery.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		parentCTEQuery.setRuleViolationMessage("TESTCTE");
-		
-		RuleImplementation parentCTEQueryName = new RuleImplementation();
-		parentCTEQueryName.getNames().getTextItem().add(Simple_idContext.class.getSimpleName());
-		parentCTEQueryName.setTextCheckType(TextCheckType.CONTAINS);
-		parentCTEQueryName.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
-		parentCTEQueryName.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
-		parentCTEQueryName.setRuleViolationMessage("TESTCTESimpl");
-		
-		
-		parentCTEQuery.getChildrenRules().getRuleImplementation().add(parentCTEQueryName);
 		
 		RuleImplementation parentQuery = new RuleImplementation();
 		parentQuery.getNames().getTextItem().add(Query_expressionContext.class.getSimpleName());
 		parentQuery.setRuleResultType(RuleResultType.DEFAULT);
 		parentQuery.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		parentQuery.setRuleViolationMessage("TEST");
-		
-		
+
 		RuleImplementation parentTableQuery = new RuleImplementation();
 		parentTableQuery.getNames().getTextItem().add(Table_nameContext.class.getSimpleName());
 		parentTableQuery.setRuleResultType(RuleResultType.DEFAULT);
 		parentTableQuery.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		parentTableQuery.setRuleViolationMessage("parentTableQuery");
-		
-		
+
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Simple_idContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
@@ -396,9 +376,8 @@ public class Antlr4Utils {
 		parentTableQuery.getChildrenRules().getRuleImplementation().add(child2);
 		parentQuery.getChildrenRules().getRuleImplementation().add(parentTableQuery);
 		RuleImplementation impl = new RuleImplementation();
-
+		
 		impl.getParentRules().getRuleImplementation().add(parentQuery);
-		impl.getParentRules().getRuleImplementation().add(parentCTEQuery);
 		impl.getNames().getTextItem().add(Table_nameContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
@@ -407,8 +386,9 @@ public class Antlr4Utils {
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT OrderID, OrderDate FROM Orders");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by name;");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from main.dbo.test order by name;");
-		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
-				.add("with cte as(select a, b,c from dbo.test)\r\nSELECT a from cte; select * from test.dbo");
+		// impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+		// .add("with cte as(select a, b,c from dbo.test)\r\nSELECT a from cte;
+		// select * from test.dbo");
 
 		rule.setRuleImplementation(impl);
 		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");

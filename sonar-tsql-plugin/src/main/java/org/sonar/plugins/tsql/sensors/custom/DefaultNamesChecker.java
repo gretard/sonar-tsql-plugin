@@ -104,7 +104,9 @@ public class DefaultNamesChecker implements INamesChecker {
 		}
 		final String text1 = node.getText();
 		final String text2 = parent.getText();
-		return StringUtils.equals(text1, text2) || StringUtils.equals(text2, text1);
+		boolean containsText =  StringUtils.contains(text1, text2) || StringUtils.contains(text2, text1);
+
+		return containsText;
 	}
 
 }

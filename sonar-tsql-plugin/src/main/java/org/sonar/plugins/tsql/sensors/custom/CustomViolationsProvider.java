@@ -32,6 +32,7 @@ public class CustomViolationsProvider implements IViolationsProvider {
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
 
 		for (final ParsedNode node : nodes) {
+			System.out.println("CHECK: "+node.getText());
 			final Map<RuleImplementation, List<ParsedNode>> statuses = new HashMap<>();
 			final Rule ruleDefinition = node.getRule();
 			final String ruleKey = ruleDefinition.getKey();
@@ -44,7 +45,11 @@ public class CustomViolationsProvider implements IViolationsProvider {
 			for (final Entry<RuleImplementation, List<ParsedNode>> st : statuses.entrySet()) {
 
 				final RuleImplementation rrule = st.getKey();
+				System.out.println("NODE: "+node.getText()+" "+node.getClassName()+" "+rrule.getRuleViolationMessage()+" "+rrule.getRuleResultType());
 				final List<ParsedNode> vNodes = st.getValue();
+				for (ParsedNode n : vNodes) {
+					System.out.println(rrule.hashCode()+" NODE: "+node.getText()+" "+n.getText()+" "+rrule.getRuleResultType()+" "+rrule.getRuleViolationMessage());
+				}
 				final int found = vNodes.size();
 				switch (rrule.getRuleResultType()) {
 				case DEFAULT:

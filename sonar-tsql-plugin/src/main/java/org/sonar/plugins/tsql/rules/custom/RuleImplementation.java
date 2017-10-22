@@ -96,8 +96,9 @@ public class RuleImplementation {
     protected ViolatingRulesCodeExamples violatingRulesCodeExamples = new ViolatingRulesCodeExamples();
     @XmlElement(required = true)
     protected CompliantRulesCodeExamples compliantRulesCodeExamples = new CompliantRulesCodeExamples();
+   
 
-    /**
+	/**
      * Gets the value of the names property.
      * 
      * @return

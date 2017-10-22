@@ -115,7 +115,7 @@ public class CustomRulesViolationsProviderTest {
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
 		ParseTree root = result.getTree();
 		TsqlIssue[] issues = provider.getIssues(root);
-		Assert.assertEquals(0, issues.length);
+		Assert.assertEquals(1, issues.length);
 	}
 
 	@Test
@@ -158,6 +158,36 @@ public class CustomRulesViolationsProviderTest {
 		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
 		ParseTree root = result.getTree();
 		TsqlIssue[] issues = provider.getIssues(root);
-		Assert.assertEquals(4, issues.length);
+		Assert.assertEquals(2, issues.length);
+	}
+	
+	
+	@Test
+	public void testSchemaCheckTrue() throws IOException {
+		final String text = "select * from test";
+		SqlRules customRules = new SqlRules();
+		customRules.setRepoKey("test");
+		customRules.getRule().add(Antlr4Utils.getSchemaRule());
+
+		AntrlResult result = Antlr4Utils.getFull(text);
+		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
+		ParseTree root = result.getTree();
+		TsqlIssue[] issues = provider.getIssues(root);
+		Assert.assertEquals(1, issues.length);
+	}
+	
+	@Test
+	public void testSchemaCheckFalse() throws IOException {
+		final String text = "with cte as (select 1 from dbo.text) select * from cte";
+		SqlRules customRules = new SqlRules();
+		customRules.setRepoKey("test");
+		customRules.getRule().add(Antlr4Utils.getSchemaRule());
+		
+		AntrlResult result = Antlr4Utils.getFull(text);
+		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
+		ParseTree root = result.getTree();
+		TsqlIssue[] issues = provider.getIssues(root);
+		Antlr4Utils.print(root, 0);
+		Assert.assertEquals(1, issues.length);
 	}
 }
