@@ -11,9 +11,9 @@ public class RulesMatcher {
 		boolean shouldAdd = false;
 		final boolean classNameMatch = checker.containsClassName(rule, node);
 		final RuleMatchType type = rule.getRuleMatchType();
-		
+
 		switch (type) {
-		
+
 		case CLASS_ONLY:
 			if (classNameMatch) {
 				shouldAdd = true;
@@ -38,18 +38,11 @@ public class RulesMatcher {
 			}
 			final boolean parentsMatch = checker.checkParent(node, parentNode);
 			final boolean nodeContainsName = checker.containsNames(rule, node, parentNode);
-			System.out.println(rule.getRuleViolationMessage()+" CHECK: "+node.getText()+" P: "+(parentNode!=null?parentNode.getText():"PNULL")+" "+node.getClassName()+" "+rule.getNames().getTextItem().get(0));
-		System.out.println("nodeContainsName: "+nodeContainsName);
-		System.out.println("classNameMatch: "+classNameMatch);
-		System.out.println("textIsFound: "+textIsFound);
-		if (type == RuleMatchType.FULL && classNameMatch && textIsFound && nodeContainsName) {
-			System.out.println("FULL OK ");
+			if (type == RuleMatchType.FULL && classNameMatch && textIsFound && nodeContainsName) {
 				shouldAdd = true;
 				break;
 			}
 			if (type == RuleMatchType.STRICT && classNameMatch && textIsFound && nodeContainsName && parentsMatch) {
-			
-				System.out.println("STRICT OK ");
 				shouldAdd = true;
 				break;
 			}
