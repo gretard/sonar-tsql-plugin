@@ -241,7 +241,7 @@ public class Antlr4Utils {
 		customRules.setRepoName(Constants.PLUGIN_REPO_NAME);
 
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(),
-				getOrderByRule(), getExecRule(), getNoLockRule(), getSchemaRule(), getSargRule()));
+				getOrderByRule(), getExecRule(), getNoLockRule(), getSargRule()));
 		return customRules;
 	}
 
@@ -645,7 +645,7 @@ public class Antlr4Utils {
 		impl.getNames().getTextItem().add(Search_conditionContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
-
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT MAX(RateChangeDate)  FROM HumanResources.EmployeePayHistory WHERE BusinessEntityID = 1");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT name, surname from dbo.test where year(date) > 2008");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()

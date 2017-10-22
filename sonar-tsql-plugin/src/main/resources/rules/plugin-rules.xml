@@ -249,115 +249,10 @@
         <source>http://sqlmag.com/t-sql/t-sql-best-practices-part-1</source>
     </rule>
     <rule>
-        <key>C006</key>
-        <name>Non schema qualified object name</name>
-        <internalKey>C006</internalKey>
-        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;Always use schema-qualified object names to speed up resolution and improve query plan reuse.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;SELECT * from test order by 1;&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;SELECT OrderID, OrderDate FROM Orders&lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;with cte as(select a, b,c from dbo.test) SELECT a from cte; select * from test.dbo&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;SELECT * from dbo.test order by name;&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;SELECT * from main.dbo.test order by name;&lt;/code&gt;&lt;/pre&gt;&lt;h4&gt;Source&lt;/h4&gt;&lt;a href='http://sqlmag.com/t-sql/t-sql-best-practices-part-1'&gt;http://sqlmag.com/t-sql/t-sql-best-practices-part-1&lt;/a&gt;</description>
-        <ruleImplementation>
-            <names>
-                <textItem>Table_sourceContext</textItem>
-            </names>
-            <textToFind/>
-            <parentRules>
-                <ruleImplementation>
-                    <names>
-                        <textItem>Table_name_with_hintContext</textItem>
-                    </names>
-                    <textToFind/>
-                    <parentRules/>
-                    <childrenRules>
-                        <ruleImplementation>
-                            <names>
-                                <textItem>Simple_idContext</textItem>
-                            </names>
-                            <textToFind/>
-                            <parentRules>
-                                <ruleImplementation>
-                                    <names>
-                                        <textItem>Common_table_expressionContext</textItem>
-                                    </names>
-                                    <textToFind/>
-                                    <parentRules/>
-                                    <childrenRules>
-                                        <ruleImplementation>
-                                            <names>
-                                                <textItem>Simple_idContext</textItem>
-                                            </names>
-                                            <textToFind/>
-                                            <parentRules/>
-                                            <childrenRules/>
-                                            <siblingsRules/>
-                                            <usesRules/>
-                                            <times>0</times>
-                                            <ruleMode>Default</ruleMode>
-                                            <ruleMatchType>Full</ruleMatchType>
-                                            <ruleResultType>SkipIfFound</ruleResultType>
-                                            <textCheckType>Strict</textCheckType>
-                                            <violatingRulesCodeExamples/>
-                                            <compliantRulesCodeExamples/>
-                                        </ruleImplementation>
-                                    </childrenRules>
-                                    <siblingsRules/>
-                                    <usesRules/>
-                                    <times>0</times>
-                                    <ruleMode>Default</ruleMode>
-                                    <ruleMatchType>ClassOnly</ruleMatchType>
-                                    <ruleResultType>Default</ruleResultType>
-                                    <textCheckType>Default</textCheckType>
-                                    <violatingRulesCodeExamples/>
-                                    <compliantRulesCodeExamples/>
-                                </ruleImplementation>
-                            </parentRules>
-                            <childrenRules/>
-                            <siblingsRules/>
-                            <usesRules/>
-                            <ruleViolationMessage>Always use schema-qualified object names</ruleViolationMessage>
-                            <times>2</times>
-                            <ruleMode>Default</ruleMode>
-                            <ruleMatchType>ClassOnly</ruleMatchType>
-                            <ruleResultType>FailIfLessFound</ruleResultType>
-                            <textCheckType>Default</textCheckType>
-                            <violatingRulesCodeExamples/>
-                            <compliantRulesCodeExamples/>
-                        </ruleImplementation>
-                    </childrenRules>
-                    <siblingsRules/>
-                    <usesRules/>
-                    <times>0</times>
-                    <ruleMode>Default</ruleMode>
-                    <ruleMatchType>ClassOnly</ruleMatchType>
-                    <ruleResultType>Default</ruleResultType>
-                    <textCheckType>Default</textCheckType>
-                    <violatingRulesCodeExamples/>
-                    <compliantRulesCodeExamples/>
-                </ruleImplementation>
-            </parentRules>
-            <childrenRules/>
-            <siblingsRules/>
-            <usesRules/>
-            <ruleViolationMessage>Always use schema-qualified object names</ruleViolationMessage>
-            <times>0</times>
-            <ruleMode>Default</ruleMode>
-            <ruleMatchType>ClassOnly</ruleMatchType>
-            <ruleResultType>Default</ruleResultType>
-            <textCheckType>Default</textCheckType>
-            <violatingRulesCodeExamples>
-                <ruleCodeExample>SELECT * from test order by 1;</ruleCodeExample>
-                <ruleCodeExample>SELECT OrderID, OrderDate FROM Orders</ruleCodeExample>
-            </violatingRulesCodeExamples>
-            <compliantRulesCodeExamples>
-                <ruleCodeExample>with cte as(select a, b,c from dbo.test) SELECT a from cte; select * from test.dbo</ruleCodeExample>
-                <ruleCodeExample>SELECT * from dbo.test order by name;</ruleCodeExample>
-                <ruleCodeExample>SELECT * from main.dbo.test order by name;</ruleCodeExample>
-            </compliantRulesCodeExamples>
-        </ruleImplementation>
-        <source>http://sqlmag.com/t-sql/t-sql-best-practices-part-1</source>
-    </rule>
-    <rule>
         <key>C009</key>
         <name>Non-sargable statement used</name>
         <internalKey>C009</internalKey>
-        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;Use of non-sargeable arguments might cause performance problems.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;SELECT name, surname from dbo.test where year(date) &gt; 2008&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;SELECT name, surname from dbo.test where name like '%red' &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;&lt;/code&gt;&lt;/pre&gt;&lt;h4&gt;Source&lt;/h4&gt;&lt;a href='http://sqlmag.com/t-sql/t-sql-best-practices-part-1'&gt;http://sqlmag.com/t-sql/t-sql-best-practices-part-1&lt;/a&gt;</description>
+        <description>&lt;h2&gt;Description&lt;/h2&gt;&lt;p&gt;Use of non-sargeable arguments might cause performance problems.&lt;/p&gt;&lt;h2&gt;Code examples&lt;/h2&gt;&lt;h3&gt;Non-compliant&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;SELECT name, surname from dbo.test where year(date) &gt; 2008&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;SELECT name, surname from dbo.test where name like '%red' &lt;/code&gt;&lt;/pre&gt;&lt;h3&gt;Compliant&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;SELECT MAX(RateChangeDate)  FROM HumanResources.EmployeePayHistory WHERE BusinessEntityID = 1&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;&lt;/code&gt;&lt;/pre&gt;&lt;h4&gt;Source&lt;/h4&gt;&lt;a href='http://sqlmag.com/t-sql/t-sql-best-practices-part-1'&gt;http://sqlmag.com/t-sql/t-sql-best-practices-part-1&lt;/a&gt;</description>
         <status>BETA</status>
         <ruleImplementation>
             <names>
@@ -455,6 +350,7 @@
                 <ruleCodeExample>SELECT name, surname from dbo.test where name like '%red' </ruleCodeExample>
             </violatingRulesCodeExamples>
             <compliantRulesCodeExamples>
+                <ruleCodeExample>SELECT MAX(RateChangeDate)  FROM HumanResources.EmployeePayHistory WHERE BusinessEntityID = 1</ruleCodeExample>
                 <ruleCodeExample>SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;</ruleCodeExample>
             </compliantRulesCodeExamples>
         </ruleImplementation>

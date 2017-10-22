@@ -1,5 +1,6 @@
 package org.sonar.plugins.tsql.sensors.custom;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,17 +26,34 @@ public class CustomViolationsProvider implements IViolationsProvider {
 	public CustomViolationsProvider(final ILinesProvider linesProvider) {
 		this.linesProvider = linesProvider;
 	}
-
+	
+	private void initStatuses(Map<RuleImplementation, List<ParsedNode>> statuses, RuleImplementation rule) {
+		statuses.putIfAbsent(rule, new ArrayList<>());
+		for (RuleImplementation i :rule.getChildrenRules().getRuleImplementation()) {
+			initStatuses(statuses, i);
+		}
+		for (RuleImplementation i :rule.getParentRules().getRuleImplementation()) {
+			initStatuses(statuses, i);
+		}
+		for (RuleImplementation i :rule.getUsesRules().getRuleImplementation()) {
+			initStatuses(statuses, i);
+		}
+		for (RuleImplementation i :rule.getParentRules().getRuleImplementation()) {
+			initStatuses(statuses, i);
+		}
+	}
 	public TsqlIssue[] getIssues(final ParsedNode... nodes) {
 
 		LOGGER.debug(String.format("Have %s nodes for checking", nodes.length));
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
 
 		for (final ParsedNode node : nodes) {
-			final Map<RuleImplementation, List<ParsedNode>> statuses = new HashMap<>();
+		
 			final Rule ruleDefinition = node.getRule();
 			final String ruleKey = ruleDefinition.getKey();
 			final RuleImplementation rule = node.getRule().getRuleImplementation();
+			final Map<RuleImplementation, List<ParsedNode>> statuses = new HashMap<>();
+			initStatuses(statuses, rule );
 			visit(ruleDefinition, rule, null, node, null, statuses);
 			final StringBuilder sb = new StringBuilder();
 			boolean shouldSkip = false;
