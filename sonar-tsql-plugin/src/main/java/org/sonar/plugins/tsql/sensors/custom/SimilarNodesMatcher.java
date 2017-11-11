@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 
-public class SimilatNodesMatcher {
+public class SimilarNodesMatcher {
 
 	final INamesChecker checker = new DefaultNamesChecker();
 

@@ -20,7 +20,7 @@ public class UsesFindRuleTest {
 		rule.setRuleImplementation(impl);
 		ParsedNode node = new ParsedNode(tree.getChild(0), rule, "a");
 
-		SimilatNodesMatcher finder = new SimilatNodesMatcher();
+		SimilarNodesMatcher finder = new SimilarNodesMatcher();
 
 		finder.isMatch(node, tree, rule);
 
@@ -36,7 +36,7 @@ public class UsesFindRuleTest {
 		rule.setRuleImplementation(impl);
 		ParsedNode node = new ParsedNode(tree, rule, "a");
 
-		SimilatNodesMatcher finder = new SimilatNodesMatcher();
+		SimilarNodesMatcher finder = new SimilarNodesMatcher();
 
 		finder.isMatch(node, tree, rule);
 

@@ -12,7 +12,7 @@ import org.sonar.plugins.tsql.rules.custom.RuleMode;
 public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 
 	private final ParseTree tree;
-	private final SimilatNodesMatcher main = new SimilatNodesMatcher();
+	private final SimilarNodesMatcher main = new SimilarNodesMatcher();
 	private ParsedNode[] nodes;
 
 	public ParsedNodeUsesFiller(final ParseTree tree) {
