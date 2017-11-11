@@ -3,6 +3,8 @@ package org.sonar.plugins.tsql.sensors.custom;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
+import org.sonar.plugins.tsql.sensors.custom.names.DefaultNamesChecker;
+import org.sonar.plugins.tsql.sensors.custom.names.INamesChecker;
 
 public class SimilarNodesMatcher {
 

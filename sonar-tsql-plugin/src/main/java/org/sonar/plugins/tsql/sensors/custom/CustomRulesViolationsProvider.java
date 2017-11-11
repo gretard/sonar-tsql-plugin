@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
+import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
 
 public class CustomRulesViolationsProvider implements ICustomRulesViolationsProvider {
 	final IViolationsProvider customIssuesProvider;

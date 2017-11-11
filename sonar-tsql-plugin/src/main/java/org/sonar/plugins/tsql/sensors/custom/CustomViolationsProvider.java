@@ -12,10 +12,11 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.sensors.custom.providers.ChildrenNodesProvider;
-import org.sonar.plugins.tsql.sensors.custom.providers.INodesProvider;
-import org.sonar.plugins.tsql.sensors.custom.providers.ParentNodesProvider;
-import org.sonar.plugins.tsql.sensors.custom.providers.SiblingsNodesProvider;
+import org.sonar.plugins.tsql.sensors.custom.lines.ILinesProvider;
+import org.sonar.plugins.tsql.sensors.custom.nodes.ChildrenNodesProvider;
+import org.sonar.plugins.tsql.sensors.custom.nodes.INodesProvider;
+import org.sonar.plugins.tsql.sensors.custom.nodes.ParentNodesProvider;
+import org.sonar.plugins.tsql.sensors.custom.nodes.SiblingsNodesProvider;
 
 public class CustomViolationsProvider implements IViolationsProvider {
 

@@ -1,4 +1,4 @@
-package org.sonar.plugins.tsql.sensors.custom.providers;
+package org.sonar.plugins.tsql.sensors.custom.nodes;
 
 import org.sonar.plugins.tsql.sensors.custom.ParsedNode;
 

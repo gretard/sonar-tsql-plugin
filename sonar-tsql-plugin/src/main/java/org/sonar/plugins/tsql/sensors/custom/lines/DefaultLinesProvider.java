@@ -1,8 +1,9 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.sensors.custom.lines;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
+import org.sonar.plugins.tsql.sensors.custom.ParsedNode;
 
 public class DefaultLinesProvider implements ILinesProvider {
 

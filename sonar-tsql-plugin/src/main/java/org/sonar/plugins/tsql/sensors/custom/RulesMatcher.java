@@ -2,6 +2,8 @@ package org.sonar.plugins.tsql.sensors.custom;
 
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
+import org.sonar.plugins.tsql.sensors.custom.names.DefaultNamesChecker;
+import org.sonar.plugins.tsql.sensors.custom.names.INamesChecker;
 
 public class RulesMatcher {
 

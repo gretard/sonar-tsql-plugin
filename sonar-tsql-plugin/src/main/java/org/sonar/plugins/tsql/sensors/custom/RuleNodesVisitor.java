@@ -11,6 +11,8 @@ import org.sonar.plugins.tsql.antlr4.tsqlBaseVisitor;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.RuleMode;
+import org.sonar.plugins.tsql.sensors.custom.names.DefaultNamesChecker;
+import org.sonar.plugins.tsql.sensors.custom.names.INamesChecker;
 
 @SuppressWarnings("rawtypes")
 public class RuleNodesVisitor extends tsqlBaseVisitor {

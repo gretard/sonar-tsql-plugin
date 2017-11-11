@@ -1,4 +1,4 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.sensors.custom.names;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Cfl_statementContext;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.TextCheckType;
+import org.sonar.plugins.tsql.sensors.custom.IParsedNode;
 
 public class DefaultNamesChecker implements INamesChecker {
 

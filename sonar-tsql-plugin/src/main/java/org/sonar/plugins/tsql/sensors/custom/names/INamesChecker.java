@@ -1,7 +1,8 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.sensors.custom.names;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
+import org.sonar.plugins.tsql.sensors.custom.IParsedNode;
 
 public interface INamesChecker {
 	boolean containsName(RuleImplementation rule, String text);

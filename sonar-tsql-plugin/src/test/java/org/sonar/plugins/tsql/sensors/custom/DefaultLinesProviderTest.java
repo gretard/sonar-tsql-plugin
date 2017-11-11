@@ -10,6 +10,7 @@ import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
 import org.sonar.plugins.tsql.rules.custom.Rule;
+import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
 
 public class DefaultLinesProviderTest {
 

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.TextCheckType;
+import org.sonar.plugins.tsql.sensors.custom.names.DefaultNamesChecker;
 
 public class DefaultNamesCheckerTest {
 

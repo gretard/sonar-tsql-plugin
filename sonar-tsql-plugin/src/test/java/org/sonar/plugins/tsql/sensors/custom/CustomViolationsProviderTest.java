@@ -2,6 +2,7 @@ package org.sonar.plugins.tsql.sensors.custom;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.plugins.tsql.sensors.custom.lines.ILinesProvider;
 
 public class CustomViolationsProviderTest {
 
