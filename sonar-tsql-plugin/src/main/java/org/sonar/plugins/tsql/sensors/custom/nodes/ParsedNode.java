@@ -14,13 +14,7 @@ public class ParsedNode implements IParsedNode {
 
 	private final String className;
 
-	final List<ParsedNode> siblings = new LinkedList<>();
-	final List<ParsedNode> uses = new LinkedList<>();
-
-	final List<ParsedNode> parents = new LinkedList<>();
-	final List<ParsedNode> children = new LinkedList<>();
-
-	public ParsedNode(final ParseTree item) {
+		public ParsedNode(final ParseTree item) {
 		this.item = item;
 		this.className = item.getClass().getSimpleName();
 	}

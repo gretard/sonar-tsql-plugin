@@ -7,9 +7,16 @@ import java.util.Map;
 
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.sensors.custom.matchers.RulesMatcher;
+import org.sonar.plugins.tsql.sensors.custom.nodes.INodesProvider;
 import org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode;
 
 public class NodesMatchingRulesProvider {
+
+	INodesProvider<IParsedNode> nodeUsesProvider;
+
+	public NodesMatchingRulesProvider(INodesProvider<IParsedNode> nodeUsesProvider) {
+		this.nodeUsesProvider = nodeUsesProvider;
+	}
 
 	public Map<RuleImplementation, List<IParsedNode>> check(RuleImplementation rule, IParsedNode node) {
 
@@ -25,34 +32,43 @@ public class NodesMatchingRulesProvider {
 	void visit(IParsedNode node, IParsedNode parent, RuleImplementation rule,
 			Map<RuleImplementation, List<IParsedNode>> items) {
 		if (this.matcher.match(rule, parent, node)) {
-			System.out.println("FOUND MATCH: "+node.getText()+" "+rule.getRuleMatchType()+" CC: "+node.getChildren().size());
 			if (!items.get(rule).contains(node)) {
 				items.get(rule).add(node);
 			}
+			if (!rule.getSiblingsRules().getRuleImplementation().isEmpty()) {
+				for (final IParsedNode nnode : node.getSiblings()) {
 
-			for (final IParsedNode nnode : node.getSiblings()) {
-				
-				for (final RuleImplementation vRule : rule.getSiblingsRules().getRuleImplementation()) {
-					System.out.println("SIBLING: "+nnode.getClassName()+" "+nnode.getText()+" "+vRule.getRuleMatchType());
-					
-					visit(nnode, node, vRule, items);
+					for (final RuleImplementation vRule : rule.getSiblingsRules().getRuleImplementation()) {
+						visit(nnode, node, vRule, items);
+					}
 				}
 			}
-			for (final IParsedNode nnode : node.getChildren()) {
-				for (final RuleImplementation vRule : rule.getChildrenRules().getRuleImplementation()) {
-					System.out.println("CHILD: "+nnode.getClassName()+" "+nnode.getText()+" "+vRule.getRuleMatchType());
-					
-					visit(nnode, node, vRule, items);
+
+			if (!rule.getChildrenRules().getRuleImplementation().isEmpty()) {
+				for (final IParsedNode nnode : node.getChildren()) {
+					for (final RuleImplementation vRule : rule.getChildrenRules().getRuleImplementation()) {
+						visit(nnode, node, vRule, items);
+					}
 				}
 			}
-			for (final IParsedNode nnode : node.getParents()) {
-				
-				for (final RuleImplementation vRule : rule.getParentRules().getRuleImplementation()) {
-					System.out.println("PARENTS: "+nnode.getClassName()+" "+nnode.getText()+" "+vRule.getRuleMatchType());
-					
-					visit(nnode, node, vRule, items);
+
+			if (!rule.getParentRules().getRuleImplementation().isEmpty()) {
+				for (final IParsedNode nnode : node.getParents()) {
+					for (final RuleImplementation vRule : rule.getParentRules().getRuleImplementation()) {
+
+						visit(nnode, node, vRule, items);
+					}
 				}
 			}
+
+			if (!rule.getUsesRules().getRuleImplementation().isEmpty()) {
+				for (final IParsedNode nnode : nodeUsesProvider.getNodes(node)) {
+					for (final RuleImplementation vRule : rule.getUsesRules().getRuleImplementation()) {
+						visit(nnode, node, vRule, items);
+					}
+				}
+			}
+
 		}
 	}
 

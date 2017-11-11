@@ -1,6 +1,7 @@
 package org.sonar.plugins.tsql.sensors.custom.checks;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
 import org.sonar.plugins.tsql.rules.custom.Rule;
@@ -27,9 +28,18 @@ public class CustomChecksTest {
 		Assert.assertEquals(1, issues.length);
 
 	}
-
 	@Test
-	public void testCount() {
+	@Ignore
+	public void testReturnRule() {
+		Rule r = Antlr4Utils.getReturnRule();
+		String s = "RETURN 1; SELECT *;";
+		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
+		Antlr4Utils.print(Antlr4Utils.get(s), 0);
+		Assert.assertEquals(1, issues.length);
+
+	}
+	@Test
+	public void testSargInCount() {
 		Rule r = Antlr4Utils.getSargRule();
 		String s = "if (SELECT count(name) from dbo.test) > 0";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);

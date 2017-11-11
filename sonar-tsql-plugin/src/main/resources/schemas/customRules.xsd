@@ -66,6 +66,7 @@
         <xs:element ref="usesRules" minOccurs="0"/>
         <xs:element ref="ruleViolationMessage"/>
         <xs:element name="times" type="xs:int" default="1" />
+        <xs:element name="distance" type="xs:int" default="0" />
         <xs:element name="ruleMode" type="ruleMode" />
         <xs:element name="ruleMatchType" type="ruleMatchType" />
         <xs:element name="ruleResultType" type="ruleResultType" />

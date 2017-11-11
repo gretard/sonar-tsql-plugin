@@ -10,12 +10,7 @@ public class RulesMatcher {
 
 	public boolean match(RuleImplementation rule, IParsedNode parent, IParsedNode node) {
 		final RuleMatchType type = rule.getRuleMatchType();
-		System.out.println();
-		System.out.println("MATCHING: " + node.getText() + " " + node.getClassName() + " " + rule.getRuleMatchType());
-		for (String s : rule.getNames().getTextItem()) {
-			System.out.println("CLASSNAME: " + s);
-		}
-		System.out.println();
+
 		boolean classMatch = checker.matchesClassName(rule, node.getClassName());
 		if (type == RuleMatchType.DEFAULT || type == RuleMatchType.CLASS_ONLY) {
 			return classMatch;
@@ -33,7 +28,8 @@ public class RulesMatcher {
 			if (parent == null) {
 				throw new IllegalArgumentException("Can't do strict check as parent is null");
 			}
-			return textMatch && classMatch && checker.containsSameText(node, parent) && checker.parentsMatch(node, parent);
+			return textMatch && classMatch && checker.containsSameText(node, parent)
+					&& checker.parentsMatch(node, parent);
 		default:
 			break;
 		}

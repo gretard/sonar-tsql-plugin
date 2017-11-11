@@ -35,9 +35,11 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.PredicateContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Query_expressionContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Return_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Search_conditionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
+import org.sonar.plugins.tsql.antlr4.tsqlParser.Sql_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_hintContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
@@ -69,7 +71,7 @@ public class Antlr4Utils {
 		final int tmp = level + 1;
 		final StringBuilder sb = new StringBuilder();
 		sb.append(StringUtils.repeat("\t", level));
-		sb.append(node.getClass().getSimpleName() + ": " + node.getText());
+		sb.append(node.getClass().getSimpleName() + "@" + level + ": " + node.getText());
 		System.out.println(sb.toString());
 		final int n = node.getChildCount();
 		for (int i = 0; i < n; i++) {
@@ -113,8 +115,8 @@ public class Antlr4Utils {
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		DefaultCustomRulesViolationsProvider provider = new DefaultCustomRulesViolationsProvider(new DefaultLinesProvider(result.getStream()),
-				customRules.getRule().toArray(new Rule[0]));
+		DefaultCustomRulesViolationsProvider provider = new DefaultCustomRulesViolationsProvider(
+				new DefaultLinesProvider(result.getStream()), customRules.getRule().toArray(new Rule[0]));
 		// CustomRulesViolationsProvider provider = new
 		// CustomRulesViolationsProvider(result.getStream(), customRules);
 		ParseTree root = result.getTree();
@@ -626,6 +628,46 @@ public class Antlr4Utils {
 		impl.getChildrenRules().getRuleImplementation().add(predicateContextContainsLike);
 
 		impl.getNames().getTextItem().add(Search_conditionContext.class.getSimpleName());
+		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT MAX(RateChangeDate)  FROM HumanResources.EmployeePayHistory WHERE BusinessEntityID = 1");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname from dbo.test where year(date) > 2008");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname from dbo.test where name like '%red' ");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;");
+		// impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+		// .add("IF @LanguageName LIKE N'%Chinese%' SET @LanguageName =
+		// N'Chinese';");
+
+		//
+		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
+		rule.setRuleImplementation(impl);
+
+		return rule;
+	}
+
+	public static Rule getReturnRule() {
+		Rule rule = new Rule();
+		rule.setKey("C010");
+		rule.setInternalKey("C010");
+		rule.setStatus("BETA");
+		rule.setName("Dead code after return");
+		rule.setDescription("<h2>Description</h2><p>Dead code was found after return statement.</p>");
+
+		
+		
+		RuleImplementation parentRule = new RuleImplementation();
+	//	impl.getNames().getTextItem().add(Sql_clauseContext.class.getSimpleName());
+		
+		parentRule.setDistance(-1);
+		
+		RuleImplementation impl = new RuleImplementation();
+		impl.getChildrenRules().getRuleImplementation().add(parentRule);
+		impl.setDistance(1);
+		impl.getNames().getTextItem().add(Sql_clauseContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample()

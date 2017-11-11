@@ -15,7 +15,8 @@
             <siblingsRules/>
             <usesRules/>
             <ruleViolationMessage>WAITFOR is used.</ruleViolationMessage>
-            <times>0</times>
+            <times>1</times>
+            <distance>0</distance>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>FailIfFound</ruleResultType>
@@ -43,7 +44,8 @@
             <siblingsRules/>
             <usesRules/>
             <ruleViolationMessage>SELECT * was used</ruleViolationMessage>
-            <times>0</times>
+            <times>1</times>
+            <distance>0</distance>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>TextAndClass</ruleMatchType>
             <ruleResultType>FailIfFound</ruleResultType>
@@ -79,7 +81,8 @@
                     <siblingsRules/>
                     <usesRules/>
                     <ruleViolationMessage>Column list is not specified in an insert statement.</ruleViolationMessage>
-                    <times>0</times>
+                    <times>1</times>
+                    <distance>0</distance>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>FailIfNotFound</ruleResultType>
@@ -90,7 +93,9 @@
             </childrenRules>
             <siblingsRules/>
             <usesRules/>
-            <times>0</times>
+            <ruleViolationMessage>TESTT</ruleViolationMessage>
+            <times>1</times>
+            <distance>0</distance>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>
@@ -125,7 +130,8 @@
                     <siblingsRules/>
                     <usesRules/>
                     <ruleViolationMessage>Positional reference is used instead of column name in order by clause.</ruleViolationMessage>
-                    <times>0</times>
+                    <times>1</times>
+                    <distance>0</distance>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>FailIfFound</ruleResultType>
@@ -137,7 +143,8 @@
             <siblingsRules/>
             <usesRules/>
             <ruleViolationMessage></ruleViolationMessage>
-            <times>0</times>
+            <times>1</times>
+            <distance>0</distance>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>
@@ -173,7 +180,8 @@
                     <siblingsRules/>
                     <usesRules/>
                     <ruleViolationMessage>EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.</ruleViolationMessage>
-                    <times>0</times>
+                    <times>1</times>
+                    <distance>0</distance>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>FailIfFound</ruleResultType>
@@ -191,7 +199,8 @@
                     <siblingsRules/>
                     <usesRules/>
                     <ruleViolationMessage>EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.</ruleViolationMessage>
-                    <times>0</times>
+                    <times>1</times>
+                    <distance>0</distance>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>SkipIfFound</ruleResultType>
@@ -202,7 +211,8 @@
             </childrenRules>
             <siblingsRules/>
             <usesRules/>
-            <times>0</times>
+            <times>1</times>
+            <distance>0</distance>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>
@@ -234,7 +244,8 @@
             <siblingsRules/>
             <usesRules/>
             <ruleViolationMessage>NOLOCK hint was used</ruleViolationMessage>
-            <times>0</times>
+            <times>1</times>
+            <distance>0</distance>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>TextAndClass</ruleMatchType>
             <ruleResultType>FailIfFound</ruleResultType>
@@ -278,7 +289,8 @@
                             <siblingsRules/>
                             <usesRules/>
                             <ruleViolationMessage>Non-sargeable argument found - column referenced in a function</ruleViolationMessage>
-                            <times>0</times>
+                            <times>1</times>
+                            <distance>0</distance>
                             <ruleMode>Default</ruleMode>
                             <ruleMatchType>ClassOnly</ruleMatchType>
                             <ruleResultType>FailIfFound</ruleResultType>
@@ -289,7 +301,8 @@
                     </childrenRules>
                     <siblingsRules/>
                     <usesRules/>
-                    <times>0</times>
+                    <times>1</times>
+                    <distance>0</distance>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>Default</ruleResultType>
@@ -318,7 +331,8 @@
                             <siblingsRules/>
                             <usesRules/>
                             <ruleViolationMessage>Non-sargeable argument found - predicate starts with wildcard</ruleViolationMessage>
-                            <times>0</times>
+                            <times>1</times>
+                            <distance>0</distance>
                             <ruleMode>Default</ruleMode>
                             <ruleMatchType>TextAndClass</ruleMatchType>
                             <ruleResultType>FailIfFound</ruleResultType>
@@ -329,7 +343,8 @@
                     </childrenRules>
                     <siblingsRules/>
                     <usesRules/>
-                    <times>0</times>
+                    <times>1</times>
+                    <distance>0</distance>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>TextAndClass</ruleMatchType>
                     <ruleResultType>Default</ruleResultType>
@@ -340,7 +355,8 @@
             </childrenRules>
             <siblingsRules/>
             <usesRules/>
-            <times>0</times>
+            <times>1</times>
+            <distance>0</distance>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>

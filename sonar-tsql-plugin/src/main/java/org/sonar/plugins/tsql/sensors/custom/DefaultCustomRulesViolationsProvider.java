@@ -13,6 +13,7 @@ import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 import org.sonar.plugins.tsql.sensors.custom.lines.ILinesProvider;
 import org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNodesProvider;
 import org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode;
+import org.sonar.plugins.tsql.sensors.custom.nodes.NodeUsesProvider;
 
 public class DefaultCustomRulesViolationsProvider implements ICustomRulesViolationsProvider {
 
@@ -38,7 +39,7 @@ public class DefaultCustomRulesViolationsProvider implements ICustomRulesViolati
 			System.out.println("FOUND candidated: " + candidates.length);
 			for (IParsedNode candidate : candidates) {
 				System.out.println("Candidate: " + candidate.getClassName() + " " + candidate.getText());
-				NodesMatchingRulesProvider m = new NodesMatchingRulesProvider();
+				NodesMatchingRulesProvider m = new NodesMatchingRulesProvider(new NodeUsesProvider(parseTree));
 				Map<RuleImplementation, List<IParsedNode>> results = m.check(r.getRuleImplementation(), candidate);
 				System.out.println("Creating issues");
 				issues.addAll(create(r, candidate, results));
