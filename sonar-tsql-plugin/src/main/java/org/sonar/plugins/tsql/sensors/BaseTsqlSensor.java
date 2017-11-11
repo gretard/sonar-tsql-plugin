@@ -25,8 +25,8 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 	private final IIssuesFiller filler = new DefaultIssuesFiller();
 
 	public BaseTsqlSensor(final Settings settings, final IIssuesProvider issuesProvider, final String repositoryKey) {
-
 		this.settings = settings;
+
 		this.issuesProvider = issuesProvider;
 		this.repositoryKey = repositoryKey;
 

@@ -78,6 +78,32 @@
   <build>
     <plugins>
     <plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>4.7</version>
+				<configuration>
+					<sourceDirectory>${basedir}/../grammars/tsql</sourceDirectory>
+					<outputDirectory>src/main/java/org/antlr/tsql</outputDirectory>
+					  <listener>true</listener>
+					  <visitor>true</visitor>
+					   <arguments>
+                    <argument>-package</argument>
+                    <argument>org.antlr.tsql</argument>
+                </arguments>
+					<includes>
+						<include>TSqlLexer.g4</include>
+						<include>TSqlParser.g4</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+    <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.0.0-M1</version>

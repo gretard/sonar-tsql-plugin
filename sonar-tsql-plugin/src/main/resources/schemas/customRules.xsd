@@ -20,6 +20,7 @@
         <xs:enumeration value="Single" />    
     </xs:restriction>
 </xs:simpleType>
+
 <xs:simpleType name="ruleMatchType" final="restriction" >
     <xs:restriction base="xs:string">
         <xs:enumeration value="Default" />
@@ -161,6 +162,7 @@
       </xs:sequence>
       <xs:attribute type="xs:string" name="repoName"/>
       <xs:attribute type="xs:string" name="repoKey"/>
+      <xs:attribute type="xs:string" name="version" default="1" />
       <xs:attribute type="xs:string" name="reportName"/>
     </xs:complexType>
   </xs:element>
