@@ -23,7 +23,6 @@ import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Column_name_listContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Column_ref_expressionContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Common_table_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.ConstantContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_statementContext;
@@ -31,34 +30,29 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Declare_cursorContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Execute_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Func_proc_nameContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Function_callContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.IdContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Insert_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.PredicateContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Query_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Search_conditionContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_listContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_hintContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_nameContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_name_with_hintContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_sourceContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Waitfor_statementContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.With_table_hintsContext;
-import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
 import org.sonar.plugins.tsql.rules.custom.RuleMode;
 import org.sonar.plugins.tsql.rules.custom.RuleResultType;
+import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.custom.TextCheckType;
 import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.sensors.custom.CustomRulesViolationsProvider;
+import org.sonar.plugins.tsql.sensors.custom.DefaultCustomRulesViolationsProvider;
+import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
 
 public class Antlr4Utils {
 	public static ParseTree get(String text) {
@@ -113,26 +107,16 @@ public class Antlr4Utils {
 		}
 	}
 
-	public static boolean verify(Rule rule, String text) {
-		AntrlResult result = Antlr4Utils.getFull(text);
-		SqlRules customRules = new SqlRules();
-		customRules.setRepoKey("test");
-		customRules.setRepoName("test");
-		customRules.getRule().add(rule);
-		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
-		ParseTree root = result.getTree();
-
-		TsqlIssue[] issues = provider.getIssues(root);
-		return issues.length == 0;
-	}
-
 	public static TsqlIssue[] verify2(Rule rule, String text) {
 		AntrlResult result = Antlr4Utils.getFull(text);
 		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		CustomRulesViolationsProvider provider = new CustomRulesViolationsProvider(result.getStream(), customRules);
+		DefaultCustomRulesViolationsProvider provider = new DefaultCustomRulesViolationsProvider(new DefaultLinesProvider(result.getStream()),
+				customRules.getRule().toArray(new Rule[0]));
+		// CustomRulesViolationsProvider provider = new
+		// CustomRulesViolationsProvider(result.getStream(), customRules);
 		ParseTree root = result.getTree();
 
 		TsqlIssue[] issues = provider.getIssues(root);
@@ -306,7 +290,7 @@ public class Antlr4Utils {
 		impl.getNames().getTextItem().add(Insert_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
-
+		impl.setRuleViolationMessage("TESTT");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("INSERT INTO dbo.test VALUES (1,2);");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("INSERT INTO dbo.test (a,b) VALUES (1,2);");
 
@@ -352,7 +336,6 @@ public class Antlr4Utils {
 		rule.setDescription(
 				"<h2>Description</h2><p>Always use schema-qualified object names to speed up resolution and improve query plan reuse.</p>");
 
-		
 		RuleImplementation parentQuery = new RuleImplementation();
 		parentQuery.getNames().getTextItem().add(Query_expressionContext.class.getSimpleName());
 		parentQuery.setRuleResultType(RuleResultType.DEFAULT);
@@ -376,7 +359,7 @@ public class Antlr4Utils {
 		parentTableQuery.getChildrenRules().getRuleImplementation().add(child2);
 		parentQuery.getChildrenRules().getRuleImplementation().add(parentTableQuery);
 		RuleImplementation impl = new RuleImplementation();
-		
+
 		impl.getParentRules().getRuleImplementation().add(parentQuery);
 		impl.getNames().getTextItem().add(Table_nameContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
@@ -645,7 +628,8 @@ public class Antlr4Utils {
 		impl.getNames().getTextItem().add(Search_conditionContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
-		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT MAX(RateChangeDate)  FROM HumanResources.EmployeePayHistory WHERE BusinessEntityID = 1");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT MAX(RateChangeDate)  FROM HumanResources.EmployeePayHistory WHERE BusinessEntityID = 1");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT name, surname from dbo.test where year(date) > 2008");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()

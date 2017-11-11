@@ -1,7 +1,5 @@
 package org.sonar.plugins.tsql.sensors.custom.nodes;
 
-import org.sonar.plugins.tsql.sensors.custom.ParsedNode;
-
-public interface INodesProvider {
-	ParsedNode[] getNodes(final ParsedNode node);
+public interface INodesProvider<T> {
+	IParsedNode[] getNodes(final T node);
 }

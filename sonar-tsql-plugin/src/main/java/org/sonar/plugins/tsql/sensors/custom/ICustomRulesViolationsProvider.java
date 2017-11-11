@@ -4,5 +4,5 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public interface ICustomRulesViolationsProvider {
-	TsqlIssue[] getIssues(ParseTree root);
+	TsqlIssue[] getIssues(ParseTree parseTree);
 }

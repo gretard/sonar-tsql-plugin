@@ -7,12 +7,13 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
+import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.issues.DefaultIssuesFiller;
 import org.sonar.plugins.tsql.rules.issues.IIssuesFiller;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.sensors.custom.CustomRulesViolationsProvider;
-import org.sonar.plugins.tsql.sensors.custom.ICustomRulesViolationsProvider;
+import org.sonar.plugins.tsql.sensors.custom.DefaultCustomRulesViolationsProvider;
+import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
 
 public class AntlrCustomRulesSensor implements IAntlrSensor {
 	private static final Logger LOGGER = Loggers.get(AntlrCustomRulesSensor.class);
@@ -36,9 +37,9 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 			final Tsql_fileContext ct = parser.tsql_file();
 			for (final SqlRules rule : this.rules) {
 				final String repositoryKey = rule.getRepoKey();
-				
-				final ICustomRulesViolationsProvider customRulesViolationsProvider = new CustomRulesViolationsProvider(
-						stream, rule);
+
+				final DefaultCustomRulesViolationsProvider customRulesViolationsProvider = new DefaultCustomRulesViolationsProvider(
+						new DefaultLinesProvider(stream), rule.getRule().toArray(new Rule[0]));
 				final TsqlIssue[] issues = customRulesViolationsProvider.getIssues(ct);
 				filler.fill(repositoryKey, context, file, issues);
 

@@ -3,7 +3,7 @@ package org.sonar.plugins.tsql.sensors.custom.lines;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
-import org.sonar.plugins.tsql.sensors.custom.ParsedNode;
+import org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode;
 
 public class DefaultLinesProvider implements ILinesProvider {
 
@@ -14,7 +14,7 @@ public class DefaultLinesProvider implements ILinesProvider {
 	}
 
 	@Override
-	public int getLine(final ParsedNode node) {
+	public int getLine(final IParsedNode node) {
 		final Interval sourceInterval = node.getItem().getSourceInterval();
 		final Token firstToken = stream.get(sourceInterval.a);
 		final int line = firstToken.getLine();

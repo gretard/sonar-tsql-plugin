@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
-import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
+import org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode;
 
 public class DefaultLinesProviderTest {
 
@@ -24,7 +24,7 @@ public class DefaultLinesProviderTest {
 		final Tsql_fileContext tree = parser.tsql_file();
 		ParseTree child = tree.getChild(0);
 		DefaultLinesProvider lines = new DefaultLinesProvider(tokens);
-		int line = lines.getLine(new ParsedNode(child, new Rule(), "test"));
+		int line = lines.getLine(new ParsedNode(child));
 		Assert.assertEquals(3, line);
 	}
 
