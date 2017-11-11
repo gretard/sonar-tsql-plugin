@@ -23,7 +23,7 @@ public class SiblingsNodesProvider implements INodesProvider {
 		final int c = parent.getChildCount();
 		for (int i = 0; i < c; i++) {
 			final ParseTree child = parent.getChild(i);
-			nodes.add(new ParsedNode(child, node.getRule(), node.getRepository()));
+			nodes.add(new ParsedNode(child, node.getRule(), node.getRepository(), i));
 		}
 
 		return nodes.toArray(new ParsedNode[0]);

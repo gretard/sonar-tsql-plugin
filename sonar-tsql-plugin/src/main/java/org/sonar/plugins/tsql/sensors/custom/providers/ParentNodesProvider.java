@@ -24,7 +24,7 @@ public class ParentNodesProvider implements INodesProvider {
 		}
 		int d = 0;
 		while (parent != null) {
-			d++;
+			d--;
 			nodes.add(new ParsedNode(parent, node.getRule(), node.getRepository(), d));
 			parent = parent.getParent();
 		}
