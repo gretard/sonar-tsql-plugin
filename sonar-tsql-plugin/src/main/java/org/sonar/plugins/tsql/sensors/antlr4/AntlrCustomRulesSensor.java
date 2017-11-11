@@ -1,12 +1,12 @@
 package org.sonar.plugins.tsql.sensors.antlr4;
 
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.antlr4.tsqlParser;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.issues.DefaultIssuesFiller;
@@ -34,13 +34,13 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 			if (!LOGGER.isDebugEnabled()) {
 				parser.removeErrorListeners();
 			}
-			final Tsql_fileContext ct = parser.tsql_file();
+			final ParseTree root = parser.tsql_file();
 			for (final SqlRules rule : this.rules) {
 				final String repositoryKey = rule.getRepoKey();
 
 				final DefaultCustomRulesViolationsProvider customRulesViolationsProvider = new DefaultCustomRulesViolationsProvider(
 						new DefaultLinesProvider(stream), rule.getRule().toArray(new Rule[0]));
-				final TsqlIssue[] issues = customRulesViolationsProvider.getIssues(ct);
+				final TsqlIssue[] issues = customRulesViolationsProvider.getIssues(root);
 				filler.fill(repositoryKey, context, file, issues);
 
 			}

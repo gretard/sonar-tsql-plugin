@@ -3,16 +3,17 @@ package org.sonar.plugins.tsql.sensors.custom.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.plugins.tsql.antlr4.tsqlBaseVisitor;
 
-public class NodeUsesProvider extends tsqlBaseVisitor implements INodesProvider<IParsedNode> {
+@SuppressWarnings("rawtypes")
+public class NodeUsesProvider extends AbstractParseTreeVisitor implements INodesProvider<IParsedNode> {
 
 	private ParseTree root;
 	private String tempText;
-	List<IParsedNode> nodes = new ArrayList<>();
+	final List<IParsedNode> nodes = new ArrayList<>();
 
 	public NodeUsesProvider(ParseTree root) {
 		this.root = root;

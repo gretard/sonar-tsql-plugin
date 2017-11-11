@@ -32,16 +32,12 @@ public class DefaultCustomRulesViolationsProvider implements ICustomRulesViolati
 			return new TsqlIssue[0];
 		}
 		for (Rule r : rules) {
-			System.out.println(r.getRuleImplementation());
 			final CandidateNodesProvider visitor = new org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNodesProvider(
 					r);
 			IParsedNode[] candidates = visitor.getNodes(parseTree);
-			System.out.println("FOUND candidated: " + candidates.length);
 			for (IParsedNode candidate : candidates) {
-				System.out.println("Candidate: " + candidate.getClassName() + " " + candidate.getText());
 				NodesMatchingRulesProvider m = new NodesMatchingRulesProvider(new NodeUsesProvider(parseTree));
 				Map<RuleImplementation, List<IParsedNode>> results = m.check(r.getRuleImplementation(), candidate);
-				System.out.println("Creating issues");
 				issues.addAll(create(r, candidate, results));
 			}
 		}
@@ -59,7 +55,6 @@ public class DefaultCustomRulesViolationsProvider implements ICustomRulesViolati
 			final RuleImplementation rrule = st.getKey();
 			final int found = nodes.size();
 			boolean add = false;
-			System.out.println("Checking: " + rrule.getRuleViolationMessage() + " " + found);
 			switch (rrule.getRuleResultType()) {
 			case DEFAULT:
 				break;
@@ -112,7 +107,13 @@ public class DefaultCustomRulesViolationsProvider implements ICustomRulesViolati
 				RuleImplementation rule = st.getKey();
 				for (IParsedNode node : st.getValue()) {
 					final TsqlIssue issue = new TsqlIssue();
-					issue.setDescription(rule.getRuleViolationMessage());
+					if (rule.getRuleViolationMessage() == null) {
+						issue.setDescription(r.getRuleImplementation().getRuleViolationMessage());
+
+					} else {
+						issue.setDescription(rule.getRuleViolationMessage());
+
+					}
 					issue.setType(r.getKey());
 					issue.setLine(this.linesProvider.getLine(node));
 					issues.add(issue);

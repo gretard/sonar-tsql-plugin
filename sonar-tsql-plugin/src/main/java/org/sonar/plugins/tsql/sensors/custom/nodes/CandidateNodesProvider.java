@@ -5,16 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
-import org.sonar.plugins.tsql.antlr4.tsqlBaseVisitor;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.RuleMode;
 import org.sonar.plugins.tsql.sensors.custom.matchers.NodesMatcher;
 
 @SuppressWarnings("rawtypes")
-public class CandidateNodesProvider extends tsqlBaseVisitor implements INodesProvider<ParseTree> {
+public class CandidateNodesProvider extends AbstractParseTreeVisitor implements INodesProvider<ParseTree> {
+	
 	private final RuleImplementation ruleImplemention;
 	private final Map<String, org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode> groupedNodes = new HashMap<>();
 	private final List<IParsedNode> singleNodes = new LinkedList<>();

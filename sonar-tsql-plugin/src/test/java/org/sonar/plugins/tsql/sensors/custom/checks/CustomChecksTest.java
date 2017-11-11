@@ -12,7 +12,7 @@ public class CustomChecksTest {
 	@Test
 	public void testSargRule() {
 		Rule r = Antlr4Utils.getSargRule();
-		String s = "SELECT * from dbo.test where name like '%test%'";
+		String s = "SELECT * from dbo.test where name like '%test%' ;";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
 		Antlr4Utils.print(Antlr4Utils.get(s), 0);
 		Assert.assertEquals(1, issues.length);

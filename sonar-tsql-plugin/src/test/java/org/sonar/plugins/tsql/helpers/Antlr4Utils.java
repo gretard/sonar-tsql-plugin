@@ -35,14 +35,12 @@ import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.PredicateContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Query_expressionContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Return_statementContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Search_conditionContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Sql_clauseContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_hintContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_nameContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Tsql_fileContext;
 import org.sonar.plugins.tsql.antlr4.tsqlParser.Waitfor_statementContext;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
@@ -58,13 +56,7 @@ import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
 
 public class Antlr4Utils {
 	public static ParseTree get(String text) {
-		final CharStream charStream = CharStreams.fromString(text);
-		final tsqlLexer lexer = new tsqlLexer(charStream);
-		final CommonTokenStream tokens = new CommonTokenStream(lexer);
-		tokens.fill();
-		final tsqlParser parser = new tsqlParser(tokens);
-		final Tsql_fileContext tree = parser.tsql_file();
-		return tree;
+		return getFull(text).getTree();
 	}
 
 	public static void print(final ParseTree node, final int level) {
@@ -127,30 +119,26 @@ public class Antlr4Utils {
 
 	public static AntrlResult getFull(String text) {
 		final CharStream charStream = CharStreams.fromString(text);
+		return getFromStream(charStream);
+	}
+
+	private static AntrlResult getFromStream(final CharStream charStream) {
+
 		final tsqlLexer lexer = new tsqlLexer(charStream);
-		lexer.removeErrorListeners();
-		final CommonTokenStream tokens = new CommonTokenStream(lexer);
-		tokens.fill();
-		final tsqlParser parser = new tsqlParser(tokens);
-		parser.removeErrorListeners();
-		final Tsql_fileContext tree = parser.tsql_file();
+
+		final CommonTokenStream stream = new CommonTokenStream(lexer);
+		stream.fill();
+		final tsqlParser parser = new tsqlParser(stream);
+
 		AntrlResult result = new AntrlResult();
-		result.setStream(tokens);
-		result.setTree(tree);
+		result.setTree(parser.tsql_file());
+		result.setStream(stream);
 		return result;
 	}
 
 	public static AntrlResult getFull(InputStream stream) throws IOException {
 		final CharStream charStream = CharStreams.fromStream(stream);
-		final tsqlLexer lexer = new tsqlLexer(charStream);
-		final CommonTokenStream tokens = new CommonTokenStream(lexer);
-		tokens.fill();
-		final tsqlParser parser = new tsqlParser(tokens);
-		final Tsql_fileContext tree = parser.tsql_file();
-		AntrlResult result = new AntrlResult();
-		result.setStream(tokens);
-		result.setTree(tree);
-		return result;
+		return getFromStream(charStream);
 	}
 
 	public static String ruleToString(SqlRules customRules) {
@@ -657,13 +645,11 @@ public class Antlr4Utils {
 		rule.setName("Dead code after return");
 		rule.setDescription("<h2>Description</h2><p>Dead code was found after return statement.</p>");
 
-		
-		
 		RuleImplementation parentRule = new RuleImplementation();
-	//	impl.getNames().getTextItem().add(Sql_clauseContext.class.getSimpleName());
-		
+		// impl.getNames().getTextItem().add(Sql_clauseContext.class.getSimpleName());
+
 		parentRule.setDistance(-1);
-		
+
 		RuleImplementation impl = new RuleImplementation();
 		impl.getChildrenRules().getRuleImplementation().add(parentRule);
 		impl.setDistance(1);
