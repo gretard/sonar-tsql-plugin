@@ -18,12 +18,12 @@ import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.antlr4.tsqlLexer;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.rules.custom.SqlRules;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginRulesProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrCpdTokenizer;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrCustomRulesSensor;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrHighlighter;
 import org.sonar.plugins.tsql.sensors.antlr4.IAntlrSensor;
-import org.sonar.plugins.tsql.sensors.custom.CustomPluginRulesProvider;
-import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
 
 public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 

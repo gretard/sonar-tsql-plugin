@@ -1,4 +1,4 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.rules.definitions;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;

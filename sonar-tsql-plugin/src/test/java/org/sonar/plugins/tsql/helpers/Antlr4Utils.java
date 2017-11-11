@@ -56,8 +56,8 @@ import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
 import org.sonar.plugins.tsql.rules.custom.RuleMode;
 import org.sonar.plugins.tsql.rules.custom.RuleResultType;
 import org.sonar.plugins.tsql.rules.custom.TextCheckType;
+import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
 import org.sonar.plugins.tsql.sensors.custom.CustomRulesViolationsProvider;
 
 public class Antlr4Utils {

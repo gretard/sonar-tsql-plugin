@@ -17,7 +17,7 @@ import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 
 public final class TSQLQualityProfile extends ProfileDefinition {
 

@@ -1,4 +1,4 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.rules.definitions;
 
 import java.io.File;
 import java.io.FileFilter;

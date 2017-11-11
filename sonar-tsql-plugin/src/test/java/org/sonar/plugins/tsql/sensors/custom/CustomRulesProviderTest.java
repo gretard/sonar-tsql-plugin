@@ -11,7 +11,7 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.internal.JUnitTempFolder;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.rules.custom.SqlRules;
-import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 
 public class CustomRulesProviderTest {
 	@org.junit.Rule
