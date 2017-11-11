@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
@@ -19,26 +22,38 @@ public class DefaultCustomRulesViolationsProvider implements ICustomRulesViolati
 
 	private Rule[] rules;
 	private ILinesProvider linesProvider;
+	private static final Logger LOGGER = Loggers.get(DefaultCustomRulesViolationsProvider.class);
 
-	public DefaultCustomRulesViolationsProvider(ILinesProvider linesProvider, Rule... rules) {
+	public DefaultCustomRulesViolationsProvider(final ILinesProvider linesProvider, final  Rule... rules) {
 		this.linesProvider = linesProvider;
 		this.rules = rules;
 	}
 
 	@Override
-	public TsqlIssue[] getIssues(ParseTree parseTree) {
-		List<TsqlIssue> issues = new ArrayList<>();
+	public TsqlIssue[] getIssues(final ParseTree parseTree) {
+		final List<TsqlIssue> issues = new ArrayList<>();
 		if (parseTree == null) {
 			return new TsqlIssue[0];
 		}
-		for (Rule r : rules) {
+		for (final Rule rule : rules) {
 			final CandidateNodesProvider visitor = new org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNodesProvider(
-					r);
-			IParsedNode[] candidates = visitor.getNodes(parseTree);
-			for (IParsedNode candidate : candidates) {
-				NodesMatchingRulesProvider m = new NodesMatchingRulesProvider(new NodeUsesProvider(parseTree));
-				Map<RuleImplementation, List<IParsedNode>> results = m.check(r.getRuleImplementation(), candidate);
-				issues.addAll(create(r, candidate, results));
+					rule);
+
+			final IParsedNode[] candidates = visitor.getNodes(parseTree);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.info(String.format("Found %s candidates against rule %s", candidates.length, rule.getKey()));
+			}
+
+			for (final IParsedNode candidate : candidates) {
+				final NodesMatchingRulesProvider m = new NodesMatchingRulesProvider(new NodeUsesProvider(parseTree));
+				final Map<RuleImplementation, List<IParsedNode>> results = m.check(rule.getRuleImplementation(),
+						candidate);
+				final List<TsqlIssue> foundIssues = create(rule, candidate, results);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.info(String.format("Found %s issues against rule %s on %s node", foundIssues.size(),
+							rule.getKey(), candidate.getText()));
+				}
+				issues.addAll(foundIssues);
 			}
 		}
 
@@ -51,8 +66,13 @@ public class DefaultCustomRulesViolationsProvider implements ICustomRulesViolati
 		Map<RuleImplementation, List<IParsedNode>> selected = new HashMap<RuleImplementation, List<IParsedNode>>();
 
 		for (final Entry<RuleImplementation, List<IParsedNode>> st : results.entrySet()) {
+
 			final List<IParsedNode> nodes = st.getValue();
 			final RuleImplementation rrule = st.getKey();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.info(String.format("Found %s violations for rule %s on %s node", nodes.size(),
+						rrule.getRuleMatchType(), root.getText()));
+			}
 			final int found = nodes.size();
 			boolean add = false;
 			switch (rrule.getRuleResultType()) {

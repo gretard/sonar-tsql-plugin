@@ -109,8 +109,6 @@ public class Antlr4Utils {
 		customRules.getRule().add(rule);
 		DefaultCustomRulesViolationsProvider provider = new DefaultCustomRulesViolationsProvider(
 				new DefaultLinesProvider(result.getStream()), customRules.getRule().toArray(new Rule[0]));
-		// CustomRulesViolationsProvider provider = new
-		// CustomRulesViolationsProvider(result.getStream(), customRules);
 		ParseTree root = result.getTree();
 
 		TsqlIssue[] issues = provider.getIssues(root);
@@ -637,42 +635,49 @@ public class Antlr4Utils {
 		return rule;
 	}
 
-	public static Rule getReturnRule() {
-		Rule rule = new Rule();
-		rule.setKey("C010");
-		rule.setInternalKey("C010");
-		rule.setStatus("BETA");
-		rule.setName("Dead code after return");
-		rule.setDescription("<h2>Description</h2><p>Dead code was found after return statement.</p>");
+	public static Rule getDeclareRule() {
+		Rule r = new Rule();
+		r.setInternalKey("C010");
+		r.setKey("C010");
+		r.setStatus("BETA");
+		r.setName("Variable was declared, but not set");
+		r.setDescription("<h2>Description</h2><p>Variable was declared, but not set.</p>");
+
+		RuleImplementation useRule = new RuleImplementation();
+		useRule.getNames().getTextItem().add("Set_statementContext");
+		useRule.setRuleMatchType(RuleMatchType.FULL);
+		useRule.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 
 		RuleImplementation parentRule = new RuleImplementation();
-		// impl.getNames().getTextItem().add(Sql_clauseContext.class.getSimpleName());
+		parentRule.getNames().getTextItem().add("Declare_statementContext");
+		parentRule.setRuleMatchType(RuleMatchType.FULL);
+		parentRule.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 
-		parentRule.setDistance(-1);
+		RuleImplementation childRule = new RuleImplementation();
+		childRule.getNames().getTextItem().add("Data_typeContext");
+		childRule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 
+		RuleImplementation sibRule = new RuleImplementation();
+		sibRule.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
+
+		sibRule.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
+		childRule.getSiblingsRules().getRuleImplementation().add(sibRule);
+
+		parentRule.getChildrenRules().getRuleImplementation().add(childRule);
 		RuleImplementation impl = new RuleImplementation();
-		impl.getChildrenRules().getRuleImplementation().add(parentRule);
-		impl.setDistance(1);
-		impl.getNames().getTextItem().add(Sql_clauseContext.class.getSimpleName());
-		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.getUsesRules().getRuleImplementation().add(useRule);
+		impl.getUsesRules().getRuleImplementation().add(parentRule);
+		impl.setTextCheckType(TextCheckType.REGEXP);
+		impl.getTextToFind().getTextItem().add("@(.*?)");
+		impl.getNames().getTextItem().add("TerminalNodeImpl");
+		impl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		impl.setRuleMode(RuleMode.GROUP);
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
-				.add("SELECT MAX(RateChangeDate)  FROM HumanResources.EmployeePayHistory WHERE BusinessEntityID = 1");
-		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
-				.add("SELECT name, surname from dbo.test where year(date) > 2008");
-		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
-				.add("SELECT name, surname from dbo.test where name like '%red' ");
-		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
-				.add("SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;");
-		// impl.getCompliantRulesCodeExamples().getRuleCodeExample()
-		// .add("IF @LanguageName LIKE N'%Chinese%' SET @LanguageName =
-		// N'Chinese';");
-
-		//
-		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
-		rule.setRuleImplementation(impl);
-
-		return rule;
+				.add("DECLARE @Group nvarchar(50); Set @Group = 'test';");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("DECLARE @Group nvarchar(50);");
+		impl.setRuleViolationMessage("Variable was declared, but not set");
+		r.setRuleImplementation(impl);
+		return r;
 	}
 
 	public static void main(String[] args) {

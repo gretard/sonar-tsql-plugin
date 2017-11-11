@@ -28,7 +28,7 @@ public class NodesMatcher {
 	public boolean parentsMatch(IParsedNode node, IParsedNode node2) {
 		IParsedNode parent1 = node.getControlFlowParent();
 		IParsedNode parent2 = node2.getControlFlowParent();
-		
+
 		if (parent1 == null || parent2 == null) {
 			return false;
 		}
@@ -53,7 +53,10 @@ public class NodesMatcher {
 	public boolean matchesText(RuleImplementation rule, String text) {
 
 		final TextCheckType type = rule.getTextCheckType();
+		if (rule.getTextToFind().getTextItem().isEmpty()) {
+			return true;
 
+		}
 		for (String s : rule.getTextToFind().getTextItem()) {
 			switch (type) {
 			case DEFAULT:

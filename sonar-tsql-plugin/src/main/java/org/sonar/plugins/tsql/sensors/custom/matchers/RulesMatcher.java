@@ -11,12 +11,18 @@ public class RulesMatcher {
 	public boolean match(RuleImplementation rule, IParsedNode parent, IParsedNode node) {
 		final RuleMatchType type = rule.getRuleMatchType();
 
+		if (rule.getDistance() > 0 && parent != null) {
+			int delta = parent.getDistance() - node.getDistance();
+			if (rule.getDistance() > delta) {
+				return false;
+			}
+		}
 		boolean classMatch = checker.matchesClassName(rule, node.getClassName());
+		boolean textMatch = checker.matchesText(rule, node.getText());
 		if (type == RuleMatchType.DEFAULT || type == RuleMatchType.CLASS_ONLY) {
 			return classMatch;
 		}
 
-		boolean textMatch = checker.matchesText(rule, node.getText());
 		switch (type) {
 		case TEXT_AND_CLASS:
 			return classMatch && textMatch;

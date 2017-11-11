@@ -46,7 +46,7 @@ public class CandidateNodesProviderTest {
 		r.getRuleImplementation().setTextCheckType(TextCheckType.CONTAINS);
 		final CandidateNodesProvider visitor = new org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNodesProvider(r);
 		IParsedNode[] candidates = visitor.getNodes(parseTree);
-		Assert.assertEquals(24, candidates.length);
+		Assert.assertEquals(27, candidates.length);
 	}
 
 	@Test

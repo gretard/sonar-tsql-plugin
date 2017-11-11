@@ -32,12 +32,12 @@ public class NodesMatchingRulesProvider {
 	void visit(IParsedNode node, IParsedNode parent, RuleImplementation rule,
 			Map<RuleImplementation, List<IParsedNode>> items) {
 		if (this.matcher.match(rule, parent, node)) {
+			items.putIfAbsent(rule, new ArrayList<>());
 			if (!items.get(rule).contains(node)) {
 				items.get(rule).add(node);
 			}
 			if (!rule.getSiblingsRules().getRuleImplementation().isEmpty()) {
 				for (final IParsedNode nnode : node.getSiblings()) {
-
 					for (final RuleImplementation vRule : rule.getSiblingsRules().getRuleImplementation()) {
 						visit(nnode, node, vRule, items);
 					}
@@ -55,7 +55,6 @@ public class NodesMatchingRulesProvider {
 			if (!rule.getParentRules().getRuleImplementation().isEmpty()) {
 				for (final IParsedNode nnode : node.getParents()) {
 					for (final RuleImplementation vRule : rule.getParentRules().getRuleImplementation()) {
-
 						visit(nnode, node, vRule, items);
 					}
 				}
