@@ -1,9 +1,10 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.sensors.custom.providers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.sonar.plugins.tsql.sensors.custom.ParsedNode;
 
 public class ParentNodesProvider implements INodesProvider {
 

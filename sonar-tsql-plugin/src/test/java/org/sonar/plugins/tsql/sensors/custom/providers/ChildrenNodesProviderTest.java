@@ -1,16 +1,17 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.sensors.custom.providers;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
 import org.sonar.plugins.tsql.rules.custom.Rule;
+import org.sonar.plugins.tsql.sensors.custom.ParsedNode;
 
-public class SiblingNodesProviderTest {
+public class ChildrenNodesProviderTest {
 
 	@Test
 	public void test() {
-		SiblingsNodesProvider provider = new SiblingsNodesProvider();
+		ChildrenNodesProvider provider = new ChildrenNodesProvider();
 		Assert.assertEquals(0, provider.getNodes(null).length);
 	}
 
@@ -18,9 +19,9 @@ public class SiblingNodesProviderTest {
 	public void test2() {
 		ParseTree tree = Antlr4Utils.get("select * from dbo.test");
 		Rule rule = new Rule();
-		SiblingsNodesProvider provider = new SiblingsNodesProvider();
-		ParsedNode node = new ParsedNode(tree.getChild(0).getChild(0), rule, "test");
-		Assert.assertEquals(1, provider.getNodes(node).length);
+		ChildrenNodesProvider provider = new ChildrenNodesProvider();
+		ParsedNode node = new ParsedNode(tree, rule, "test");
+		Assert.assertEquals(26, provider.getNodes(node).length);
 	}
 
 }

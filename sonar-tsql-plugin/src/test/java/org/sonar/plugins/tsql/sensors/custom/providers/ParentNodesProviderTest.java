@@ -1,10 +1,11 @@
-package org.sonar.plugins.tsql.sensors.custom;
+package org.sonar.plugins.tsql.sensors.custom.providers;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
 import org.sonar.plugins.tsql.rules.custom.Rule;
+import org.sonar.plugins.tsql.sensors.custom.ParsedNode;
 
 public class ParentNodesProviderTest {
 

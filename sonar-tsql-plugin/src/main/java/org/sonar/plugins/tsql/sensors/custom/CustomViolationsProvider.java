@@ -12,6 +12,10 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
+import org.sonar.plugins.tsql.sensors.custom.providers.ChildrenNodesProvider;
+import org.sonar.plugins.tsql.sensors.custom.providers.INodesProvider;
+import org.sonar.plugins.tsql.sensors.custom.providers.ParentNodesProvider;
+import org.sonar.plugins.tsql.sensors.custom.providers.SiblingsNodesProvider;
 
 public class CustomViolationsProvider implements IViolationsProvider {
 
@@ -26,34 +30,35 @@ public class CustomViolationsProvider implements IViolationsProvider {
 	public CustomViolationsProvider(final ILinesProvider linesProvider) {
 		this.linesProvider = linesProvider;
 	}
-	
+
 	private void initStatuses(Map<RuleImplementation, List<ParsedNode>> statuses, RuleImplementation rule) {
 		statuses.putIfAbsent(rule, new ArrayList<>());
-		for (RuleImplementation i :rule.getChildrenRules().getRuleImplementation()) {
+		for (RuleImplementation i : rule.getChildrenRules().getRuleImplementation()) {
 			initStatuses(statuses, i);
 		}
-		for (RuleImplementation i :rule.getParentRules().getRuleImplementation()) {
+		for (RuleImplementation i : rule.getParentRules().getRuleImplementation()) {
 			initStatuses(statuses, i);
 		}
-		for (RuleImplementation i :rule.getUsesRules().getRuleImplementation()) {
+		for (RuleImplementation i : rule.getUsesRules().getRuleImplementation()) {
 			initStatuses(statuses, i);
 		}
-		for (RuleImplementation i :rule.getParentRules().getRuleImplementation()) {
+		for (RuleImplementation i : rule.getParentRules().getRuleImplementation()) {
 			initStatuses(statuses, i);
 		}
 	}
+
 	public TsqlIssue[] getIssues(final ParsedNode... nodes) {
 
 		LOGGER.debug(String.format("Have %s nodes for checking", nodes.length));
 		final List<TsqlIssue> finalIssues = new LinkedList<>();
 
 		for (final ParsedNode node : nodes) {
-		
+
 			final Rule ruleDefinition = node.getRule();
 			final String ruleKey = ruleDefinition.getKey();
 			final RuleImplementation rule = node.getRule().getRuleImplementation();
 			final Map<RuleImplementation, List<ParsedNode>> statuses = new HashMap<>();
-			initStatuses(statuses, rule );
+			initStatuses(statuses, rule);
 			visit(ruleDefinition, rule, null, node, null, statuses);
 			final StringBuilder sb = new StringBuilder();
 			boolean shouldSkip = false;
