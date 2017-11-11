@@ -36,6 +36,7 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 			final Tsql_fileContext ct = parser.tsql_file();
 			for (final SqlRules rule : this.rules) {
 				final String repositoryKey = rule.getRepoKey();
+				
 				final ICustomRulesViolationsProvider customRulesViolationsProvider = new CustomRulesViolationsProvider(
 						stream, rule);
 				final TsqlIssue[] issues = customRulesViolationsProvider.getIssues(ct);
