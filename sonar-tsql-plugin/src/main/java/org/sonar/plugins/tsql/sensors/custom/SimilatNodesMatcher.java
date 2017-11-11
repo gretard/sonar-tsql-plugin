@@ -4,11 +4,11 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.plugins.tsql.rules.custom.Rule;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 
-public class UsesFindRule {
+public class SimilatNodesMatcher {
 
 	final INamesChecker checker = new DefaultNamesChecker();
 
-	public boolean root(final ParsedNode item, final ParseTree candidate, final Rule rule) {
+	public boolean isMatch(final ParsedNode item, final ParseTree candidate, final Rule rule) {
 		
 		final RuleImplementation impl = rule.getRuleImplementation();
 		if (impl == null || candidate == null || item.getItem() == candidate) {

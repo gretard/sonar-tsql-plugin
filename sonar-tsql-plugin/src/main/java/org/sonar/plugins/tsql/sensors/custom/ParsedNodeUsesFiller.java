@@ -12,7 +12,7 @@ import org.sonar.plugins.tsql.rules.custom.RuleMode;
 public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 
 	private final ParseTree tree;
-	private final UsesFindRule main = new UsesFindRule();
+	private final SimilatNodesMatcher main = new SimilatNodesMatcher();
 	private ParsedNode[] nodes;
 
 	public ParsedNodeUsesFiller(final ParseTree tree) {
@@ -27,7 +27,7 @@ public class ParsedNodeUsesFiller extends tsqlBaseVisitor implements IFiller {
 
 		for (final ParsedNode x : this.nodes) {
 
-			main.root(x, node, x.getRule());
+			main.isMatch(x, node, x.getRule());
 
 		}
 

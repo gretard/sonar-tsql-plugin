@@ -20,9 +20,9 @@ public class UsesFindRuleTest {
 		rule.setRuleImplementation(impl);
 		ParsedNode node = new ParsedNode(tree.getChild(0), rule, "a");
 
-		UsesFindRule finder = new UsesFindRule();
+		SimilatNodesMatcher finder = new SimilatNodesMatcher();
 
-		finder.root(node, tree, rule);
+		finder.isMatch(node, tree, rule);
 
 		//Assert.assertEquals(1, node.getUses().size());
 	}
@@ -36,9 +36,9 @@ public class UsesFindRuleTest {
 		rule.setRuleImplementation(impl);
 		ParsedNode node = new ParsedNode(tree, rule, "a");
 
-		UsesFindRule finder = new UsesFindRule();
+		SimilatNodesMatcher finder = new SimilatNodesMatcher();
 
-		finder.root(node, tree, rule);
+		finder.isMatch(node, tree, rule);
 
 		Assert.assertEquals(0, node.getUses().size());
 	}
