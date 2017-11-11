@@ -57,12 +57,8 @@ public class HighlightingSensorTest {
 		for (Issue is : issues) {
 			System.out.println(is.ruleKey() + " " + is.primaryLocation().message());
 		}
-		Assert.assertEquals(9, issues.size());
+		Assert.assertEquals(5, issues.size());
 
-		// Assert.assertEquals(1, ctxTester.highlightingTypeAt("test:test.sql",
-		// 1, 0).size());
-		// Assert.assertEquals(TypeOfText.KEYWORD,
-		// ctxTester.highlightingTypeAt("test:test.sql", 1, 0).get(0));
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 2, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 5, 0).size());
 		Assert.assertEquals(15, ctxTester.cpdTokens("test:test.sql").size());
