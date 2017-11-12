@@ -2,6 +2,7 @@ package org.sonar.plugins.tsql.sensors.antlr4;
 
 import static java.lang.String.format;
 
+import org.antlr.tsql.TSqlParser;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.sonar.api.batch.fs.InputFile;
@@ -40,26 +41,26 @@ public class AntlrHighlighter implements IAntlrSensor {
 					continue;
 				}
 
-				if (token.getType() == tsqlParser.EOF) {
+				if (token.getType() == TSqlParser.EOF) {
 					continue;
 				}
-				if (token.getType() == tsqlParser.COMMENT || token.getType() == tsqlParser.LINE_COMMENT) {
+				if (token.getType() == TSqlParser.COMMENT || token.getType() == TSqlParser.LINE_COMMENT) {
 
 					newHighlightning.highlight(startLine, startLineOffset, endLine, endLineOffset, TypeOfText.COMMENT);
 					continue;
 				}
 
-				if (token.getType() == tsqlParser.STRING) {
+				if (token.getType() == TSqlParser.STRING) {
 					newHighlightning.highlight(startLine, startLineOffset, endLine, endLineOffset, TypeOfText.STRING);
 
 					continue;
 				}
 
-				if (token.getType() > tsqlParser.LINE_COMMENT) {
+				if (token.getType() > TSqlParser.LINE_COMMENT) {
 					continue;
 				}
 
-				if (this.keywordsProvider.isKeyword(tsqlParser.VOCABULARY.getSymbolicName(token.getType()))) {
+				if (this.keywordsProvider.isKeyword(TSqlParser.VOCABULARY.getSymbolicName(token.getType()))) {
 					newHighlightning.highlight(startLine, startLineOffset, endLine, endLineOffset, TypeOfText.KEYWORD);
 				}
 			} catch (final Throwable e) {

@@ -41,14 +41,6 @@ public class CustomChecksTest {
 
 	}
 
-	@Test
-	public void testSargInCount() {
-		Rule r = Antlr4Utils.getSargRule();
-		String s = "if (SELECT count(name) from dbo.test) > 0";
-		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
-		Antlr4Utils.print(Antlr4Utils.get(s), 0);
-		Assert.assertEquals(1, issues.length);
-
-	}
+	
 
 }

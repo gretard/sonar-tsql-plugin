@@ -10,6 +10,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.antlr.tsql.TSqlLexer;
+import org.antlr.tsql.TSqlParser;
+import org.antlr.tsql.TSqlParser.Full_column_nameContext;
+import org.antlr.tsql.TSqlParser.SCALAR_FUNCTIONContext;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -116,18 +120,24 @@ public class Antlr4Utils {
 	}
 
 	public static AntrlResult getFull(String text) {
-		final CharStream charStream = CharStreams.fromString(text);
+		final CharStream charStream = CharStreams.fromString(text.toUpperCase());
 		return getFromStream(charStream);
 	}
 
 	private static AntrlResult getFromStream(final CharStream charStream) {
 
-		final tsqlLexer lexer = new tsqlLexer(charStream);
+		final TSqlLexer lexer = new TSqlLexer(charStream);
+		final CommonTokenStream stream = new CommonTokenStream(lexer);
+		stream.fill();
+		final TSqlParser parser = new TSqlParser(stream);
+		
+		
+		/*final tsqlLexer lexer = new tsqlLexer(charStream);
 
 		final CommonTokenStream stream = new CommonTokenStream(lexer);
 		stream.fill();
 		final tsqlParser parser = new tsqlParser(stream);
-
+*/
 		AntrlResult result = new AntrlResult();
 		result.setTree(parser.tsql_file());
 		result.setStream(stream);
@@ -579,6 +589,9 @@ public class Antlr4Utils {
 				"<h2>Description</h2><p>Use of non-sargeable arguments might cause performance problems.</p>");
 
 		RuleImplementation functionCallContainsColRef = new RuleImplementation();
+		functionCallContainsColRef.getNames().getTextItem().add(Full_column_nameContext.class.getSimpleName());
+		
+		
 		functionCallContainsColRef.getNames().getTextItem().add(Column_ref_expressionContext.class.getSimpleName());
 		functionCallContainsColRef.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		functionCallContainsColRef.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
@@ -586,6 +599,7 @@ public class Antlr4Utils {
 				.setRuleViolationMessage("Non-sargeable argument found - column referenced in a function");
 
 		RuleImplementation ruleFunctionCall = new RuleImplementation();
+		ruleFunctionCall.getNames().getTextItem().add(SCALAR_FUNCTIONContext.class.getSimpleName());
 		ruleFunctionCall.getNames().getTextItem().add(Function_callContext.class.getSimpleName());
 		ruleFunctionCall.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		ruleFunctionCall.setRuleResultType(RuleResultType.DEFAULT);

@@ -1,7 +1,15 @@
 package org.sonar.plugins.tsql.sensors.antlr4;
 
+import java.nio.charset.Charset;
+
+import org.antlr.tsql.TSqlLexer;
+import org.antlr.tsql.TSqlParser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
@@ -29,8 +37,9 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 	@Override
 	public void work(final SensorContext context, final CommonTokenStream stream, final InputFile file) {
 		try {
+			
+			final TSqlParser parser = new TSqlParser(stream);
 
-			final tsqlParser parser = new tsqlParser(stream);
 			if (!LOGGER.isDebugEnabled()) {
 				parser.removeErrorListeners();
 			}
