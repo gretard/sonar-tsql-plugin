@@ -33,7 +33,7 @@ public class AntlrHighlighter implements IAntlrSensor {
 			int endLine = startLine;
 			int endLineOffset = startLineOffset + token.getText().length();
 			if (startLine == 1) {
-				startLineOffset -= 1;
+				//startLineOffset -= 1;
 			}
 			try {
 

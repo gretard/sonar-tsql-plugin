@@ -58,10 +58,41 @@ public class HighlightingSensorTest {
 			System.out.println(is.ruleKey() + " " + is.primaryLocation().message());
 		}
 		Assert.assertEquals(5, issues.size());
-
+		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 0, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 2, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 5, 0).size());
 		Assert.assertEquals(15, ctxTester.cpdTokens("test:test.sql").size());
+		for (TokensLine line : ctxTester.cpdTokens("test:test.sql")) {
+			System.out.println(
+					" LINE " + line.getValue() + " " + line.getStartUnit() + " " + line.getEndUnit() + line.toString());
+		}
+
+	}
+	
+	@Test
+	public void testHighlighting2() throws Throwable {
+
+
+		Settings settings = new Settings();
+	
+		File baseFile = folder.newFile("test.sql");
+		FileUtils.write(baseFile, "SELECT * FROM dbo.test");
+
+		DefaultInputFile file1 = new DefaultInputFile("test", "test.sql");
+
+		file1.initMetadata(new String(Files.readAllBytes(baseFile.toPath())));
+		file1.setLanguage(TSQLLanguage.KEY);
+
+		
+		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
+		ctxTester.fileSystem().add(file1);
+		HighlightingSensor sensor = new HighlightingSensor(settings);
+		sensor.execute(ctxTester);
+		
+		Assert.assertEquals(1, ctxTester.highlightingTypeAt("test:test.sql", 1,5).size());
+		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 2, 0).size());
+		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 5, 0).size());
+		Assert.assertEquals(1, ctxTester.cpdTokens("test:test.sql").size());
 		for (TokensLine line : ctxTester.cpdTokens("test:test.sql")) {
 			System.out.println(
 					" LINE " + line.getValue() + " " + line.getStartUnit() + " " + line.getEndUnit() + line.toString());

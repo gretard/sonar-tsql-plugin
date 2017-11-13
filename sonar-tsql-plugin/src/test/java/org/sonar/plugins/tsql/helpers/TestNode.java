@@ -11,6 +11,8 @@ public class TestNode implements IParsedNode {
 	private String className;
 	private int distance;
 	private TestNode parent;
+	private int index;
+	private int index2;
 	
 	public void setParent(TestNode parent) {
 		this.parent = parent;
@@ -21,7 +23,20 @@ public class TestNode implements IParsedNode {
 		this.className = className;
 		this.distance = distance;
 	}
-
+	public TestNode(String text, String className, int distance, int index) {
+		this.text = text;
+		this.className = className;
+		this.distance = distance;
+		this.index = index;
+	}
+	public TestNode(String text, String className, int distance, int index, int index2) {
+		this.text = text;
+		this.className = className;
+		this.distance = distance;
+		this.index = index;
+		this.index2 = index2;
+		
+	}
 	@Override
 	public String getText() {
 		return text;
@@ -63,6 +78,18 @@ public class TestNode implements IParsedNode {
 	@Override
 	public IParsedNode getControlFlowParent() {
 		return parent;
+	}
+
+	@Override
+	public int getIndex() {
+		// TODO Auto-generated method stub
+		return index;
+	}
+
+	@Override
+	public int getIndex2() {
+		// TODO Auto-generated method stub
+		return this.index2;
 	}
 
 }

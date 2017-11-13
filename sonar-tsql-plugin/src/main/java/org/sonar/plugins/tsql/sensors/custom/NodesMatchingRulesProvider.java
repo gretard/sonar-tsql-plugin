@@ -12,25 +12,23 @@ import org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode;
 
 public class NodesMatchingRulesProvider {
 
-	INodesProvider<IParsedNode> nodeUsesProvider;
+	private final INodesProvider<IParsedNode> nodeUsesProvider;
+	private final RulesMatcher matcher = new RulesMatcher();
 
-	public NodesMatchingRulesProvider(INodesProvider<IParsedNode> nodeUsesProvider) {
+	public NodesMatchingRulesProvider(final INodesProvider<IParsedNode> nodeUsesProvider) {
 		this.nodeUsesProvider = nodeUsesProvider;
 	}
 
-	public Map<RuleImplementation, List<IParsedNode>> check(RuleImplementation rule, IParsedNode node) {
+	public Map<RuleImplementation, List<IParsedNode>> check(final RuleImplementation rule, final IParsedNode node) {
 
 		Map<RuleImplementation, List<IParsedNode>> map = new HashMap<RuleImplementation, List<IParsedNode>>();
 		initMap(map, rule);
 		visit(node, null, rule, map);
-
 		return map;
 	}
 
-	RulesMatcher matcher = new RulesMatcher();
-
-	void visit(IParsedNode node, IParsedNode parent, RuleImplementation rule,
-			Map<RuleImplementation, List<IParsedNode>> items) {
+	void visit(final IParsedNode node, final IParsedNode parent, final RuleImplementation rule,
+			final Map<RuleImplementation, List<IParsedNode>> items) {
 		if (this.matcher.match(rule, parent, node)) {
 			items.putIfAbsent(rule, new ArrayList<>());
 			if (!items.get(rule).contains(node)) {
@@ -71,19 +69,19 @@ public class NodesMatchingRulesProvider {
 		}
 	}
 
-	void initMap(Map<RuleImplementation, List<IParsedNode>> map, RuleImplementation rule) {
+	private static void initMap(final Map<RuleImplementation, List<IParsedNode>> map, final RuleImplementation rule) {
 		map.putIfAbsent(rule, new ArrayList<>());
 
-		for (RuleImplementation i : rule.getChildrenRules().getRuleImplementation()) {
+		for (final RuleImplementation i : rule.getChildrenRules().getRuleImplementation()) {
 			initMap(map, i);
 		}
-		for (RuleImplementation i : rule.getParentRules().getRuleImplementation()) {
+		for (final RuleImplementation i : rule.getParentRules().getRuleImplementation()) {
 			initMap(map, i);
 		}
-		for (RuleImplementation i : rule.getUsesRules().getRuleImplementation()) {
+		for (final RuleImplementation i : rule.getUsesRules().getRuleImplementation()) {
 			initMap(map, i);
 		}
-		for (RuleImplementation i : rule.getParentRules().getRuleImplementation()) {
+		for (final RuleImplementation i : rule.getSiblingsRules().getRuleImplementation()) {
 			initMap(map, i);
 		}
 	}

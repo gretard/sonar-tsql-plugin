@@ -1,12 +1,17 @@
 package org.sonar.plugins.tsql.sensors.custom.checks;
 
+import org.antlr.tsql.TSqlParser.Select_statementContext;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
+import org.sonar.plugins.tsql.helpers.AntrlResult;
 import org.sonar.plugins.tsql.rules.custom.Rule;
+import org.sonar.plugins.tsql.rules.custom.RuleDistanceIndexMatchType;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
-import org.sonar.plugins.tsql.rules.custom.RuleMode;
+import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
 import org.sonar.plugins.tsql.rules.custom.RuleResultType;
+import org.sonar.plugins.tsql.rules.custom.TextCheckType;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomChecksTest {
@@ -17,6 +22,55 @@ public class CustomChecksTest {
 		String s = "SELECT * from dbo.test where name like '%test%' ;";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
 		Antlr4Utils.print(Antlr4Utils.get(s), 0);
+		Assert.assertEquals(1, issues.length);
+
+	}
+
+	@Test
+	public void testCheckEndingWIthSemicolon() {
+		Rule r = new Rule();
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(Select_statementContext.class.getSimpleName());
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		r.setRuleImplementation(rImpl);
+		RuleImplementation child = new RuleImplementation();
+		child.setDistance(1);
+		child.setIndex(-1);
+		child.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.setIndexCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.getTextToFind().getTextItem().add(";");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		child.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		String s = "SELECT * from dbo.test where name like '%test%' ;";
+		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
+		Assert.assertEquals(0, issues.length);
+
+	}
+
+	@Test
+	public void testCheckEndingWIthSemicolon2() {
+		Rule r = new Rule();
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(Select_statementContext.class.getSimpleName());
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		r.setRuleImplementation(rImpl);
+		RuleImplementation child = new RuleImplementation();
+		child.setDistance(1);
+		child.setIndex(-1);
+		child.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.setIndexCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.getTextToFind().getTextItem().add(";");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		child.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		String s = "SELECT * from dbo.test where name like '%test%'";
+		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
+	//	Antlr4Utils.print(Antlr4Utils.get(s), 0);
 		Assert.assertEquals(1, issues.length);
 
 	}
@@ -40,7 +94,5 @@ public class CustomChecksTest {
 		Assert.assertEquals(1, issues.length);
 
 	}
-
-	
 
 }

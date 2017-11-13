@@ -14,15 +14,36 @@ public class ParsedNode implements IParsedNode {
 
 	private final String className;
 
-		public ParsedNode(final ParseTree item) {
+	public int getIndex() {
+		return index;
+	}
+
+	private int index;
+
+	private int index2;
+
+	public int getIndex2() {
+		return index2;
+	}
+
+	public ParsedNode(final ParseTree item) {
 		this.item = item;
 		this.className = item.getClass().getSimpleName();
 	}
 
-	public ParsedNode(final ParseTree item, int distance) {
+	public ParsedNode(final ParseTree item, int level, int index, int index2) {
 		this.item = item;
+		this.index = index;
+		this.index2 = index2;
 		this.className = item.getClass().getSimpleName();
-		this.distance = distance;
+		this.distance = level;
+	}
+
+	public ParsedNode(final ParseTree item, int level, int index) {
+		this.item = item;
+		this.index = index;
+		this.className = item.getClass().getSimpleName();
+		this.distance = level;
 	}
 
 	public String getText() {
@@ -46,7 +67,7 @@ public class ParsedNode implements IParsedNode {
 			return nodes;
 		}
 		ParseTree parseTreeItem = this.item.getParent();
-		visit(nodes, parseTreeItem);
+		visit(nodes, parseTreeItem, 0);
 		return nodes;
 
 	}
@@ -63,8 +84,8 @@ public class ParsedNode implements IParsedNode {
 		ParseTree parseTreeItem = this.item.getParent();
 		int i = 0;
 		while (parseTreeItem != null) {
-			i--;
-			nodes.add(new ParsedNode(parseTreeItem, i));
+			i++;
+			nodes.add(new ParsedNode(parseTreeItem, i, 1));
 			parseTreeItem = parseTreeItem.getParent();
 		}
 
@@ -77,22 +98,22 @@ public class ParsedNode implements IParsedNode {
 			return nodes;
 		}
 		ParseTree parseTreeItem = this.item;
-		visit(nodes, parseTreeItem);
+		visit(nodes, parseTreeItem, 0);
 		return nodes;
 	}
 
-	void visit(List<IParsedNode> nodes, final ParseTree tree) {
+	void visit(List<IParsedNode> nodes, final ParseTree tree, int level) {
 		if (tree == null) {
 			return;
 		}
-
+		int newLevel = level + 1;
 		final int c = tree.getChildCount();
-
+		int j = c * -1;
 		for (int i = 0; i < c; i++) {
 			final ParseTree child = tree.getChild(i);
-			final ParsedNode node = new ParsedNode(child, i);
+			final ParsedNode node = new ParsedNode(child, newLevel, i + 1, j++);
 			nodes.add(node);
-			visit(nodes, child);
+			visit(nodes, child, newLevel);
 		}
 	}
 

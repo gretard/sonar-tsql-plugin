@@ -39,7 +39,14 @@
         <xs:enumeration value="Strict" />
     </xs:restriction>
 </xs:simpleType>
-
+<xs:simpleType name="ruleDistanceIndexMatchType" final="restriction" >
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Default" />
+        <xs:enumeration value="More" />
+        <xs:enumeration value="Less" />
+        <xs:enumeration value="Equals" />  
+    </xs:restriction>
+</xs:simpleType>
 <xs:element name="textToFind">
     <xs:complexType mixed="false">
       <xs:sequence>
@@ -68,6 +75,9 @@
         <xs:element ref="ruleViolationMessage"/>
         <xs:element name="times" type="xs:int" default="1" />
         <xs:element name="distance" type="xs:int" default="0" />
+        <xs:element name="index" type="xs:int" default="0" /> 
+        <xs:element name="indexCheckType" type="ruleDistanceIndexMatchType" />
+        <xs:element name="distanceCheckType" type="ruleDistanceIndexMatchType" />
         <xs:element name="ruleMode" type="ruleMode" />
         <xs:element name="ruleMatchType" type="ruleMatchType" />
         <xs:element name="ruleResultType" type="ruleResultType" />

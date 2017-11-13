@@ -27,12 +27,13 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 
 		final Token[] alltokens = stream.getTokens().toArray(new Token[0]);
 		for (final Token token : alltokens) {
+			
 			int startLine = token.getLine();
 			int startLineOffset = token.getCharPositionInLine();
 			int endLine = startLine;
 			int endLineOffset = startLineOffset + token.getText().length();
 			if (startLine == 1) {
-				startLineOffset -= 1;
+				//startLineOffset -= 1;
 			}
 			final String text = token.getText();
 			try {

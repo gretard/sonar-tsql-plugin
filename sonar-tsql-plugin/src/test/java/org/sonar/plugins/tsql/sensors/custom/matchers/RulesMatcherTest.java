@@ -3,6 +3,7 @@ package org.sonar.plugins.tsql.sensors.custom.matchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.helpers.TestNode;
+import org.sonar.plugins.tsql.rules.custom.RuleDistanceIndexMatchType;
 import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
 import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
 
@@ -73,5 +74,57 @@ public class RulesMatcherTest {
 		rule.getNames().getTextItem().add("testClass2");
 		TestNode parent = new TestNode("test", "ttt", 3);
 		Assert.assertFalse(matcher.match(rule, testNode2, parent));
+	}
+
+	@Test
+	public void testCheckDistanceLess() {
+		RulesMatcher matcher = new RulesMatcher();
+		RuleImplementation rule = new RuleImplementation();
+		rule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		rule.setDistance(2);
+		rule.setDistanceCheckType(RuleDistanceIndexMatchType.LESS);
+		rule.getNames().getTextItem().add("ttt");
+		TestNode parent = new TestNode("test", "ttt", 3);
+		TestNode node = new TestNode("test", "ttt", 1, 1);
+		Assert.assertTrue(matcher.match(rule, parent, node));
+	}
+
+	@Test
+	public void testCheckDistanceMore() {
+		RulesMatcher matcher = new RulesMatcher();
+		RuleImplementation rule = new RuleImplementation();
+		rule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		rule.setDistance(2);
+		rule.setDistanceCheckType(RuleDistanceIndexMatchType.MORE);
+		rule.getNames().getTextItem().add("ttt");
+		TestNode parent = new TestNode("test", "ttt", 3);
+		TestNode node = new TestNode("test", "ttt", 1, 1);
+		Assert.assertFalse(matcher.match(rule, parent, node));
+	}
+
+	@Test
+	public void testCheckDistanceEquals() {
+		RulesMatcher matcher = new RulesMatcher();
+		RuleImplementation rule = new RuleImplementation();
+		rule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		rule.setDistance(2);
+		rule.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+		rule.getNames().getTextItem().add("ttt");
+		TestNode parent = new TestNode("test", "ttt", 3);
+		TestNode node = new TestNode("test", "ttt", 1, 2);
+		Assert.assertFalse(matcher.match(rule, parent, node));
+	}
+
+	@Test
+	public void testCheckIndexLast() {
+		RulesMatcher matcher = new RulesMatcher();
+		RuleImplementation rule = new RuleImplementation();
+		rule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		rule.setIndex(-1);
+		rule.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+		rule.getNames().getTextItem().add("ttt");
+		TestNode parent = new TestNode("test", "ttt", 3);
+		TestNode node = new TestNode("test", "ttt", 1, 5, -1);
+		Assert.assertTrue(matcher.match(rule, parent, node));
 	}
 }

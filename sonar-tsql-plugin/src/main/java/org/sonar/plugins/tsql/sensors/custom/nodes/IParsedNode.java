@@ -5,12 +5,16 @@ import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public interface IParsedNode {
-	
+
 	public String getText();
 
 	public String getClassName();
 
 	public int getDistance();
+
+	public int getIndex();
+
+	public int getIndex2();
 
 	public ParseTree getItem();
 
@@ -19,7 +23,7 @@ public interface IParsedNode {
 	public List<IParsedNode> getChildren();
 
 	public List<IParsedNode> getSiblings();
-	
+
 	public IParsedNode getControlFlowParent();
 
 }

@@ -14,34 +14,37 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for ruleMode.
+ * <p>Java class for ruleDistanceIndexMatchType.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="ruleMode">
+ * &lt;simpleType name="ruleDistanceIndexMatchType">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="Default"/>
- *     &lt;enumeration value="Group"/>
- *     &lt;enumeration value="Single"/>
+ *     &lt;enumeration value="More"/>
+ *     &lt;enumeration value="Less"/>
+ *     &lt;enumeration value="Equals"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "ruleMode")
+@XmlType(name = "ruleDistanceIndexMatchType")
 @XmlEnum
-public enum RuleMode {
+public enum RuleDistanceIndexMatchType {
 
     @XmlEnumValue("Default")
     DEFAULT("Default"),
-    @XmlEnumValue("Group")
-    GROUP("Group"),
-    @XmlEnumValue("Single")
-    SINGLE("Single");
+    @XmlEnumValue("More")
+    MORE("More"),
+    @XmlEnumValue("Less")
+    LESS("Less"),
+    @XmlEnumValue("Equals")
+    EQUALS("Equals");
     private final String value;
 
-    RuleMode(String v) {
+    RuleDistanceIndexMatchType(String v) {
         value = v;
     }
 
@@ -49,8 +52,8 @@ public enum RuleMode {
         return value;
     }
 
-    public static RuleMode fromValue(String v) {
-        for (RuleMode c: RuleMode.values()) {
+    public static RuleDistanceIndexMatchType fromValue(String v) {
+        for (RuleDistanceIndexMatchType c: RuleDistanceIndexMatchType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
