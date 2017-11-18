@@ -28,5 +28,17 @@ public class CgSqlIssuesParserTest {
 	
 
 	}
+	
+	@Test
+	public void testParserNonExising() {
+
+		String file = "test.file";
+		CodeGuardIssuesParser parser = new CodeGuardIssuesParser();
+
+		TsqlIssue[] issues = parser.parse(new File(file));
+		Assert.assertNotNull("Returned issues was null", issues);
+		
+
+	}
 
 }
