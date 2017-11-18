@@ -10,8 +10,15 @@ public class TsqlIssue {
 	private String description;
 
 	private String filePath;
-
 	private int line;
+	private String repositoryKey;
+	public String getRepositoryKey() {
+		return repositoryKey;
+	}
+
+	public void setRepositoryKey(String repositoryKey) {
+		this.repositoryKey = repositoryKey;
+	}
 
 	public String getType() {
 		return type;

@@ -2,8 +2,6 @@ package org.sonar.plugins.tsql.sensors.antlr4;
 
 import static java.lang.String.format;
 
-import java.util.List;
-
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.sonar.api.batch.fs.InputFile;
@@ -27,17 +25,31 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 		}
 		final NewCpdTokens cpdTokens = context.newCpdTokens().onFile(file);
 
-		final List<Token> alltokens = stream.getTokens();
+		final Token[] alltokens = stream.getTokens().toArray(new Token[0]);
 		for (final Token token : alltokens) {
+			
+			int startLine = token.getLine();
+			int startLineOffset = token.getCharPositionInLine();
+			int endLine = startLine;
+			int endLineOffset = startLineOffset + token.getText().length();
+			if (startLine == 1) {
+				//startLineOffset -= 1;
+			}
+			final String text = token.getText();
 			try {
-				if (token.getStartIndex() == token.getStopIndex()) {
+
+				if (token.getStartIndex() >= token.getStopIndex() || text.isEmpty()) {
 					continue;
 				}
-				cpdTokens.addToken(((DefaultInputFile) file).newRange(token.getStartIndex(), token.getStopIndex()+1),
-						token.getText());
-
+				cpdTokens.addToken(startLine, startLineOffset, endLine, endLineOffset, text);
 			} catch (final Throwable e) {
-				LOGGER.debug(format("Unexpected error adding highlightings/tokens on file %s", file.absolutePath()), e);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(
+							format("Unexpected error adding cpd tokens on file %s for token %s on (%s, %s) -  (%s, %s)",
+									file.absolutePath(), text, startLine, startLineOffset, endLine, endLineOffset),
+							e);
+				}
+
 			}
 		}
 		cpdTokens.save();

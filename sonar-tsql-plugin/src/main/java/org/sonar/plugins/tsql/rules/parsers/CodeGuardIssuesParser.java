@@ -37,8 +37,8 @@ public class CodeGuardIssuesParser implements IIssuesParser<TsqlIssue> {
 			}
 			return list.toArray(new TsqlIssue[0]);
 
-		} catch (Throwable e) {
-			LOGGER.warn("Unexpected error occured", e);
+		} catch (final Throwable e) {
+			LOGGER.warn("Unexpected error occured redading file "+file, e);
 		}
 		return new TsqlIssue[0];
 	}

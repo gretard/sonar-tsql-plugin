@@ -10,11 +10,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.config.Settings;
 import org.sonar.api.utils.internal.JUnitTempFolder;
+import org.sonar.duplications.internal.pmd.TokensLine;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
@@ -54,16 +54,41 @@ public class HighlightingSensorTest {
 		HighlightingSensor sensor = new HighlightingSensor(settings);
 		sensor.execute(ctxTester);
 		Collection<Issue> issues = ctxTester.allIssues();
-		for (Issue is : issues) {
-			System.out.println(is.ruleKey() + " " + is.primaryLocation().message());
-		}
-		Assert.assertEquals(8, issues.size());
-
-		Assert.assertEquals(1, ctxTester.highlightingTypeAt("test:test.sql", 1, 0).size());
-		Assert.assertEquals(TypeOfText.KEYWORD, ctxTester.highlightingTypeAt("test:test.sql", 1, 0).get(0));
+	
+		Assert.assertEquals(3, issues.size());
+		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 0, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 2, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 5, 0).size());
-		Assert.assertEquals(16, ctxTester.cpdTokens("test:test.sql").size());
+		Assert.assertEquals(15, ctxTester.cpdTokens("test:test.sql").size());
+		
+
+	}
+	
+	@Test
+	public void testHighlighting2() throws Throwable {
+
+
+		Settings settings = new Settings();
+	
+		File baseFile = folder.newFile("test.sql");
+		FileUtils.write(baseFile, "SELECT * FROM dbo.test");
+
+		DefaultInputFile file1 = new DefaultInputFile("test", "test.sql");
+
+		file1.initMetadata(new String(Files.readAllBytes(baseFile.toPath())));
+		file1.setLanguage(TSQLLanguage.KEY);
+
+		
+		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
+		ctxTester.fileSystem().add(file1);
+		HighlightingSensor sensor = new HighlightingSensor(settings);
+		sensor.execute(ctxTester);
+		
+		Assert.assertEquals(1, ctxTester.highlightingTypeAt("test:test.sql", 1,5).size());
+		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 2, 0).size());
+		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 5, 0).size());
+		Assert.assertEquals(1, ctxTester.cpdTokens("test:test.sql").size());
+		
 
 	}
 

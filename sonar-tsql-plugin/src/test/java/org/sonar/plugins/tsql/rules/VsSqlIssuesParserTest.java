@@ -9,12 +9,11 @@ import org.sonar.plugins.tsql.rules.parsers.MsIssuesParser;
 
 public class VsSqlIssuesParserTest {
 
+	private final MsIssuesParser parser = new MsIssuesParser();
+
 	@Test
 	public void testParser() {
-
 		String file = this.getClass().getClassLoader().getResource("vsSample.xml").getFile();
-		MsIssuesParser parser = new MsIssuesParser();
-
 		TsqlIssue[] issues = parser.parse(new File(file));
 		Assert.assertNotNull("Returned issues was null", issues);
 		Assert.assertEquals("Expected a single issue", 1, issues.length);
@@ -26,6 +25,14 @@ public class VsSqlIssuesParserTest {
 		Assert.assertEquals("Line did not match", 6, issue.getLine());
 		Assert.assertEquals("Descpriptions did not match", "Microsoft.Rules.Data.SR0001", issue.getType());
 
+	}
+
+	@Test
+	public void testParserNonExistingFile() {
+		final String file = "test";
+		TsqlIssue[] issues = parser.parse(new File(file));
+		Assert.assertNotNull("Returned issues was null", issues);
+		Assert.assertEquals("Expected a single issue", 0, issues.length);
 	}
 
 }

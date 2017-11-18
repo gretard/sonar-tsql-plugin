@@ -12,9 +12,8 @@ import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
-import org.sonar.plugins.tsql.rules.custom.CustomRules;
-import org.sonar.plugins.tsql.sensors.custom.CustomRulesProvider;
 
 public class CustomRulesDefinition implements RulesDefinition {
 
@@ -30,11 +29,11 @@ public class CustomRulesDefinition implements RulesDefinition {
 	private void defineRulesForLanguage(final Context context) {
 		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
 		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
-		final Map<String, CustomRules> rules = provider.getRules(null, rulesPrefix, paths);
+		final Map<String, SqlRules> rules = provider.getRules(null, rulesPrefix, paths);
 
 		for (final String key : rules.keySet()) {
 
-			final CustomRules type = rules.get(key);
+			final SqlRules type = rules.get(key);
 			final String repositoryKey = type.getRepoKey();
 			final String repositoryName = type.getRepoName();
 			final NewRepository repository = context.createRepository(repositoryKey, TSQLLanguage.KEY)

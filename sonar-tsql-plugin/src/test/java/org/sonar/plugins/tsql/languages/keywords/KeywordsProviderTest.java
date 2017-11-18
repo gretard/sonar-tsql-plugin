@@ -16,5 +16,11 @@ public class KeywordsProviderTest {
 		KeywordsProvider provider = new KeywordsProvider();
 		Assert.assertTrue(provider.isKeyword("SELECT"));
 	}
+	
+	@Test
+	public void testInitializeNonExisting() {
+		KeywordsProvider provider = new KeywordsProvider("nonExisting");
+		Assert.assertFalse(provider.isKeyword("SELECT"));
+	}
 
 }

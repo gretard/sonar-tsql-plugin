@@ -7,7 +7,7 @@ Currently plug-in supports:
 - 14 code analysis rules by Microsoft. Details can be found at [https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx](https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx "https://msdn.microsoft.com/en-us/library/dd172133(v=vs.100).aspx").
 - 120 code analysis rules by SQL Code Guard tool. Details can be found at [http://sqlcodeguard.com/index-database-issues.html](http://sqlcodeguard.com/index-database-issues.html "http://sqlcodeguard.com/index-database-issues.html")
 - Experimental keyword highlighting and copy/paste detectiong using T-SQL grammar from (https://github.com/antlr/grammars-v4/tree/master/tsql)
-- 5 plugin rules to detect issues such as asterisk in select and a few others.
+- Custom plugin rules to detect issues such as asterisk in select and a few others.
 
  
 
@@ -16,7 +16,7 @@ Currently plug-in supports:
 1. Download and install SonarQube
 2. Download plugin from the [releases](https://github.com/gretard/sonar-tsql-plugin/releases) and copy it to sonarqube's extensions\plugins directory
 3. Start SonarQube and enable rules
-4. If you want plug-in to automatically run SQL Code guard analysis part, please install [SQL Code Guard](http://sqlcodeguard.com/ "SQL Code Guard") onto your build machines and make sure that property **sonar.tsql.cg.path** is set to an existing installation (default is **C:\\Program Files (x86)\\SqlCodeGuard\\SqlCodeGuard.Cmd.exe**), otherwise please run analysis before invoking sonar analysis step as in it is shown in Example project's **run.bat** file.
+4. If you want plug-in to automatically run SQL Code guard analysis part, please install [SQL Code Guard](http://sqlcodeguard.com/ "SQL Code Guard") onto your build machines and make sure that property **sonar.tsql.cg.path** is set to an existing installation (default is **C:\\Program Files (x86)\\SqlCodeGuard\\SqlCodeGuard.Cmd.exe**)
 5. If you want plugin to import issues found by Microsoft, please before running a sonar analysis build solution with setting */p:RunSqlCodeAnalysis=true*. 
 
 ## CI integration ##

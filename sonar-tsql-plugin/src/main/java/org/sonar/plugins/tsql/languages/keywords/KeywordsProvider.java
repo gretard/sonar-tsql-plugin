@@ -1,7 +1,6 @@
 package org.sonar.plugins.tsql.languages.keywords;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -19,8 +18,13 @@ public class KeywordsProvider implements IKeywordsProvider {
 	private final List<String> keywords = new ArrayList<String>();
 
 	public KeywordsProvider() {
-		init("/tsql.keywords");
-		init("/tsql.odbc.keywords");
+		this("/tsql.keywords", "/tsql.odbc.keywords");
+	}
+
+	public KeywordsProvider(final String... files) {
+		for (final String file : files) {
+			init(file);
+		}
 	}
 
 	private void init(final String file) {
@@ -38,8 +42,8 @@ public class KeywordsProvider implements IKeywordsProvider {
 
 				}
 			}
-		} catch (final IOException e) {
-			LOGGER.warn(String.format("Error reading keywords file %s", file), e);
+		} catch (final Throwable e) {
+			LOGGER.warn(String.format("Error reading keywords file: %s", file), e);
 		}
 
 	}

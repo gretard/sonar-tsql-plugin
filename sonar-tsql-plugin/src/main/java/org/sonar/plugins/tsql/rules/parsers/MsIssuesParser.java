@@ -9,9 +9,9 @@ import javax.xml.bind.Unmarshaller;
 
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 import org.sonar.plugins.tsql.rules.issues.MsIssues;
 import org.sonar.plugins.tsql.rules.issues.MsIssues.Problem;
+import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class MsIssuesParser implements IIssuesParser<TsqlIssue> {
 
@@ -34,7 +34,7 @@ public class MsIssuesParser implements IIssuesParser<TsqlIssue> {
 			}
 			return list.toArray(new TsqlIssue[0]);
 		} catch (final Throwable e) {
-			LOGGER.warn("Unexpected error occured", e);
+			LOGGER.warn("Unexpected error occured reading file: " + file, e);
 		}
 		return new TsqlIssue[0];
 	}

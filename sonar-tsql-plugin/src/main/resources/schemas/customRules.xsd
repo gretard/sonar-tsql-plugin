@@ -20,6 +20,7 @@
         <xs:enumeration value="Single" />    
     </xs:restriction>
 </xs:simpleType>
+
 <xs:simpleType name="ruleMatchType" final="restriction" >
     <xs:restriction base="xs:string">
         <xs:enumeration value="Default" />
@@ -38,7 +39,14 @@
         <xs:enumeration value="Strict" />
     </xs:restriction>
 </xs:simpleType>
-
+<xs:simpleType name="ruleDistanceIndexMatchType" final="restriction" >
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Default" />
+        <xs:enumeration value="More" />
+        <xs:enumeration value="Less" />
+        <xs:enumeration value="Equals" />  
+    </xs:restriction>
+</xs:simpleType>
 <xs:element name="textToFind">
     <xs:complexType mixed="false">
       <xs:sequence>
@@ -66,12 +74,16 @@
         <xs:element ref="usesRules" minOccurs="0"/>
         <xs:element ref="ruleViolationMessage"/>
         <xs:element name="times" type="xs:int" default="1" />
+        <xs:element name="distance" type="xs:int" default="0" />
+        <xs:element name="index" type="xs:int" default="0" /> 
+        <xs:element name="indexCheckType" type="ruleDistanceIndexMatchType" />
+        <xs:element name="distanceCheckType" type="ruleDistanceIndexMatchType" />
         <xs:element name="ruleMode" type="ruleMode" />
         <xs:element name="ruleMatchType" type="ruleMatchType" />
         <xs:element name="ruleResultType" type="ruleResultType" />
         <xs:element name="textCheckType" type="textCheckType" />
-          <xs:element ref="violatingRulesCodeExamples"/>
-            <xs:element ref="compliantRulesCodeExamples"/>
+        <xs:element ref="violatingRulesCodeExamples"/>
+        <xs:element ref="compliantRulesCodeExamples"/>
         
       </xs:sequence>
     </xs:complexType>
@@ -131,6 +143,7 @@
   <xs:element name="remediationFunctionBaseEffort" type="xs:string"/>
   <xs:element name="debtRemediationFunctionCoefficient" type="xs:string"/>
   <xs:element name="tag" type="xs:string"/>
+  <xs:element name="source" type="xs:string"/>
   <xs:element name="rule">
     <xs:complexType>
       <xs:sequence>
@@ -147,16 +160,19 @@
         <xs:element ref="debtRemediationFunctionCoefficient"/>
         <xs:element ref="tag"/>
         <xs:element ref="ruleImplementation"/>
+        <xs:element ref="source"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="customRules">
+  <xs:element name="sql-rules">
+  
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="rule" maxOccurs="unbounded" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute type="xs:string" name="repoName"/>
       <xs:attribute type="xs:string" name="repoKey"/>
+      <xs:attribute type="xs:string" name="version" default="1" />
       <xs:attribute type="xs:string" name="reportName"/>
     </xs:complexType>
   </xs:element>
