@@ -20,7 +20,7 @@ public class ParsedNode implements IParsedNode {
 
 	public ParsedNode(final ParseTree item) {
 		this.item = item;
-		this.className = item.getClass().getSimpleName();
+		this.className = (item != null ? item.getClass().getSimpleName() : null);
 		this.index = 0;
 		this.index2 = 0;
 		this.distance = 0;
@@ -116,6 +116,9 @@ public class ParsedNode implements IParsedNode {
 
 	@Override
 	public IParsedNode getControlFlowParent() {
+		if (this.item == null) {
+			return new ParsedNode(null);
+		}
 		ParseTree parent1 = item.getParent();
 		while (parent1 != null) {
 			if (parent1 instanceof Cfl_statementContext) {
