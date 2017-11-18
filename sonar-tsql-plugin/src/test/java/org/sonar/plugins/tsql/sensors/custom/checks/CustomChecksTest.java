@@ -41,7 +41,7 @@ public class CustomChecksTest {
 				+ "(     TransactionID int NOT NULL,     CONSTRAINT PaK_TransactionHistoryArchive_TransactionID PRIMARY KEY CLUSTERED (TransactionID)  "
 				+ ");  ";
 		String s = "ALTER TABLE Production.TransactionHistoryArchive  ADD CONSTRAINT PaK_TransactionHistoryArchive_TransactionID PRIMARY KEY CLUSTERED (TransactionID);  ";
-		Antlr4Utils.print(Antlr4Utils.get(s), 0);
+	//	Antlr4Utils.print(Antlr4Utils.get(s), 0);
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
 		Assert.assertEquals(1, issues.length);
 
@@ -50,6 +50,10 @@ public class CustomChecksTest {
 	@Test
 	public void testCheckEndingWithSemicolon() {
 		Rule r = new Rule();
+		r.setKey("Example1");
+		r.setInternalKey("Example1");
+		r.setDescription("Select statement should end with semicolon");
+		r.setName("Select statement should end with semicolon");
 		RuleImplementation rImpl = new RuleImplementation();
 		rImpl.getNames().getTextItem().add(Select_statementContext.class.getSimpleName());
 		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
@@ -61,13 +65,20 @@ public class CustomChecksTest {
 		child.setIndexCheckType(RuleDistanceIndexMatchType.EQUALS);
 		child.getTextToFind().getTextItem().add(";");
 		child.setTextCheckType(TextCheckType.STRICT);
-		child.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		child.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
 		rImpl.getChildrenRules().getRuleImplementation().add(child);
-		String s = "SELECT * from dbo.test where name like '%test%' ;";
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name like '%test%';");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name like '%test%'");
+
+		String s = "SELECT * from dbo.test where name like '%test%';";
+		//System.out.println(Antlr4Utils.ruleImplToString(r));
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
+		
+		//TsqlIssue[] issues = Antlr4Utils.verifyWithPrinting(r, s);
 		Assert.assertEquals(0, issues.length);
+	//	Antlr4Utils.print(Antlr4Utils.get("SELECT * from dbo.test;"), 0);
 
 	}
 
