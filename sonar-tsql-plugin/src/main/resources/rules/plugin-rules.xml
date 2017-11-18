@@ -388,7 +388,7 @@
                                 <textItem>TerminalNodeImpl</textItem>
                             </names>
                             <textToFind>
-                                <textItem>N?[',‘]%(.*?)'</textItem>
+                                <textItem>N?[',�]%(.*?)'</textItem>
                             </textToFind>
                             <parentRules/>
                             <childrenRules/>

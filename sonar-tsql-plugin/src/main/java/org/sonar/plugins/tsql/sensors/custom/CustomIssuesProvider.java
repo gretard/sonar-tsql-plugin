@@ -32,6 +32,9 @@ public class CustomIssuesProvider {
 				rules);
 		final FoundViolationsAnalyzer an = new FoundViolationsAnalyzer(new DefaultLinesProvider(stream));
 		final CandidateNode[] candidates = candidatesProvider.getNodes(root);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.info(String.format("Found %s candidates matching custom rules", candidates.length));
+		}
 		final NodesMatchingRulesProvider m = new NodesMatchingRulesProvider(new NodeUsesProvider(root));
 		final List<TsqlIssue> issues = new ArrayList<TsqlIssue>();
 		for (CandidateNode candidate : candidates) {

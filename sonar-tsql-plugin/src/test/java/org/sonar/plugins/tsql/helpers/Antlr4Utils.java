@@ -864,7 +864,7 @@ public class Antlr4Utils {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws IOException {
 
-		FileUtils.write(new File("src/main/resources/rules/plugin-rules.xml"), ruleToString(getCustomMainRules()));
+		//FileUtils.write(new File("src/main/resources/rules/plugin-rules.xml"), ruleToString(getCustomMainRules()));
 		SqlRules rules = getCustomMainRules();
 		for (Rule r : rules.getRule()) {
 			System.out.println(r.getKey() + " - " + r.getName());

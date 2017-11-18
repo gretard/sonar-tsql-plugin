@@ -10,7 +10,6 @@ public class TextNameMatcher extends ABaseMatcher {
 
 	public TextNameMatcher(boolean isStrict) {
 		this.isStrict = isStrict;
-
 	}
 
 	public TextNameMatcher() {
@@ -38,7 +37,7 @@ public class TextNameMatcher extends ABaseMatcher {
 				}
 				break;
 			case STRICT:
-				if (text.equals(searchItem)) {
+				if (text.equalsIgnoreCase(searchItem)) {
 					return true;
 				}
 				break;

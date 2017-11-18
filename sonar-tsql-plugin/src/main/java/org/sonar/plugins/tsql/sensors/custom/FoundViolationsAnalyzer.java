@@ -36,10 +36,7 @@ public class FoundViolationsAnalyzer {
 
 			final List<IParsedNode> nodes = st.getValue();
 			final RuleImplementation rrule = st.getKey();
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.info(String.format("Found %s violations for rule %s on %s node", nodes.size(),
-						rrule.getRuleMatchType(), root.getText()));
-			}
+
 			final int found = nodes.size();
 			boolean add = false;
 			switch (rrule.getRuleResultType()) {
@@ -115,7 +112,10 @@ public class FoundViolationsAnalyzer {
 			}
 
 		}
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.info(String.format("Found %s issues for rule %s in %s repository on %s node", issues.size(),
+					baseRule.getKey(), candidate.getKey(), root.getText()));
+		}
 		return issues;
 	}
 }
