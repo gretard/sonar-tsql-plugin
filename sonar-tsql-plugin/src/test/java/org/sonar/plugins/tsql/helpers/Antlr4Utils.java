@@ -22,6 +22,7 @@ import org.antlr.tsql.TSqlParser.Execute_statementContext;
 import org.antlr.tsql.TSqlParser.Full_column_nameContext;
 import org.antlr.tsql.TSqlParser.Func_proc_nameContext;
 import org.antlr.tsql.TSqlParser.Function_callContext;
+import org.antlr.tsql.TSqlParser.IdContext;
 import org.antlr.tsql.TSqlParser.Insert_statementContext;
 import org.antlr.tsql.TSqlParser.Order_by_clauseContext;
 import org.antlr.tsql.TSqlParser.PredicateContext;
@@ -32,6 +33,7 @@ import org.antlr.tsql.TSqlParser.Search_conditionContext;
 import org.antlr.tsql.TSqlParser.Select_list_elemContext;
 import org.antlr.tsql.TSqlParser.Set_statementContext;
 import org.antlr.tsql.TSqlParser.Simple_idContext;
+import org.antlr.tsql.TSqlParser.Table_constraintContext;
 import org.antlr.tsql.TSqlParser.Table_hintContext;
 import org.antlr.tsql.TSqlParser.Table_nameContext;
 import org.antlr.tsql.TSqlParser.Waitfor_statementContext;
@@ -45,6 +47,7 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.checks.custom.Rule;
+import org.sonar.plugins.tsql.checks.custom.RuleDistanceIndexMatchType;
 import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
 import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
 import org.sonar.plugins.tsql.checks.custom.RuleMode;
@@ -186,6 +189,54 @@ public class Antlr4Utils {
 		return xmlString;
 	}
 
+	public static String ruleImplToString(Rule r) {
+		System.out.println(r.getKey());
+		String xmlString = "";
+		List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
+		List<String> violating = r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample();
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(r.getDescription());
+		sb.append("<h2>Code examples</h2>");
+		if (!violating.isEmpty()) {
+			sb.append("<h3>Non-compliant</h3>");
+			for (String x : violating) {
+				sb.append("<pre><code>" + x + "</code></pre>");
+				System.out.println(x);
+				print(Antlr4Utils.get(x), 0);
+			}
+		}
+
+		if (!compliant.isEmpty()) {
+			sb.append("<h3>Compliant</h3>");
+			for (String x : compliant) {
+				sb.append("<pre><code>" + x + "</code></pre>");
+				System.out.println(x);
+				print(Antlr4Utils.get(x), 0);
+			}
+		}
+		if (r.getSource() != null && !r.getSource().isEmpty()) {
+			sb.append("<h4>Source</h4>");
+			sb.append(String.format("<a href='%s'>%s</a>", r.getSource(), r.getSource()));
+		}
+		r.setDescription(sb.toString());
+
+		
+		try {
+			JAXBContext context = JAXBContext.newInstance(Rule.class);
+			Marshaller m = context.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To
+			StringWriter sw = new StringWriter();
+			m.marshal(r, sw);
+			xmlString = sw.toString();
+
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+
+		return xmlString;
+	}
+
 	public static SqlRules[] read(String path) {
 		CustomRulesProvider provider = new CustomRulesProvider();
 		return provider.getRules(null, "", path).values().toArray(new SqlRules[0]);
@@ -213,7 +264,7 @@ public class Antlr4Utils {
 		customRules.setRepoName(Constants.PLUGIN_REPO_NAME);
 
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(),
-				getOrderByRule(), getExecRule(), getNoLockRule(), getSargRule()));
+				getOrderByRule(), getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule()));
 		return customRules;
 	}
 
@@ -223,6 +274,10 @@ public class Antlr4Utils {
 		rule.setInternalKey("C001");
 		rule.setDescription("WAITFOR is used.");
 		rule.setName("WAITFOR is used");
+		rule.setTag("performance");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation impl = new RuleImplementation();
 		impl.getNames().getTextItem().add(Waitfor_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
@@ -240,7 +295,10 @@ public class Antlr4Utils {
 		rule.setInternalKey("C002");
 		rule.setName("SELECT * is used");
 		rule.setDescription("<h2>Description</h2><p>SELECT * is used. Please list names.</p>");
-
+		rule.setTag("design");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation impl = new RuleImplementation();
 
 		// impl.getChildrenRules().getRuleImplementation().add(child2);
@@ -265,6 +323,10 @@ public class Antlr4Utils {
 		rule.setName("INSERT statement without columns listed");
 		rule.setDescription(
 				"<h2>Description</h2><p>INSERT statement does not have columns listed. Always use a column list in your INSERT statements.</p>");
+		rule.setTag("design");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(Column_name_listContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
@@ -294,7 +356,10 @@ public class Antlr4Utils {
 		rule.setName("ORDER BY clause contains positional references");
 		rule.setDescription(
 				"<h2>Description</h2><p>Do not use column numbers in the ORDER BY clause. Always use column names in an order by clause. Avoid positional references.</p>");
-
+		rule.setTag("design");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
@@ -374,7 +439,10 @@ public class Antlr4Utils {
 		rule.setDescription(".");
 		rule.setDescription(
 				"<h2>Description</h2><p>EXECUTE/EXEC for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p>");
-
+		rule.setTag("best-practise");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation child2 = new RuleImplementation();
 		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
 		child2.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
@@ -415,7 +483,10 @@ public class Antlr4Utils {
 		rule.setInternalKey("C007");
 		rule.setName("NOLOCK hint used");
 		rule.setDescription("<h2>Description</h2><p>Use of NOLOCK might cause data inconsistency problems.</p>");
-
+		rule.setTag("reliability");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation impl = new RuleImplementation();
 
 		impl.getTextToFind().getTextItem().add("NOLOCK");
@@ -569,6 +640,110 @@ public class Antlr4Utils {
 		return rule;
 	}
 
+	public static Rule getPKRule() {
+		RuleImplementation ruleImpl = new RuleImplementation();
+		ruleImpl.getNames().getTextItem().add(Table_constraintContext.class.getSimpleName());
+		ruleImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+
+		RuleImplementation child1 = new RuleImplementation();
+		child1.getTextToFind().getTextItem().add("PRIMARY");
+		child1.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		child1.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		child1.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+
+		RuleImplementation child2 = new RuleImplementation();
+		child2.getTextToFind().getTextItem().add("KEY");
+		child2.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		child2.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		child2.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		ruleImpl.getChildrenRules().getRuleImplementation().add(child1);
+		ruleImpl.getChildrenRules().getRuleImplementation().add(child2);
+		ruleImpl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+
+		RuleImplementation main = new RuleImplementation();
+		main.getNames().getTextItem().add(IdContext.class.getSimpleName());
+		main.setTextCheckType(TextCheckType.CONTAINS);
+		main.getTextToFind().getTextItem().add("PK_");
+		main.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		main.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		main.setRuleViolationMessage("Primary key is not defined using suggested naming convention to start with PK_");
+		main.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+
+		ruleImpl.getChildrenRules().getRuleImplementation().add(main);
+		ruleImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add(
+				"CREATE TABLE dbo.Orders\r\n(\r\nId int NOT NULL,\r\nCONSTRAINT OrderID PRIMARY KEY CLUSTERED (Id) \r\n);  ");
+		ruleImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("ALTER TABLE dbo.Orders ADD CONSTRAINT PK_OrderId PRIMARY KEY CLUSTERED (Id);");
+		ruleImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("CREATE TABLE dbo.Orders\r\n(\r\nId int NOT NULL,  \r\nPRIMARY KEY (Id)\r\n);  ");
+
+		Rule rule = new Rule();
+		rule.setKey("C010");
+		rule.setInternalKey("C010");
+		rule.setStatus("BETA");
+		rule.setName("Defined primary key is not using recommended naming convention");
+		rule.setDescription(
+				"<h2>Description</h2><p>Defined primary key is not using recommended naming convention to start with PK_.</p>");
+		rule.setTag("naming");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("3min");
+		rule.setRuleImplementation(ruleImpl);
+
+		return rule;
+	}
+
+	public static Rule getFKRule() {
+		RuleImplementation ruleImpl = new RuleImplementation();
+		ruleImpl.getNames().getTextItem().add(Table_constraintContext.class.getSimpleName());
+		ruleImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+
+		RuleImplementation child1 = new RuleImplementation();
+		child1.getTextToFind().getTextItem().add("FOREIGN");
+		child1.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		child1.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		child1.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+
+		RuleImplementation child2 = new RuleImplementation();
+		child2.getTextToFind().getTextItem().add("KEY");
+		child2.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		child2.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		child2.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		ruleImpl.getChildrenRules().getRuleImplementation().add(child1);
+		ruleImpl.getChildrenRules().getRuleImplementation().add(child2);
+		ruleImpl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+
+		RuleImplementation main = new RuleImplementation();
+		main.getNames().getTextItem().add(IdContext.class.getSimpleName());
+		main.setTextCheckType(TextCheckType.CONTAINS);
+		main.getTextToFind().getTextItem().add("FK_");
+		main.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		main.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		main.setRuleViolationMessage("Foreign key is not defined using suggested naming convention to start with FK_");
+		main.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+
+		ruleImpl.getChildrenRules().getRuleImplementation().add(main);
+		ruleImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add(
+				"ALTER TABLE dbo.Orders ADD CONSTRAINT ClientId FOREIGN KEY (ClientId) REFERENCES dbo.Clients(Id);  ");
+		ruleImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add(
+				"ALTER TABLE dbo.Orders ADD CONSTRAINT FK_ClientId FOREIGN KEY (ClientId) REFERENCES dbo.Clients(Id); ");
+
+		Rule rule = new Rule();
+		rule.setKey("C011");
+		rule.setInternalKey("C011");
+		rule.setStatus("BETA");
+		rule.setName("Defined foreign key is not using recommended naming convention");
+		rule.setDescription(
+				"<h2>Description</h2><p>Defined foreign key is not using recommended naming convention to start with FK_.</p>");
+		rule.setTag("naming");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("3min");
+		rule.setRuleImplementation(ruleImpl);
+
+		return rule;
+	}
+
 	public static Rule getSargRule() {
 		Rule rule = new Rule();
 		rule.setKey("C009");
@@ -577,7 +752,10 @@ public class Antlr4Utils {
 		rule.setName("Non-sargable statement used");
 		rule.setDescription(
 				"<h2>Description</h2><p>Use of non-sargeable arguments might cause performance problems.</p>");
-
+		rule.setTag("performance");
+		rule.setSeverity("MAJOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("5min");
 		RuleImplementation functionCallContainsColRef = new RuleImplementation();
 		functionCallContainsColRef.getNames().getTextItem().add(Full_column_nameContext.class.getSimpleName());
 		functionCallContainsColRef.setRuleMatchType(RuleMatchType.CLASS_ONLY);
@@ -638,8 +816,8 @@ public class Antlr4Utils {
 
 	public static Rule getDeclareRule() {
 		Rule r = new Rule();
-		r.setInternalKey("C010");
-		r.setKey("C010");
+		r.setInternalKey("C011");
+		r.setKey("C011");
 		r.setStatus("BETA");
 		r.setName("Variable was declared, but not set");
 		r.setDescription("<h2>Description</h2><p>Variable was declared, but not set.</p>");
@@ -690,6 +868,11 @@ public class Antlr4Utils {
 		SqlRules rules = getCustomMainRules();
 		for (Rule r : rules.getRule()) {
 			System.out.println(r.getKey() + " - " + r.getName());
+		}
+		System.out.println();
+		for (Rule r : rules.getRule()) {
+			System.out.println(r.getKey() + " - " + r.getName());
+			ruleImplToString(r);
 		}
 
 	}

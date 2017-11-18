@@ -1,6 +1,8 @@
 package org.sonar.plugins.tsql.sensors.custom.checks;
 
+import org.antlr.tsql.TSqlParser.IdContext;
 import org.antlr.tsql.TSqlParser.Select_statementContext;
+import org.antlr.tsql.TSqlParser.Table_constraintContext;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,6 +13,7 @@ import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
 import org.sonar.plugins.tsql.checks.custom.RuleResultType;
 import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
+import org.sonar.plugins.tsql.helpers.AntrlResult;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomChecksTest {
@@ -21,6 +24,20 @@ public class CustomChecksTest {
 		String s = "select * from dbo.test where name in (SELECT name from dbo.test where name like '%test%' or name2 like 'test5%' or year(name) > 2008);";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
 		Assert.assertEquals(2, issues.length);
+
+	}
+
+	@Test
+	public void testPrimarYkey() {
+		// Table_constraintContext
+		Rule r = Antlr4Utils.getPKRule();
+		String s2 = "CREATE TABLE Production.TransactionHistoryArchive1  "
+				+ "(     TransactionID int NOT NULL,     CONSTRAINT PaK_TransactionHistoryArchive_TransactionID PRIMARY KEY CLUSTERED (TransactionID)  "
+				+ ");  ";
+		String s = "ALTER TABLE Production.TransactionHistoryArchive  ADD CONSTRAINT PaK_TransactionHistoryArchive_TransactionID PRIMARY KEY CLUSTERED (TransactionID);  ";
+		Antlr4Utils.print(Antlr4Utils.get(s), 0);
+		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
+		Assert.assertEquals(1, issues.length);
 
 	}
 
