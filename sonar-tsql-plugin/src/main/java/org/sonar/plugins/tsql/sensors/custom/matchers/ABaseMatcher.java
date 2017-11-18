@@ -11,9 +11,13 @@ public abstract class ABaseMatcher implements IMatcher {
 
 	@Override
 	public boolean match(RuleImplementation rule, IParsedNode item) {
+		if (rule == null || item == null) {
+			return false;
+		}
 		if (shouldApply(rule, item)) {
 			return innerMatch(rule, item);
 		}
+
 		return true;
 	}
 
