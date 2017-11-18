@@ -15,6 +15,9 @@ public class DefaultLinesProvider implements ILinesProvider {
 
 	@Override
 	public int getLine(final IParsedNode node) {
+		if (node == null || node.getItem() == null) {
+			return 0;
+		}
 		final Interval sourceInterval = node.getItem().getSourceInterval();
 		final Token firstToken = stream.get(sourceInterval.a);
 		final int line = firstToken.getLine();

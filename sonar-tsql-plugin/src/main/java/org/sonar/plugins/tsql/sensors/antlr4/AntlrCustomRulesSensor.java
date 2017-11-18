@@ -31,7 +31,6 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 
 			filler.fill(context, file, finalIssues);
 		} catch (final Throwable e) {
-			e.printStackTrace();
 			LOGGER.warn("Unexpected error while parsing issues for: " + file.absolutePath());
 		}
 	}
