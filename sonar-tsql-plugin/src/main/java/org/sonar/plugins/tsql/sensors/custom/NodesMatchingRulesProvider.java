@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
+import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
 import org.sonar.plugins.tsql.sensors.custom.matchers.RulesMatcher;
+import org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNode;
 import org.sonar.plugins.tsql.sensors.custom.nodes.INodesProvider;
 import org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode;
 
@@ -19,8 +20,12 @@ public class NodesMatchingRulesProvider {
 		this.nodeUsesProvider = nodeUsesProvider;
 	}
 
-	public Map<RuleImplementation, List<IParsedNode>> check(final RuleImplementation rule, final IParsedNode node) {
-
+	public Map<RuleImplementation, List<IParsedNode>> check(CandidateNode candidate) {
+		if (candidate == null) {
+			throw new IllegalArgumentException("Candidate node can't be null");
+		}
+		IParsedNode node = candidate.getNode();
+		RuleImplementation rule = candidate.getRule().getRuleImplementation();
 		Map<RuleImplementation, List<IParsedNode>> map = new HashMap<RuleImplementation, List<IParsedNode>>();
 		initMap(map, rule);
 		visit(node, null, rule, map);

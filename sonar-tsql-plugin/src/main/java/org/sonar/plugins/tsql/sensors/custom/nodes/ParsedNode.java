@@ -1,34 +1,29 @@
 package org.sonar.plugins.tsql.sensors.custom.nodes;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+import org.antlr.tsql.TSqlParser.Cfl_statementContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Cfl_statementContext;
 
 public class ParsedNode implements IParsedNode {
+
 	private final ParseTree item;
 
-	private int distance;
+	private final int distance;
 
 	private final String className;
 
-	public int getIndex() {
-		return index;
-	}
+	private final int index;
 
-	private int index;
-
-	private int index2;
-
-	public int getIndex2() {
-		return index2;
-	}
+	private final int index2;
 
 	public ParsedNode(final ParseTree item) {
 		this.item = item;
 		this.className = item.getClass().getSimpleName();
+		this.index = 0;
+		this.index2 = 0;
+		this.distance = 0;
 	}
 
 	public ParsedNode(final ParseTree item, int level, int index, int index2) {
@@ -39,11 +34,12 @@ public class ParsedNode implements IParsedNode {
 		this.distance = level;
 	}
 
-	public ParsedNode(final ParseTree item, int level, int index) {
-		this.item = item;
-		this.index = index;
-		this.className = item.getClass().getSimpleName();
-		this.distance = level;
+	public int getIndex() {
+		return index;
+	}
+
+	public int getIndex2() {
+		return index2;
 	}
 
 	public String getText() {
@@ -54,59 +50,55 @@ public class ParsedNode implements IParsedNode {
 	}
 
 	public ParseTree getItem() {
-		return item;
+		return this.item;
 	}
 
 	public String getClassName() {
-		return className;
+		return this.className;
 	}
 
-	public List<IParsedNode> getSiblings() {
-		List<IParsedNode> nodes = new ArrayList<>();
+	public IParsedNode[] getSiblings() {
+		final List<IParsedNode> nodes = new ArrayList<>();
 		if (this.item == null || this.item.getParent() == null) {
-			return nodes;
+			return nodes.toArray(new IParsedNode[0]);
 		}
 		ParseTree parseTreeItem = this.item.getParent();
 		visit(nodes, parseTreeItem, 0);
-		return nodes;
+		return nodes.toArray(new IParsedNode[0]);
 
 	}
 
-	public List<IParsedNode> getUses() {
-		return new ArrayList<IParsedNode>();
-	}
-
-	public List<IParsedNode> getParents() {
+	public IParsedNode[] getParents() {
 		List<IParsedNode> nodes = new ArrayList<>();
 		if (this.item == null) {
-			return nodes;
+			return nodes.toArray(new IParsedNode[0]);
 		}
 		ParseTree parseTreeItem = this.item.getParent();
 		int i = 0;
 		while (parseTreeItem != null) {
 			i++;
-			nodes.add(new ParsedNode(parseTreeItem, i, 1));
+			nodes.add(new ParsedNode(parseTreeItem, i, 1, -1));
 			parseTreeItem = parseTreeItem.getParent();
 		}
 
-		return nodes;
+		return nodes.toArray(new IParsedNode[0]);
 	}
 
-	public List<IParsedNode> getChildren() {
-		List<IParsedNode> nodes = new ArrayList<>();
+	public IParsedNode[] getChildren() {
+		final List<IParsedNode> nodes = new ArrayList<>();
 		if (this.item == null) {
-			return nodes;
+			return nodes.toArray(new IParsedNode[0]);
 		}
-		ParseTree parseTreeItem = this.item;
+		final ParseTree parseTreeItem = this.item;
 		visit(nodes, parseTreeItem, 0);
-		return nodes;
+		return nodes.toArray(new IParsedNode[0]);
 	}
 
-	void visit(List<IParsedNode> nodes, final ParseTree tree, int level) {
+	void visit(final List<IParsedNode> nodes, final ParseTree tree, int level) {
 		if (tree == null) {
 			return;
 		}
-		int newLevel = level + 1;
+		final int newLevel = level + 1;
 		final int c = tree.getChildCount();
 		int j = c * -1;
 		for (int i = 0; i < c; i++) {
@@ -132,6 +124,31 @@ public class ParsedNode implements IParsedNode {
 			parent1 = parent1.getParent();
 		}
 		return new ParsedNode(null);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((item == null) ? 0 : item.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ParsedNode other = (ParsedNode) obj;
+		if (item == null) {
+			if (other.item != null)
+				return false;
+		} else if (!item.equals(other.item))
+			return false;
+		return true;
 	}
 
 }

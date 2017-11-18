@@ -1,7 +1,5 @@
 package org.sonar.plugins.tsql.sensors.custom.nodes;
 
-import java.util.List;
-
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public interface IParsedNode {
@@ -18,11 +16,11 @@ public interface IParsedNode {
 
 	public ParseTree getItem();
 
-	public List<IParsedNode> getParents();
+	public IParsedNode[] getParents();
 
-	public List<IParsedNode> getChildren();
+	public IParsedNode[] getChildren();
 
-	public List<IParsedNode> getSiblings();
+	public IParsedNode[] getSiblings();
 
 	public IParsedNode getControlFlowParent();
 

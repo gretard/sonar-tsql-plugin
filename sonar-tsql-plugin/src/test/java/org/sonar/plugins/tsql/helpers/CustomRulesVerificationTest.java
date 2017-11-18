@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sonar.plugins.tsql.rules.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.custom.Rule;
+import org.sonar.plugins.tsql.checks.custom.Rule;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomRulesVerificationTest {
@@ -37,9 +37,7 @@ public class CustomRulesVerificationTest {
 				if (!res) {
 					Antlr4Utils.print(Antlr4Utils.get(s), 0);
 				}
-				for (TsqlIssue i : issues) {
-					System.out.println(i.getDescription()+" "+i.getLine());
-				}
+				
 				Assert.assertTrue(String.format("%s Expected violating code for %s", r.getKey(), s), res);
 
 			}

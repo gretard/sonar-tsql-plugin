@@ -12,8 +12,8 @@ import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
-import org.sonar.plugins.tsql.rules.custom.SqlRules;
 
 public class CustomRulesDefinition implements RulesDefinition {
 

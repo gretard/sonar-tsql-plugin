@@ -39,12 +39,12 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 
 		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
 		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
-		final Map<String, org.sonar.plugins.tsql.rules.custom.SqlRules> rules = customRulesProvider.getRules(null,
+		final Map<String, org.sonar.plugins.tsql.checks.custom.SqlRules> rules = customRulesProvider.getRules(null,
 				rulesPrefix, paths);
 
 		for (final String key : rules.keySet()) {
 			try {
-				org.sonar.plugins.tsql.rules.custom.SqlRules set = rules.get(key);
+				org.sonar.plugins.tsql.checks.custom.SqlRules set = rules.get(key);
 				FileInputStream st = new FileInputStream(key);
 				activeRules(profile, set.getRepoKey(), st);
 				st.close();

@@ -11,16 +11,22 @@ import org.apache.commons.lang3.StringUtils;
 @SuppressWarnings("rawtypes")
 public class NodeUsesProvider extends AbstractParseTreeVisitor implements INodesProvider<IParsedNode> {
 
-	private ParseTree root;
-	private String tempText;
-	final List<IParsedNode> nodes = new ArrayList<>();
+	private final ParseTree root;
+	private final List<IParsedNode> nodes = new ArrayList<>();
 
-	public NodeUsesProvider(ParseTree root) {
+	private String tempText;
+
+	public NodeUsesProvider(final ParseTree root) {
 		this.root = root;
 	}
 
 	@Override
-	public IParsedNode[] getNodes(IParsedNode node) {
+	public IParsedNode[] getNodes(final IParsedNode node) {
+		this.nodes.clear();
+		this.tempText = null;
+		if (node == null) {
+			return new IParsedNode[0];
+		}
 		this.tempText = node.getText();
 		visit(root);
 		IParsedNode[] results = this.nodes.toArray(new IParsedNode[0]);
@@ -45,8 +51,8 @@ public class NodeUsesProvider extends AbstractParseTreeVisitor implements INodes
 
 		}
 		final String textToFind = node.getText();
-
-		if (StringUtils.contains(textToFind, tempText) || StringUtils.contains(tempText, textToFind)) {
+		if (StringUtils.containsIgnoreCase(textToFind, tempText)
+				|| StringUtils.containsIgnoreCase(tempText, textToFind)) {
 			nodes.add(new ParsedNode(node));
 		}
 		return null;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sql-rules repoName="tsql plugin custom rules" repoKey="tsqlPluginRepo" version="1">
+<sql-rules repoName="tsql plugin custom rules" repoKey="tsqlPluginRepo">
     <rule>
         <key>C001</key>
         <name>WAITFOR is used</name>
@@ -17,6 +17,9 @@
             <ruleViolationMessage>WAITFOR is used.</ruleViolationMessage>
             <times>1</times>
             <distance>0</distance>
+            <index>0</index>
+            <indexCheckType>Default</indexCheckType>
+            <distanceCheckType>Default</distanceCheckType>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>FailIfFound</ruleResultType>
@@ -46,6 +49,9 @@
             <ruleViolationMessage>SELECT * was used</ruleViolationMessage>
             <times>1</times>
             <distance>0</distance>
+            <index>0</index>
+            <indexCheckType>Default</indexCheckType>
+            <distanceCheckType>Default</distanceCheckType>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>TextAndClass</ruleMatchType>
             <ruleResultType>FailIfFound</ruleResultType>
@@ -83,6 +89,9 @@
                     <ruleViolationMessage>Column list is not specified in an insert statement.</ruleViolationMessage>
                     <times>1</times>
                     <distance>0</distance>
+                    <index>0</index>
+                    <indexCheckType>Default</indexCheckType>
+                    <distanceCheckType>Default</distanceCheckType>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>FailIfNotFound</ruleResultType>
@@ -96,6 +105,9 @@
             <ruleViolationMessage>TESTT</ruleViolationMessage>
             <times>1</times>
             <distance>0</distance>
+            <index>0</index>
+            <indexCheckType>Default</indexCheckType>
+            <distanceCheckType>Default</distanceCheckType>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>
@@ -132,6 +144,9 @@
                     <ruleViolationMessage>Positional reference is used instead of column name in order by clause.</ruleViolationMessage>
                     <times>1</times>
                     <distance>0</distance>
+                    <index>0</index>
+                    <indexCheckType>Default</indexCheckType>
+                    <distanceCheckType>Default</distanceCheckType>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>FailIfFound</ruleResultType>
@@ -145,6 +160,9 @@
             <ruleViolationMessage></ruleViolationMessage>
             <times>1</times>
             <distance>0</distance>
+            <index>0</index>
+            <indexCheckType>Default</indexCheckType>
+            <distanceCheckType>Default</distanceCheckType>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>
@@ -182,6 +200,9 @@
                     <ruleViolationMessage>EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.</ruleViolationMessage>
                     <times>1</times>
                     <distance>0</distance>
+                    <index>0</index>
+                    <indexCheckType>Default</indexCheckType>
+                    <distanceCheckType>Default</distanceCheckType>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>FailIfFound</ruleResultType>
@@ -201,6 +222,9 @@
                     <ruleViolationMessage>EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.</ruleViolationMessage>
                     <times>1</times>
                     <distance>0</distance>
+                    <index>0</index>
+                    <indexCheckType>Default</indexCheckType>
+                    <distanceCheckType>Default</distanceCheckType>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>SkipIfFound</ruleResultType>
@@ -213,6 +237,9 @@
             <usesRules/>
             <times>1</times>
             <distance>0</distance>
+            <index>0</index>
+            <indexCheckType>Default</indexCheckType>
+            <distanceCheckType>Default</distanceCheckType>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>
@@ -246,6 +273,9 @@
             <ruleViolationMessage>NOLOCK hint was used</ruleViolationMessage>
             <times>1</times>
             <distance>0</distance>
+            <index>0</index>
+            <indexCheckType>Default</indexCheckType>
+            <distanceCheckType>Default</distanceCheckType>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>TextAndClass</ruleMatchType>
             <ruleResultType>FailIfFound</ruleResultType>
@@ -274,6 +304,7 @@
             <childrenRules>
                 <ruleImplementation>
                     <names>
+                        <textItem>SCALAR_FUNCTIONContext</textItem>
                         <textItem>Function_callContext</textItem>
                     </names>
                     <textToFind/>
@@ -281,6 +312,7 @@
                     <childrenRules>
                         <ruleImplementation>
                             <names>
+                                <textItem>Full_column_nameContext</textItem>
                                 <textItem>Column_ref_expressionContext</textItem>
                             </names>
                             <textToFind/>
@@ -291,6 +323,9 @@
                             <ruleViolationMessage>Non-sargeable argument found - column referenced in a function</ruleViolationMessage>
                             <times>1</times>
                             <distance>0</distance>
+                            <index>0</index>
+                            <indexCheckType>Default</indexCheckType>
+                            <distanceCheckType>Default</distanceCheckType>
                             <ruleMode>Default</ruleMode>
                             <ruleMatchType>ClassOnly</ruleMatchType>
                             <ruleResultType>FailIfFound</ruleResultType>
@@ -303,6 +338,9 @@
                     <usesRules/>
                     <times>1</times>
                     <distance>0</distance>
+                    <index>0</index>
+                    <indexCheckType>Default</indexCheckType>
+                    <distanceCheckType>Default</distanceCheckType>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>ClassOnly</ruleMatchType>
                     <ruleResultType>Default</ruleResultType>
@@ -324,7 +362,7 @@
                                 <textItem>TerminalNodeImpl</textItem>
                             </names>
                             <textToFind>
-                                <textItem>N?[',‘]%(.*?)'</textItem>
+                                <textItem>N?[',?]%(.*?)'</textItem>
                             </textToFind>
                             <parentRules/>
                             <childrenRules/>
@@ -333,6 +371,9 @@
                             <ruleViolationMessage>Non-sargeable argument found - predicate starts with wildcard</ruleViolationMessage>
                             <times>1</times>
                             <distance>0</distance>
+                            <index>0</index>
+                            <indexCheckType>Default</indexCheckType>
+                            <distanceCheckType>Default</distanceCheckType>
                             <ruleMode>Default</ruleMode>
                             <ruleMatchType>TextAndClass</ruleMatchType>
                             <ruleResultType>FailIfFound</ruleResultType>
@@ -345,6 +386,9 @@
                     <usesRules/>
                     <times>1</times>
                     <distance>0</distance>
+                    <index>0</index>
+                    <indexCheckType>Default</indexCheckType>
+                    <distanceCheckType>Default</distanceCheckType>
                     <ruleMode>Default</ruleMode>
                     <ruleMatchType>TextAndClass</ruleMatchType>
                     <ruleResultType>Default</ruleResultType>
@@ -357,6 +401,9 @@
             <usesRules/>
             <times>1</times>
             <distance>0</distance>
+            <index>0</index>
+            <indexCheckType>Default</indexCheckType>
+            <distanceCheckType>Default</distanceCheckType>
             <ruleMode>Default</ruleMode>
             <ruleMatchType>ClassOnly</ruleMatchType>
             <ruleResultType>Default</ruleResultType>

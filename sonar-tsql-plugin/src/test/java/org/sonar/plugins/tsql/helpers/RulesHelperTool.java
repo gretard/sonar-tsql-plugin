@@ -6,9 +6,9 @@ import java.io.IOException;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.io.IOUtils;
-import org.sonar.plugins.tsql.rules.custom.SqlRules;
+import org.sonar.plugins.tsql.checks.custom.Rule;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.rules.custom.Rule;
 
 public class RulesHelperTool {
 

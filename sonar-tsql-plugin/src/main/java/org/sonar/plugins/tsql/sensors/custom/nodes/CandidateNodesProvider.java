@@ -7,54 +7,68 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.sonar.plugins.tsql.rules.custom.Rule;
-import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
-import org.sonar.plugins.tsql.rules.custom.RuleMode;
-import org.sonar.plugins.tsql.sensors.custom.matchers.NodesMatcher;
+import org.sonar.plugins.tsql.checks.custom.Rule;
+import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
+import org.sonar.plugins.tsql.checks.custom.RuleMode;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
+import org.sonar.plugins.tsql.sensors.custom.matchers.IMatcher;
+import org.sonar.plugins.tsql.sensors.custom.matchers.NodeNameAndOrClassMatcher;
 
 @SuppressWarnings("rawtypes")
-public class CandidateNodesProvider extends AbstractParseTreeVisitor implements INodesProvider<ParseTree> {
+public class CandidateNodesProvider extends AbstractParseTreeVisitor {
 
-	private final RuleImplementation ruleImplemention;
-	private final Map<String, org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode> groupedNodes = new HashMap<>();
-	private final List<IParsedNode> singleNodes = new LinkedList<>();
-	private final NodesMatcher checker = new NodesMatcher();
+	private final Map<String, CandidateNode> groupedNodes = new HashMap<>();
+	private final List<CandidateNode> singleNodes = new LinkedList<>();
+	private final IMatcher matcher;
+	private final SqlRules[] rules;
 
-	public CandidateNodesProvider(final Rule rule) {
-		this.ruleImplemention = rule.getRuleImplementation();
+	public CandidateNodesProvider(final SqlRules... rules) {
+		this(new NodeNameAndOrClassMatcher(), rules);
 	}
 
-	private org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode[] getNodes() {
+	public CandidateNodesProvider(final IMatcher matcher, final SqlRules... rules) {
+		this.rules = rules;
+		this.matcher = matcher;
+	}
+
+	private CandidateNode[] getNodes() {
 		singleNodes.addAll(groupedNodes.values());
-		return singleNodes.toArray(new org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode[0]);
+		return singleNodes.toArray(new CandidateNode[0]);
 	}
 
 	@Override
-	public Object visit(ParseTree tree) {
+	public Object visit(final ParseTree tree) {
 
 		final int n = tree.getChildCount();
 
 		for (int i = 0; i < n; i++) {
 			final ParseTree c = tree.getChild(i);
 			visit(c);
-
 		}
-		final String name = tree.getText();
 
-		if (checker.match(ruleImplemention, tree)) {
-			final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode(tree);
-
-			if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
-				groupedNodes.putIfAbsent(name, parsedNode);
-			} else {
-				singleNodes.add(parsedNode);
+		for (final SqlRules rule : this.rules) {
+			for (final Rule r : rule.getRule()) {
+				final RuleImplementation ruleImplemention = r.getRuleImplementation();
+				final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode(tree);
+				if (matcher.match(ruleImplemention, parsedNode)) {
+					final CandidateNode node = new CandidateNode(rule.getRepoKey(), r, parsedNode);
+					if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
+						final String name = tree.getText();
+						groupedNodes.putIfAbsent(name, node);
+					} else {
+						singleNodes.add(node);
+					}
+				}
 			}
 		}
+
 		return tree.accept(this);
 	}
 
-	@Override
-	public IParsedNode[] getNodes(ParseTree node) {
+	public CandidateNode[] getNodes(final ParseTree node) {
+		if (node == null) {
+			return new CandidateNode[0];
+		}
 		this.visit(node);
 		return this.getNodes();
 	}

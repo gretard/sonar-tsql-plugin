@@ -2,10 +2,10 @@ package org.sonar.plugins.tsql.sensors.custom.matchers;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.plugins.tsql.checks.custom.RuleDistanceIndexMatchType;
+import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
+import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
 import org.sonar.plugins.tsql.helpers.TestNode;
-import org.sonar.plugins.tsql.rules.custom.RuleDistanceIndexMatchType;
-import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
-import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
 
 public class RulesMatcherTest {
 
@@ -16,7 +16,7 @@ public class RulesMatcherTest {
 	public void testNoMatch() {
 		RulesMatcher matcher = new RulesMatcher();
 		RuleImplementation rule = new RuleImplementation();
-		Assert.assertFalse(matcher.match(rule, null, testNode));
+		Assert.assertTrue(matcher.match(rule, null, testNode));
 	}
 
 	@Test

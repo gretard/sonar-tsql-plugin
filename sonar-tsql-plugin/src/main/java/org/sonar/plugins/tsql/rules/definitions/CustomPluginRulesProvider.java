@@ -6,7 +6,7 @@ import javax.xml.bind.Unmarshaller;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.rules.custom.SqlRules;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
 
 public class CustomPluginRulesProvider {
 	private static final Logger LOGGER = Loggers.get(CustomPluginRulesProvider.class);

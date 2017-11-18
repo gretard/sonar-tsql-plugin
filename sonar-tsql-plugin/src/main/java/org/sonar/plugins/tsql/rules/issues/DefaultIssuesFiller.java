@@ -15,7 +15,7 @@ public class DefaultIssuesFiller implements IIssuesFiller {
 	private static final Logger LOGGER = Loggers.get(DefaultIssuesFiller.class);
 
 	@Override
-	public void fill(final String repositoryKey, final SensorContext context, final InputFile inputFile,
+	public void fill(final SensorContext context, final InputFile inputFile,
 			final TsqlIssue... issues) {
 	
 		for (final TsqlIssue error : issues) {
@@ -36,7 +36,7 @@ public class DefaultIssuesFiller implements IIssuesFiller {
 						continue;
 					}
 				}
-				final RuleKey rule = RuleKey.of(repositoryKey, error.getType());
+				final RuleKey rule = RuleKey.of(error.getRepositoryKey(), error.getType());
 				final NewIssue issue = context.newIssue().forRule(rule);
 
 				final NewIssueLocation loc = issue.newLocation().on(file).at(file.selectLine(error.getLine()));

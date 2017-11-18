@@ -49,9 +49,12 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 		final String baseDir = context.fileSystem().baseDir().getAbsolutePath();
 
 		final TsqlIssue[] issues = this.issuesProvider.getIssues(baseDir);
+		for (TsqlIssue i : issues) {
+			i.setRepositoryKey(this.repositoryKey);
+		}
 		LOGGER.info(format("Found %d issues", issues.length));
 
-		filler.fill(this.repositoryKey, context, null, issues);
+		filler.fill(context, null, issues);
 
 	}
 

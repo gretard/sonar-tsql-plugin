@@ -11,7 +11,6 @@ import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.antlr4.tsqlParser;
 import org.sonar.plugins.tsql.languages.keywords.IKeywordsProvider;
 import org.sonar.plugins.tsql.languages.keywords.KeywordsProvider;
 
@@ -32,9 +31,7 @@ public class AntlrHighlighter implements IAntlrSensor {
 			int startLineOffset = token.getCharPositionInLine();
 			int endLine = startLine;
 			int endLineOffset = startLineOffset + token.getText().length();
-			if (startLine == 1) {
-				//startLineOffset -= 1;
-			}
+		
 			try {
 
 				if (token.getStartIndex() >= token.getStopIndex() || text.isEmpty()) {

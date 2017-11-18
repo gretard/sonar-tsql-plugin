@@ -12,8 +12,29 @@ import javax.xml.bind.Marshaller;
 
 import org.antlr.tsql.TSqlLexer;
 import org.antlr.tsql.TSqlParser;
+import org.antlr.tsql.TSqlParser.Column_name_listContext;
+import org.antlr.tsql.TSqlParser.ConstantContext;
+import org.antlr.tsql.TSqlParser.Cursor_nameContext;
+import org.antlr.tsql.TSqlParser.Cursor_statementContext;
+import org.antlr.tsql.TSqlParser.Declare_cursorContext;
+import org.antlr.tsql.TSqlParser.Declare_statementContext;
+import org.antlr.tsql.TSqlParser.Execute_statementContext;
 import org.antlr.tsql.TSqlParser.Full_column_nameContext;
+import org.antlr.tsql.TSqlParser.Func_proc_nameContext;
+import org.antlr.tsql.TSqlParser.Function_callContext;
+import org.antlr.tsql.TSqlParser.Insert_statementContext;
+import org.antlr.tsql.TSqlParser.Order_by_clauseContext;
+import org.antlr.tsql.TSqlParser.PredicateContext;
+import org.antlr.tsql.TSqlParser.Primitive_expressionContext;
+import org.antlr.tsql.TSqlParser.Query_expressionContext;
 import org.antlr.tsql.TSqlParser.SCALAR_FUNCTIONContext;
+import org.antlr.tsql.TSqlParser.Search_conditionContext;
+import org.antlr.tsql.TSqlParser.Select_list_elemContext;
+import org.antlr.tsql.TSqlParser.Set_statementContext;
+import org.antlr.tsql.TSqlParser.Simple_idContext;
+import org.antlr.tsql.TSqlParser.Table_hintContext;
+import org.antlr.tsql.TSqlParser.Table_nameContext;
+import org.antlr.tsql.TSqlParser.Waitfor_statementContext;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -23,40 +44,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.antlr4.tsqlLexer;
-import org.sonar.plugins.tsql.antlr4.tsqlParser;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Column_name_listContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Column_ref_expressionContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.ConstantContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_nameContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Cursor_statementContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Declare_cursorContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Execute_statementContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Func_proc_nameContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Function_callContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Insert_statementContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Order_by_clauseContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.PredicateContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Primitive_expressionContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Query_expressionContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Search_conditionContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Select_list_elemContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Simple_idContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Sql_clauseContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_hintContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Table_nameContext;
-import org.sonar.plugins.tsql.antlr4.tsqlParser.Waitfor_statementContext;
-import org.sonar.plugins.tsql.rules.custom.Rule;
-import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
-import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
-import org.sonar.plugins.tsql.rules.custom.RuleMode;
-import org.sonar.plugins.tsql.rules.custom.RuleResultType;
-import org.sonar.plugins.tsql.rules.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.custom.TextCheckType;
+import org.sonar.plugins.tsql.checks.custom.Rule;
+import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
+import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
+import org.sonar.plugins.tsql.checks.custom.RuleMode;
+import org.sonar.plugins.tsql.checks.custom.RuleResultType;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
+import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.sensors.custom.DefaultCustomRulesViolationsProvider;
-import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
+import org.sonar.plugins.tsql.sensors.custom.CustomIssuesProvider;
 
 public class Antlr4Utils {
 	public static ParseTree get(String text) {
@@ -106,16 +103,16 @@ public class Antlr4Utils {
 	}
 
 	public static TsqlIssue[] verify2(Rule rule, String text) {
-		AntrlResult result = Antlr4Utils.getFull(text);
+		final CharStream charStream = CharStreams.fromString(text.toUpperCase());
+		final TSqlLexer lexer = new TSqlLexer(charStream);
+		final CommonTokenStream stream = new CommonTokenStream(lexer);
+		stream.fill();
 		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		DefaultCustomRulesViolationsProvider provider = new DefaultCustomRulesViolationsProvider(
-				new DefaultLinesProvider(result.getStream()), customRules.getRule().toArray(new Rule[0]));
-		ParseTree root = result.getTree();
-
-		TsqlIssue[] issues = provider.getIssues(root);
+		final CustomIssuesProvider provider = new CustomIssuesProvider();
+		TsqlIssue[] issues = provider.getIssues(stream, customRules);
 		return issues;
 	}
 
@@ -130,14 +127,7 @@ public class Antlr4Utils {
 		final CommonTokenStream stream = new CommonTokenStream(lexer);
 		stream.fill();
 		final TSqlParser parser = new TSqlParser(stream);
-		
-		
-		/*final tsqlLexer lexer = new tsqlLexer(charStream);
 
-		final CommonTokenStream stream = new CommonTokenStream(lexer);
-		stream.fill();
-		final tsqlParser parser = new tsqlParser(stream);
-*/
 		AntrlResult result = new AntrlResult();
 		result.setTree(parser.tsql_file());
 		result.setStream(stream);
@@ -590,9 +580,6 @@ public class Antlr4Utils {
 
 		RuleImplementation functionCallContainsColRef = new RuleImplementation();
 		functionCallContainsColRef.getNames().getTextItem().add(Full_column_nameContext.class.getSimpleName());
-		
-		
-		functionCallContainsColRef.getNames().getTextItem().add(Column_ref_expressionContext.class.getSimpleName());
 		functionCallContainsColRef.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		functionCallContainsColRef.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		functionCallContainsColRef
@@ -658,14 +645,16 @@ public class Antlr4Utils {
 		r.setDescription("<h2>Description</h2><p>Variable was declared, but not set.</p>");
 
 		RuleImplementation useRule = new RuleImplementation();
-		useRule.getNames().getTextItem().add("Set_statementContext");
+		useRule.getNames().getTextItem().add(Set_statementContext.class.getSimpleName());
 		useRule.setRuleMatchType(RuleMatchType.FULL);
 		useRule.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		useRule.setRuleViolationMessage("Item was not set");
 
 		RuleImplementation parentRule = new RuleImplementation();
-		parentRule.getNames().getTextItem().add("Declare_statementContext");
+		parentRule.getNames().getTextItem().add(Declare_statementContext.class.getSimpleName());
 		parentRule.setRuleMatchType(RuleMatchType.FULL);
 		parentRule.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		parentRule.setRuleViolationMessage("Item was not declared");
 
 		RuleImplementation childRule = new RuleImplementation();
 		childRule.getNames().getTextItem().add("Data_typeContext");

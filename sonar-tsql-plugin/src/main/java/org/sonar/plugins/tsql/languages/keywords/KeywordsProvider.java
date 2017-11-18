@@ -19,8 +19,13 @@ public class KeywordsProvider implements IKeywordsProvider {
 	private final List<String> keywords = new ArrayList<String>();
 
 	public KeywordsProvider() {
-		init("/tsql.keywords");
-		init("/tsql.odbc.keywords");
+		this("/tsql.keywords", "/tsql.odbc.keywords");
+	}
+
+	public KeywordsProvider(final String... files) {
+		for (String file : files) {
+			init(file);
+		}
 	}
 
 	private void init(final String file) {

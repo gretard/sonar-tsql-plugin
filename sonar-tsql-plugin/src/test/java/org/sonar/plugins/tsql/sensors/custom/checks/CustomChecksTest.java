@@ -4,14 +4,13 @@ import org.antlr.tsql.TSqlParser.Select_statementContext;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.plugins.tsql.checks.custom.Rule;
+import org.sonar.plugins.tsql.checks.custom.RuleDistanceIndexMatchType;
+import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
+import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
+import org.sonar.plugins.tsql.checks.custom.RuleResultType;
+import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 import org.sonar.plugins.tsql.helpers.Antlr4Utils;
-import org.sonar.plugins.tsql.helpers.AntrlResult;
-import org.sonar.plugins.tsql.rules.custom.Rule;
-import org.sonar.plugins.tsql.rules.custom.RuleDistanceIndexMatchType;
-import org.sonar.plugins.tsql.rules.custom.RuleImplementation;
-import org.sonar.plugins.tsql.rules.custom.RuleMatchType;
-import org.sonar.plugins.tsql.rules.custom.RuleResultType;
-import org.sonar.plugins.tsql.rules.custom.TextCheckType;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomChecksTest {
@@ -19,10 +18,9 @@ public class CustomChecksTest {
 	@Test
 	public void testSargRule() {
 		Rule r = Antlr4Utils.getSargRule();
-		String s = "SELECT * from dbo.test where name like '%test%' ;";
+		String s = "select * from dbo.test where name in (SELECT name from dbo.test where name like '%test%' or name2 like 'test5%' or year(name) > 2008);";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
-		Antlr4Utils.print(Antlr4Utils.get(s), 0);
-		Assert.assertEquals(1, issues.length);
+		Assert.assertEquals(2, issues.length);
 
 	}
 
@@ -70,7 +68,6 @@ public class CustomChecksTest {
 		rImpl.getChildrenRules().getRuleImplementation().add(child);
 		String s = "SELECT * from dbo.test where name like '%test%'";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
-	//	Antlr4Utils.print(Antlr4Utils.get(s), 0);
 		Assert.assertEquals(1, issues.length);
 
 	}
@@ -80,7 +77,6 @@ public class CustomChecksTest {
 		Rule r = Antlr4Utils.getInsertRule();
 		String s = "INSERT INTO dbo.test VALUES (1,2);";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
-		Antlr4Utils.print(Antlr4Utils.get(s), 0);
 		Assert.assertEquals(1, issues.length);
 
 	}
@@ -88,9 +84,8 @@ public class CustomChecksTest {
 	@Test
 	public void testUseRule() {
 		Rule r = Antlr4Utils.getDeclareRule();
-		String s = "DECLARE @Grohhup nvarchar(50) = 'tt'; DECLARE @Group2 nvarchar(50); DECLARE @Grou55 nvarchar(50); Set @Group2 = 'sss';";
+		String s = "DECLARE @group1 nvarchar(50) = 'tt'; DECLARE @group2 nvarchar(50); DECLARE @group3 nvarchar(50); Set @Group2 = 'sss';";
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
-		Antlr4Utils.print(Antlr4Utils.get(s), 0);
 		Assert.assertEquals(1, issues.length);
 
 	}
