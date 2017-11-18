@@ -209,7 +209,6 @@
             <childrenRules>
                 <ruleImplementation>
                     <names>
-                        <textItem>ConstantContext</textItem>
                         <textItem>Primitive_expressionContext</textItem>
                     </names>
                     <textToFind/>

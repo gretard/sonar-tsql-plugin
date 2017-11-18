@@ -1,5 +1,6 @@
 package org.sonar.plugins.tsql.helpers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -44,6 +45,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.checks.custom.Rule;
@@ -194,7 +196,7 @@ public class Antlr4Utils {
 		String xmlString = "";
 		List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
 		List<String> violating = r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample();
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(r.getDescription());
 		sb.append("<h2>Code examples</h2>");
@@ -221,7 +223,6 @@ public class Antlr4Utils {
 		}
 		r.setDescription(sb.toString());
 
-		
 		try {
 			JAXBContext context = JAXBContext.newInstance(Rule.class);
 			Marshaller m = context.createMarshaller();
@@ -444,7 +445,6 @@ public class Antlr4Utils {
 		rule.setRemediationFunction("LINEAR");
 		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation child2 = new RuleImplementation();
-		child2.getNames().getTextItem().add(ConstantContext.class.getSimpleName());
 		child2.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
@@ -861,10 +861,10 @@ public class Antlr4Utils {
 		return r;
 	}
 
-	public static void main(String[] args) {
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args) throws IOException {
 
-		System.out.println(ruleToString(getCustomMainRules()));
-
+		FileUtils.write(new File("src/main/resources/rules/plugin-rules.xml"), ruleToString(getCustomMainRules()));
 		SqlRules rules = getCustomMainRules();
 		for (Rule r : rules.getRule()) {
 			System.out.println(r.getKey() + " - " + r.getName());
