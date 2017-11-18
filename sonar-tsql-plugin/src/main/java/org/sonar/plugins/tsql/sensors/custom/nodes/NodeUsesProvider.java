@@ -43,9 +43,6 @@ public class NodeUsesProvider extends AbstractParseTreeVisitor implements INodes
 		final int n = node.getChildCount();
 
 		for (int i = 0; i < n; i++) {
-			if (!shouldVisitNextChild(node, defaultResult())) {
-				break;
-			}
 			final ParseTree c = node.getChild(i);
 			c.accept(this);
 
