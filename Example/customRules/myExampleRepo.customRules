@@ -18,7 +18,7 @@
             <childrenRules/>
             <siblingsRules/>
             <usesRules/>
-            <ruleViolationMessage>WAITFOR is used.</ruleViolationMessage>
+            <ruleViolationMessage>DEMO: WAITFOR is used.</ruleViolationMessage>
             <times>1</times>
             <distance>0</distance>
             <index>0</index>
@@ -54,7 +54,7 @@
             <childrenRules/>
             <siblingsRules/>
             <usesRules/>
-            <ruleViolationMessage>SELECT * was used</ruleViolationMessage>
+            <ruleViolationMessage>DEMO: SELECT * was used</ruleViolationMessage>
             <times>1</times>
             <distance>0</distance>
             <index>0</index>
