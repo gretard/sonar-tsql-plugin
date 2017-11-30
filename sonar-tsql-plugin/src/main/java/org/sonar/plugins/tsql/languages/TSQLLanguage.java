@@ -10,7 +10,7 @@ public final class TSQLLanguage extends AbstractLanguage {
 
 	public static final String KEY = "tsql";
 
-	public static final String[] DEFAULT_FILE_SUFFIXES = new String[] { "sql" };
+	public static final String[] DEFAULT_FILE_SUFFIXES = new String[] { ".sql" };
 
 	private final Settings settings;
 
