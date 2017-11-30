@@ -15,6 +15,8 @@ public final class Constants {
 
 	public static final String PLUGIN_SKIP_CPD = "sonar.tsql.skip.cpd";
 
+	public static final String PLUGIN_SUFFIXES = "sonar.tsql.file.suffixes";
+
 	public static final String PLUGIN_SKIP_CUSTOM_RULES = "sonar.tsql.skip.custom.rules";
 
 	public static final String CG_REPO_KEY = TSQLLanguage.KEY.toLowerCase() + "-sqlcodeguard";

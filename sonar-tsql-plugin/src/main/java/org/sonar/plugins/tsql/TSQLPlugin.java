@@ -46,6 +46,9 @@ public class TSQLPlugin implements Plugin {
 				.defaultValue("").type(PropertyType.STRING).build());
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PREFIX)
 				.name("Custom rules file name prefix").defaultValue(".customRules").type(PropertyType.STRING).build());
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SUFFIXES)
+				.name("Suffixes to analyze").description("Suffixes supported by the plugin").defaultValue(".sql").type(PropertyType.STRING).build());
+		
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
 		context.addExtensions(MsRulesDefinition.class, CustomPluginRulesDefinition.class,
 				CodeGuardRulesDefinition.class, CustomRulesDefinition.class, MsIssuesLoaderSensor.class,
