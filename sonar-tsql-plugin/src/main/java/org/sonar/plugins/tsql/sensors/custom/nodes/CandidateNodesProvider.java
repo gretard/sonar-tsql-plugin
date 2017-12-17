@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
 import org.sonar.plugins.tsql.checks.custom.RuleMode;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
@@ -27,9 +26,11 @@ public class CandidateNodesProvider extends AbstractParseTreeVisitor {
 	public CandidateNodesProvider(final SqlRules... rules) {
 		this(new NodeNameAndOrClassMatcher(), RulesHelper.convert(rules));
 	}
+
 	public CandidateNodesProvider(final CandidateRule... rules) {
 		this(new NodeNameAndOrClassMatcher(), rules);
 	}
+
 	public CandidateNodesProvider(final IMatcher matcher, final CandidateRule... rules) {
 		this.rules = rules;
 		this.matcher = matcher;
@@ -49,21 +50,21 @@ public class CandidateNodesProvider extends AbstractParseTreeVisitor {
 			final ParseTree c = tree.getChild(i);
 			visit(c);
 		}
+		final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode(tree);
 
 		for (final CandidateRule rule : this.rules) {
-			
-				final RuleImplementation ruleImplemention = rule.getRuleImplementation();
-				final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode(tree);
-				if (matcher.match(ruleImplemention, parsedNode)) {
-					final CandidateNode node = new CandidateNode(rule.getKey(), rule.getRule(), parsedNode);
-					if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
-						final String name = tree.getText();
-						groupedNodes.putIfAbsent(name, node);
-					} else {
-						singleNodes.add(node);
-					}
+
+			final RuleImplementation ruleImplemention = rule.getRuleImplementation();
+			if (matcher.match(ruleImplemention, parsedNode)) {
+				final CandidateNode node = new CandidateNode(rule.getKey(), rule.getRule(), parsedNode);
+				if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
+					final String name = tree.getText();
+					groupedNodes.putIfAbsent(name, node);
+				} else {
+					singleNodes.add(node);
 				}
-			
+			}
+
 		}
 
 		return tree.accept(this);
