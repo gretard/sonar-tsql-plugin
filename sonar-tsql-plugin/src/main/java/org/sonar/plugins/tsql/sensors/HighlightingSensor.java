@@ -4,12 +4,15 @@ import static java.lang.String.format;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import org.antlr.tsql.TSqlLexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -24,7 +27,9 @@ import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrCpdTokenizer;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrCustomRulesSensor;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrHighlighter;
+import org.sonar.plugins.tsql.sensors.antlr4.CandidateRule;
 import org.sonar.plugins.tsql.sensors.antlr4.IAntlrSensor;
+import org.sonar.plugins.tsql.sensors.antlr4.RulesHelper;
 
 public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
@@ -51,6 +56,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 		}
 		final boolean skipCustomRules = this.settings.getBoolean(Constants.PLUGIN_SKIP_CUSTOM_RULES);
 
+		final int timeout = settings.getInt(Constants.PLUGIN_CPD_TIMEOUT);
 		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
 		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
 		final List<SqlRules> rules = new ArrayList<>();
@@ -62,40 +68,63 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 		}
 
 		rules.addAll(provider.getRules(context.fileSystem().baseDir().getAbsolutePath(), rulesPrefix, paths).values());
-		LOGGER.info(String.format("Total %s custom rules repositories", rules.size()));
-		SqlRules[] finalRules = rules.toArray(new SqlRules[0]);
+		final SqlRules[] finalRules = rules.toArray(new SqlRules[0]);
+
+		final CandidateRule[] candidateRules = RulesHelper.convert(finalRules);
+		LOGGER.info(String.format("Total %s custom rules repositories with total %s checks", rules.size(),
+				candidateRules.length));
+
 		final IAntlrSensor[] sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
-				new AntlrCustomRulesSensor(finalRules) };
+				new AntlrCustomRulesSensor(candidateRules) };
 
 		final FileSystem fs = context.fileSystem();
 		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));
+		ExecutorService executorService = Executors.newWorkStealingPool();
 
-		for (final InputFile file : files) {
-			try {
-				@SuppressWarnings("deprecation")
-				final CharStream charStream = CharStreams
-						.fromString(FileUtils.readFileToString(file.file()).toUpperCase());
+		files.forEach(new Consumer<InputFile>() {
 
-				final TSqlLexer lexer = new TSqlLexer(charStream);
+			@Override
+			public void accept(final InputFile file) {
+				executorService.execute(new Runnable() {
 
-				if (!LOGGER.isDebugEnabled()) {
-					lexer.removeErrorListeners();
-				}
+					@Override
+					public void run() {
+						try {
+							final CharStream charStream = CharStreams.fromPath(file.path(),
+									context.fileSystem().encoding());
 
-				final CommonTokenStream stream = new CommonTokenStream(lexer);
+							final TSqlLexer lexer = new TSqlLexer(charStream);
 
-				stream.fill();
+							lexer.removeErrorListeners();
 
-				for (final IAntlrSensor sensor : sensors) {
-					sensor.work(context, stream, file);
-				}
+							final CommonTokenStream stream = new CommonTokenStream(lexer);
 
-				LOGGER.info(String.format("Finished working on %s file", file.absolutePath()));
+							stream.fill();
 
-			} catch (final Throwable e) {
-				LOGGER.warn(format("Unexpected error parsing file %s", file.absolutePath()), e);
+							for (final IAntlrSensor sensor : sensors) {
+								sensor.work(context, stream, file);
+							}
+
+						} catch (final Throwable e) {
+							LOGGER.warn(format("Unexpected error parsing file %s", file.absolutePath()), e);
+						}
+
+					}
+				});
+
 			}
+
+		});
+
+		try {
+			executorService.shutdown();
+			executorService.awaitTermination(timeout == 0 ? 3600 : timeout, TimeUnit.SECONDS);
+			executorService.shutdownNow();
+		} catch (final InterruptedException e) {
+			LOGGER.warn("Unexpected error while running waiting for executor service to finish", e);
+
 		}
+
 	}
 
 	@Override

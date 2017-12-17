@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -18,6 +19,7 @@ import org.sonar.duplications.internal.pmd.TokensLine;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
+@Ignore
 public class HighlightingSensorTest {
 
 	@Rule

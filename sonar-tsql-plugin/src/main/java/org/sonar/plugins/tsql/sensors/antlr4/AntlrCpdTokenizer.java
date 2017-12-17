@@ -2,8 +2,10 @@ package org.sonar.plugins.tsql.sensors.antlr4;
 
 import static java.lang.String.format;
 
+import org.antlr.tsql.TSqlParser;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -27,18 +29,19 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 
 		final Token[] alltokens = stream.getTokens().toArray(new Token[0]);
 		for (final Token token : alltokens) {
-			
+
 			int startLine = token.getLine();
 			int startLineOffset = token.getCharPositionInLine();
 			int endLine = startLine;
 			int endLineOffset = startLineOffset + token.getText().length();
 			if (startLine == 1) {
-				//startLineOffset -= 1;
+				// startLineOffset -= 1;
 			}
 			final String text = token.getText();
 			try {
 
-				if (token.getStartIndex() >= token.getStopIndex() || text.isEmpty()) {
+				if (token.getStartIndex() >= token.getStopIndex() || token.getType() == TSqlParser.EOF
+						|| StringUtils.isEmpty(text) || !StringUtils.isAlphanumeric(text)) {
 					continue;
 				}
 				cpdTokens.addToken(startLine, startLineOffset, endLine, endLineOffset, text);
@@ -52,8 +55,14 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 
 			}
 		}
-		cpdTokens.save();
-
+		try {
+			cpdTokens.save();
+		} catch (Throwable e) {
+			LOGGER.warn(
+					format("Unexpected error saving cpd tokens on file %s",
+							file.absolutePath()),
+					e);
+		}
 	}
 
 }

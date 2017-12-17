@@ -15,6 +15,9 @@ public final class Constants {
 
 	public static final String PLUGIN_SKIP_CPD = "sonar.tsql.skip.cpd";
 
+	public static final String PLUGIN_CPD_TIMEOUT = "sonar.tsql.timeout.cpd";
+
+	
 	public static final String PLUGIN_SUFFIXES = "sonar.tsql.file.suffixes";
 
 	public static final String PLUGIN_SKIP_CUSTOM_RULES = "sonar.tsql.skip.custom.rules";
@@ -33,6 +36,8 @@ public final class Constants {
 
 	public static final String PLUGIN_CUSTOM_RULES_PATH = "sonar.tsql.customrules.paths";
 
+	
+	
 	public static final String PLUGIN_CUSTOM_RULES_PREFIX = "sonar.tsql.customrules.prefix";
 
 	public static final String PLUGIN_RULES_FILE = "/rules/plugin-rules.xml";

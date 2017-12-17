@@ -30,9 +30,7 @@ public class CustomIssuesProvider {
 	public TsqlIssue[] getIssues(final CommonTokenStream stream) {
 		final TSqlParser parser = new TSqlParser(stream);
 
-		if (!LOGGER.isDebugEnabled()) {
-			parser.removeErrorListeners();
-		}
+		parser.removeErrorListeners();
 		final ParseTree root = parser.tsql_file();
 		final CandidateNodesProvider candidatesProvider = new org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNodesProvider(
 				rules);
@@ -49,6 +47,7 @@ public class CustomIssuesProvider {
 			issues.addAll(foundIssues);
 		}
 		final TsqlIssue[] finalIssues = issues.toArray(new TsqlIssue[0]);
+	
 		return finalIssues;
 	}
 }

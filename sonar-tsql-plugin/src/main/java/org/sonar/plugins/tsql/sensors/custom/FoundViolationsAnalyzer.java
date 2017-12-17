@@ -112,10 +112,7 @@ public class FoundViolationsAnalyzer {
 			}
 
 		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.info(String.format("Found %s issues for rule %s in %s repository on %s node at %line", issues.size(),
-					baseRule.getKey(), candidate.getKey(), root.getClass(), this.linesProvider.getLine(root)));
-		}
+
 		return issues;
 	}
 }

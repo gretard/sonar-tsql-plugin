@@ -1,7 +1,6 @@
 package org.sonar.plugins.tsql.helpers;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
 
@@ -27,7 +26,7 @@ public class PluginRulesVerifier {
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
 		String dirPath = args[0];
 		File dir = new File(dirPath);
-		System.out.println("checking dir: "+dir.getAbsolutePath());
+		System.out.println("checking dir: " + dir.getAbsolutePath());
 		Collection<File> files = FileUtils.listFiles(dir, new String[] { "sql" }, true);
 		System.out.println("Found " + files.size());
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
@@ -42,7 +41,8 @@ public class PluginRulesVerifier {
 			ctxTester.fileSystem().add(file1);
 
 		}
-
+		System.gc();
+		System.gc();
 		long start = System.nanoTime();
 		HighlightingSensor sensor = new HighlightingSensor(settings);
 		sensor.execute(ctxTester);

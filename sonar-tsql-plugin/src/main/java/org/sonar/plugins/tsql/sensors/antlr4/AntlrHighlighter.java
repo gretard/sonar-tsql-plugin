@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import org.antlr.tsql.TSqlParser;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
@@ -31,10 +32,10 @@ public class AntlrHighlighter implements IAntlrSensor {
 			int startLineOffset = token.getCharPositionInLine();
 			int endLine = startLine;
 			int endLineOffset = startLineOffset + token.getText().length();
-		
+
 			try {
 
-				if (token.getStartIndex() >= token.getStopIndex() || text.isEmpty()) {
+				if (token.getStartIndex() >= token.getStopIndex() ||  StringUtils.isEmpty(text)) {
 					continue;
 				}
 
@@ -63,7 +64,7 @@ public class AntlrHighlighter implements IAntlrSensor {
 			} catch (final Throwable e) {
 				if (debugEnabled) {
 					LOGGER.debug(
-							format("Unexpected error adding highlightings/tokens on file %s for token %s on (%s, %s) -  (%s, %s)",
+							format("Unexpected error adding highlightings on file %s for token %s on (%s, %s) -  (%s, %s)",
 									file.absolutePath(), text, startLine, startLineOffset, endLine, endLineOffset),
 							e);
 				}
