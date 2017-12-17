@@ -67,7 +67,7 @@ public class CandidateNodesProvider extends AbstractParseTreeVisitor {
 
 		}
 
-		return tree.accept(this);
+		return null; // tree.accept(this);
 	}
 
 	public CandidateNode[] getNodes(final ParseTree node) {
