@@ -11,6 +11,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.config.Settings;
+import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.sensors.HighlightingSensor;
 
@@ -23,6 +24,7 @@ public class PluginRulesVerifier {
 		TemporaryFolder folder = new TemporaryFolder();
 		folder.create();
 		Settings settings = new Settings();
+		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
 		String dirPath = args[0];
 		File dir = new File(dirPath);
 		System.out.println("checking dir: "+dir.getAbsolutePath());

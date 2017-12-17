@@ -3,9 +3,15 @@ package org.sonar.plugins.tsql.sensors.custom.nodes;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 
 public class CandidateNode {
-	private String key;
-	private Rule rule;
-	private IParsedNode nnode;
+	private final String key;
+	private final Rule rule;
+	private final IParsedNode nnode;
+
+	public CandidateNode(final String key, final Rule rule, final IParsedNode nnode) {
+		this.key = key;
+		this.rule = rule;
+		this.nnode = nnode;
+	}
 
 	public String getKey() {
 		return key;
@@ -19,9 +25,41 @@ public class CandidateNode {
 		return nnode;
 	}
 
-	public CandidateNode(String key, Rule rule, IParsedNode nnode) {
-		this.key = key;
-		this.rule = rule;
-		this.nnode = nnode;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + ((nnode == null) ? 0 : nnode.hashCode());
+		result = prime * result + ((rule == null) ? 0 : rule.hashCode());
+		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CandidateNode other = (CandidateNode) obj;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		} else if (!key.equals(other.key))
+			return false;
+		if (nnode == null) {
+			if (other.nnode != null)
+				return false;
+		} else if (!nnode.equals(other.nnode))
+			return false;
+		if (rule == null) {
+			if (other.rule != null)
+				return false;
+		} else if (!rule.equals(other.rule))
+			return false;
+		return true;
+	}
+
 }

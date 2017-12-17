@@ -10,8 +10,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
-import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
+import org.sonar.plugins.tsql.sensors.antlr4.CandidateRule;
 import org.sonar.plugins.tsql.sensors.custom.lines.DefaultLinesProvider;
 import org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNode;
 import org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNodesProvider;
@@ -20,8 +20,14 @@ import org.sonar.plugins.tsql.sensors.custom.nodes.NodeUsesProvider;
 
 public class CustomIssuesProvider {
 	private static final Logger LOGGER = Loggers.get(FoundViolationsAnalyzer.class);
+	private CandidateRule[] rules;
 
-	public TsqlIssue[] getIssues(final CommonTokenStream stream, final SqlRules... rules) {
+	public CustomIssuesProvider(CandidateRule... rules) {
+		this.rules = rules;
+
+	}
+
+	public TsqlIssue[] getIssues(final CommonTokenStream stream) {
 		final TSqlParser parser = new TSqlParser(stream);
 
 		if (!LOGGER.isDebugEnabled()) {

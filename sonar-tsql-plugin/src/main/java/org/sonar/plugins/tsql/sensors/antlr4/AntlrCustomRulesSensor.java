@@ -14,20 +14,18 @@ import org.sonar.plugins.tsql.sensors.custom.CustomIssuesProvider;
 public class AntlrCustomRulesSensor implements IAntlrSensor {
 	private static final Logger LOGGER = Loggers.get(AntlrCustomRulesSensor.class);
 
-	private SqlRules[] rules;
-
 	private final IIssuesFiller filler = new DefaultIssuesFiller();
-	private final CustomIssuesProvider provider = new CustomIssuesProvider();
+	private final CustomIssuesProvider provider;
 
 	public AntlrCustomRulesSensor(SqlRules[] rules) {
-		this.rules = rules;
+		this.provider = new CustomIssuesProvider(RulesHelper.convert(rules));
 	}
 
 	@Override
 	public void work(final SensorContext context, final CommonTokenStream stream, final InputFile file) {
 		try {
 
-			final TsqlIssue[] finalIssues = provider.getIssues(stream, rules);
+			final TsqlIssue[] finalIssues = provider.getIssues(stream);
 
 			filler.fill(context, file, finalIssues);
 		} catch (final Throwable e) {

@@ -1,6 +1,5 @@
 package org.sonar.plugins.tsql.helpers;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -48,7 +47,6 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.checks.custom.Rule;
@@ -61,6 +59,7 @@ import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
+import org.sonar.plugins.tsql.sensors.antlr4.RulesHelper;
 import org.sonar.plugins.tsql.sensors.custom.CustomIssuesProvider;
 import org.sonar.plugins.tsql.sensors.custom.FoundViolationsAnalyzer;
 import org.sonar.plugins.tsql.sensors.custom.NodesMatchingRulesProvider;
@@ -126,10 +125,11 @@ public class Antlr4Utils {
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		final CustomIssuesProvider provider = new CustomIssuesProvider();
-		TsqlIssue[] issues = provider.getIssues(stream, customRules);
+		final CustomIssuesProvider provider = new CustomIssuesProvider(RulesHelper.convert(customRules));
+		TsqlIssue[] issues = provider.getIssues(stream);
 		return issues;
 	}
+
 	public static TsqlIssue[] verifyWithPrinting(Rule rule, String text) {
 		final CharStream charStream = CharStreams.fromString(text.toUpperCase());
 		final TSqlLexer lexer = new TSqlLexer(charStream);
@@ -139,7 +139,7 @@ public class Antlr4Utils {
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		
+
 		final TSqlParser parser = new TSqlParser(stream);
 
 		final ParseTree root = parser.tsql_file();
@@ -147,48 +147,47 @@ public class Antlr4Utils {
 				customRules);
 		final FoundViolationsAnalyzer an = new FoundViolationsAnalyzer(new DefaultLinesProvider(stream));
 		final CandidateNode[] candidates = candidatesProvider.getNodes(root);
-		
+
 		final NodesMatchingRulesProvider m = new NodesMatchingRulesProvider(new NodeUsesProvider(root));
 		final List<TsqlIssue> issues = new ArrayList<TsqlIssue>();
 		for (CandidateNode candidate : candidates) {
-			System.out.println(String.format(
-					"Found candidate with text %s of class %s against rule: %s classes and %s text",
-					candidate.getNode().getText(),
-					candidate.getNode().getClassName(),
-					Arrays.toString(candidate.getRule().getRuleImplementation().getNames().getTextItem().toArray(new String[0])),
-					Arrays.toString(candidate.getRule().getRuleImplementation().getTextToFind().getTextItem().toArray(new String[0]))
-					
+			System.out.println(
+					String.format("Found candidate with text %s of class %s against rule: %s classes and %s text",
+							candidate.getNode().getText(), candidate.getNode().getClassName(),
+							Arrays.toString(candidate.getRule().getRuleImplementation().getNames().getTextItem()
+									.toArray(new String[0])),
+							Arrays.toString(candidate.getRule().getRuleImplementation().getTextToFind().getTextItem()
+									.toArray(new String[0]))
+
 					));
 			final Map<RuleImplementation, List<IParsedNode>> results = m.check(candidate);
-			
+
 			for (Entry<RuleImplementation, List<IParsedNode>> entry : results.entrySet()) {
 				RuleImplementation mRule = entry.getKey();
 				List<IParsedNode> items = entry.getValue();
 				System.out.println(String.format(
 						"Found %s candidates against [match: %s, result: %s, distance %s, index: %s, indexCheck %s, distanceCheck: %s] rule: %s classes and %s text",
-						items.size(),
-						mRule.getRuleMatchType(),
-						mRule.getRuleResultType(),
-						mRule.getDistance(),
-						mRule.getIndex(),
-						mRule.getIndexCheckType(),
-						mRule.getDistanceCheckType(),
+						items.size(), mRule.getRuleMatchType(), mRule.getRuleResultType(), mRule.getDistance(),
+						mRule.getIndex(), mRule.getIndexCheckType(), mRule.getDistanceCheckType(),
 						Arrays.toString(mRule.getNames().getTextItem().toArray(new String[0])),
 						Arrays.toString(mRule.getTextToFind().getTextItem().toArray(new String[0]))
-						
-						));
+
+				));
 				for (IParsedNode node : items) {
-					System.out.println("\tNode matching rule: "+node.getText()+" "+node.getClassName()+" Distance: "+node.getDistance()+" Index: "+node.getIndex()+" Index2: "+node.getIndex2());
+					System.out.println("\tNode matching rule: " + node.getText() + " " + node.getClassName()
+							+ " Distance: " + node.getDistance() + " Index: " + node.getIndex() + " Index2: "
+							+ node.getIndex2());
 				}
 			}
-			
+
 			final List<TsqlIssue> foundIssues = an.create(candidate, results);
 			issues.addAll(foundIssues);
 		}
 		final TsqlIssue[] finalIssues = issues.toArray(new TsqlIssue[0]);
 		return finalIssues;
-		
+
 	}
+
 	public static AntrlResult getFull(String text) {
 		final CharStream charStream = CharStreams.fromString(text.toUpperCase());
 		return getFromStream(charStream);
@@ -932,7 +931,9 @@ public class Antlr4Utils {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws IOException {
 
-		//FileUtils.write(new File("src/main/resources/rules/plugin-rules.xml"), ruleToString(getCustomMainRules()));
+		// FileUtils.write(new
+		// File("src/main/resources/rules/plugin-rules.xml"),
+		// ruleToString(getCustomMainRules()));
 		SqlRules rules = getCustomMainRules();
 		for (Rule r : rules.getRule()) {
 			System.out.println(r.getKey() + " - " + r.getName());
