@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
@@ -23,6 +24,11 @@ public class AntlrHighlighter implements IAntlrSensor {
 	@Override
 	public void work(SensorContext context, CommonTokenStream stream, InputFile file) {
 
+		if (file == null) {
+
+			return;
+		}
+
 		final NewHighlighting newHighlightning = context.newHighlighting().onFile(file);
 
 		final Token[] alltokens = stream.getTokens().toArray(new Token[0]);
@@ -35,21 +41,24 @@ public class AntlrHighlighter implements IAntlrSensor {
 
 			try {
 
-				if (token.getStartIndex() >= token.getStopIndex() ||  StringUtils.isEmpty(text)) {
+				if (token.getStartIndex() >= token.getStopIndex() || StringUtils.isEmpty(text)) {
 					continue;
 				}
 
 				if (token.getType() == TSqlParser.EOF) {
 					continue;
 				}
+				final TextRange range = file.newRange(startLine, startLineOffset, endLine, endLineOffset);
+				
+				
 				if (token.getType() == TSqlParser.COMMENT || token.getType() == TSqlParser.LINE_COMMENT) {
 
-					newHighlightning.highlight(startLine, startLineOffset, endLine, endLineOffset, TypeOfText.COMMENT);
+					newHighlightning.highlight(range, TypeOfText.COMMENT);
 					continue;
 				}
 
 				if (token.getType() == TSqlParser.STRING) {
-					newHighlightning.highlight(startLine, startLineOffset, endLine, endLineOffset, TypeOfText.STRING);
+					newHighlightning.highlight(range, TypeOfText.STRING);
 
 					continue;
 				}
@@ -59,7 +68,7 @@ public class AntlrHighlighter implements IAntlrSensor {
 				}
 
 				if (this.keywordsProvider.isKeyword(TSqlParser.VOCABULARY.getSymbolicName(token.getType()))) {
-					newHighlightning.highlight(startLine, startLineOffset, endLine, endLineOffset, TypeOfText.KEYWORD);
+					newHighlightning.highlight(range, TypeOfText.KEYWORD);
 				}
 			} catch (final Throwable e) {
 				if (debugEnabled) {
@@ -71,8 +80,11 @@ public class AntlrHighlighter implements IAntlrSensor {
 
 			}
 		}
-		newHighlightning.save();
-
+		try {
+			newHighlightning.save();
+		} catch (final Throwable e) {
+			LOGGER.warn(format("Unexpected error saving highlightings on file %s", file.absolutePath()), e);
+		}
 	}
 
 }

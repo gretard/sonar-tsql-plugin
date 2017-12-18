@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.utils.log.Logger;
@@ -21,7 +21,7 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 	public void work(final SensorContext context, final CommonTokenStream stream, InputFile file) {
 		final boolean skipCpdAnalysis = context.settings().getBoolean(Constants.PLUGIN_SKIP_CPD);
 
-		if (skipCpdAnalysis || !(file instanceof DefaultInputFile)) {
+		if (skipCpdAnalysis || file == null) {
 
 			return;
 		}
@@ -41,10 +41,12 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 			try {
 
 				if (token.getStartIndex() >= token.getStopIndex() || token.getType() == TSqlParser.EOF
+						|| token.getType() == TSqlParser.COMMENT || token.getType() == TSqlParser.LINE_COMMENT
 						|| StringUtils.isEmpty(text) || !StringUtils.isAlphanumeric(text)) {
 					continue;
 				}
-				cpdTokens.addToken(startLine, startLineOffset, endLine, endLineOffset, text);
+				final TextRange range = file.newRange(startLine, startLineOffset, endLine, endLineOffset);
+				cpdTokens.addToken(range, text);
 			} catch (final Throwable e) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug(
@@ -56,12 +58,12 @@ public class AntlrCpdTokenizer implements IAntlrSensor {
 			}
 		}
 		try {
-			cpdTokens.save();
+			synchronized (context) {
+				cpdTokens.save();
+			}
+
 		} catch (Throwable e) {
-			LOGGER.warn(
-					format("Unexpected error saving cpd tokens on file %s",
-							file.absolutePath()),
-					e);
+			LOGGER.warn(format("Unexpected error saving cpd tokens on file %s", file.absolutePath()), e);
 		}
 	}
 

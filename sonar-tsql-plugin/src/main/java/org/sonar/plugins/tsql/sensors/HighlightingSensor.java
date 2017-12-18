@@ -79,7 +79,7 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 		final FileSystem fs = context.fileSystem();
 		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));
-		ExecutorService executorService = Executors.newWorkStealingPool();
+		final ExecutorService executorService = Executors.newWorkStealingPool();
 
 		files.forEach(new Consumer<InputFile>() {
 
