@@ -27,11 +27,8 @@ public class CustomIssuesProvider {
 
 	}
 
-	public TsqlIssue[] getIssues(final CommonTokenStream stream) {
-		final TSqlParser parser = new TSqlParser(stream);
-
-		parser.removeErrorListeners();
-		final ParseTree root = parser.tsql_file();
+	public TsqlIssue[] getIssues(final CommonTokenStream stream, final ParseTree root) {
+		
 		final CandidateNodesProvider candidatesProvider = new org.sonar.plugins.tsql.sensors.custom.nodes.CandidateNodesProvider(
 				rules);
 		final FoundViolationsAnalyzer an = new FoundViolationsAnalyzer(new DefaultLinesProvider(stream));

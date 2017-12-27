@@ -1,6 +1,7 @@
 package org.sonar.plugins.tsql.sensors.antlr4;
 
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.tsql.TSqlParser;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
@@ -21,10 +22,15 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 	}
 
 	@Override
-	public void work(final SensorContext context, final CommonTokenStream stream, final InputFile file) {
+	public void work(final SensorContext context, final AntrlFile antrlFile) {
+		final InputFile file = antrlFile.getFile();
+		if (file == null) {
+			return;
+		}
 		try {
-
-			final TsqlIssue[] finalIssues = provider.getIssues(stream);
+			
+			final ParseTree root = antrlFile.getRoot();
+			final TsqlIssue[] finalIssues = provider.getIssues(antrlFile.getStream(), root);
 
 			filler.fill(context, file, finalIssues);
 			if (LOGGER.isDebugEnabled()) {

@@ -121,12 +121,14 @@ public class Antlr4Utils {
 		final TSqlLexer lexer = new TSqlLexer(charStream);
 		final CommonTokenStream stream = new CommonTokenStream(lexer);
 		stream.fill();
+		TSqlParser parser = new TSqlParser(stream);
+		final ParseTree root = parser.tsql_file();
 		SqlRules customRules = new SqlRules();
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
 		final CustomIssuesProvider provider = new CustomIssuesProvider(RulesHelper.convert(customRules));
-		TsqlIssue[] issues = provider.getIssues(stream);
+		TsqlIssue[] issues = provider.getIssues(stream, root);
 		return issues;
 	}
 
@@ -203,6 +205,7 @@ public class Antlr4Utils {
 		AntrlResult result = new AntrlResult();
 		result.setTree(parser.tsql_file());
 		result.setStream(stream);
+		result.setParser(parser);
 		return result;
 	}
 

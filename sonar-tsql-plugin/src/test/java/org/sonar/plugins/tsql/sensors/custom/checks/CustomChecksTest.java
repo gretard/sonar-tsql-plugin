@@ -28,7 +28,7 @@ public class CustomChecksTest {
 	public void testExecRule() {
 		Rule r = Antlr4Utils.getExecRule();
 		String s = "EXEC ('SELECT 1');";
-		// Antlr4Utils.print(Antlr4Utils.get(s), 0);
+		 Antlr4Utils.print(Antlr4Utils.get(s), 0);
 		TsqlIssue[] issues = Antlr4Utils.verify2(r, s);
 		Assert.assertEquals(1, issues.length);
 
