@@ -66,7 +66,7 @@ public class AntlrMeasurer implements IAntlrSensor {
 				comments++;
 			}
 		}
-		final int complexity = new XXX().visit(antrlFile.getRoot());
+		final int complexity = new ComplexityVisitor().visit(antrlFile.getRoot());
 		synchronized (context) {
 			
 			try {
