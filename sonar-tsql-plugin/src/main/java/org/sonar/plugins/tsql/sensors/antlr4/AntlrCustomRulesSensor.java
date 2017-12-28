@@ -1,6 +1,5 @@
 package org.sonar.plugins.tsql.sensors.antlr4;
 
-import org.antlr.tsql.TSqlParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -17,18 +16,21 @@ public class AntlrCustomRulesSensor implements IAntlrFiller {
 	private final IIssuesFiller filler = new DefaultIssuesFiller();
 	private final CustomIssuesProvider provider;
 
+	private final CandidateRule[] rules;
+
 	public AntlrCustomRulesSensor(CandidateRule[] rules) {
+		this.rules = rules;
 		this.provider = new CustomIssuesProvider(rules);
 	}
 
 	@Override
 	public void fill(final SensorContext context, final FillerRequest antrlFile) {
 		final InputFile file = antrlFile.getFile();
-		if (file == null) {
+		if (file == null || rules.length == 0) {
 			return;
 		}
 		try {
-			
+
 			final ParseTree root = antrlFile.getRoot();
 			final TsqlIssue[] finalIssues = provider.getIssues(antrlFile.getStream(), root);
 
