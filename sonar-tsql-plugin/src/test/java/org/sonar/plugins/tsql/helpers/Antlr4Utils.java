@@ -57,9 +57,9 @@ import org.sonar.plugins.tsql.checks.custom.RuleMode;
 import org.sonar.plugins.tsql.checks.custom.RuleResultType;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.checks.custom.TextCheckType;
-import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
-import org.sonar.plugins.tsql.sensors.antlr4.RulesHelper;
+import org.sonar.plugins.tsql.sensors.antlr4.PluginHelper;
 import org.sonar.plugins.tsql.sensors.custom.CustomIssuesProvider;
 import org.sonar.plugins.tsql.sensors.custom.FoundViolationsAnalyzer;
 import org.sonar.plugins.tsql.sensors.custom.NodesMatchingRulesProvider;
@@ -127,7 +127,7 @@ public class Antlr4Utils {
 		customRules.setRepoKey("test");
 		customRules.setRepoName("test");
 		customRules.getRule().add(rule);
-		final CustomIssuesProvider provider = new CustomIssuesProvider(RulesHelper.convert(customRules));
+		final CustomIssuesProvider provider = new CustomIssuesProvider(PluginHelper.convert(customRules));
 		TsqlIssue[] issues = provider.getIssues(stream, root);
 		return issues;
 	}
@@ -309,7 +309,7 @@ public class Antlr4Utils {
 	}
 
 	public static SqlRules[] read(String path) {
-		CustomRulesProvider provider = new CustomRulesProvider();
+		CustomUserChecksProvider provider = new CustomUserChecksProvider();
 		return provider.getRules(null, "", path).values().toArray(new SqlRules[0]);
 	}
 

@@ -17,13 +17,13 @@ import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksProvider;
 
 public final class TSQLQualityProfile extends ProfileDefinition {
 
 	private static final Logger LOGGER = Loggers.get(TSQLQualityProfile.class);
 	private final Settings settings;
-	private final CustomRulesProvider customRulesProvider = new CustomRulesProvider();
+	private final CustomUserChecksProvider customRulesProvider = new CustomUserChecksProvider();
 
 	public TSQLQualityProfile(Settings settings) {
 		this.settings = settings;

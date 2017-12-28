@@ -15,14 +15,14 @@ import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
-public class CustomRulesDefinition implements RulesDefinition {
+public class CustomUserChecksRulesDefinition implements RulesDefinition {
 
 	private final Settings settings;
-	private final CustomRulesProvider provider = new CustomRulesProvider();
+	private final CustomUserChecksProvider provider = new CustomUserChecksProvider();
 
-	private static final Logger LOGGER = Loggers.get(CustomRulesDefinition.class);
+	private static final Logger LOGGER = Loggers.get(CustomUserChecksRulesDefinition.class);
 
-	public CustomRulesDefinition(Settings settings) {
+	public CustomUserChecksRulesDefinition(Settings settings) {
 		this.settings = settings;
 	}
 
@@ -30,7 +30,7 @@ public class CustomRulesDefinition implements RulesDefinition {
 		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
 		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
 		final Map<String, SqlRules> rules = provider.getRules(null, rulesPrefix, paths);
-
+		
 		for (final String key : rules.keySet()) {
 
 			final SqlRules type = rules.get(key);

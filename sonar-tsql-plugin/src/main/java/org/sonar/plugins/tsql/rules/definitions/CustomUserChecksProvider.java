@@ -19,8 +19,8 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 
-public class CustomRulesProvider {
-	private static final Logger LOGGER = Loggers.get(CustomRulesProvider.class);
+public class CustomUserChecksProvider {
+	private static final Logger LOGGER = Loggers.get(CustomUserChecksProvider.class);
 
 	public Map<String, SqlRules> getRules(final String baseDir, final String prefix, final String... paths) {
 
@@ -59,9 +59,10 @@ public class CustomRulesProvider {
 				final InputStream file = new FileInputStream(path);
 				final JAXBContext jaxbContext = JAXBContext.newInstance(SqlRules.class);
 				final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-				rulesRepositories.put(path, (SqlRules) jaxbUnmarshaller.unmarshal(file));
+				final SqlRules rules = (SqlRules) jaxbUnmarshaller.unmarshal(file);
+				rulesRepositories.put(path, rules);
 				file.close();
-				LOGGER.info("Read rules ok at: " + path);
+				LOGGER.info(String.format("Read %s rules ok at: %s", rules.getRule().size(), path));
 			} catch (final FileNotFoundException e) {
 				LOGGER.info("Custom rule file not found at: " + path);
 			} catch (final JAXBException e) {

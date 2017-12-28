@@ -11,7 +11,7 @@ import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
 import org.sonar.plugins.tsql.checks.custom.RuleMode;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.sensors.antlr4.CandidateRule;
-import org.sonar.plugins.tsql.sensors.antlr4.RulesHelper;
+import org.sonar.plugins.tsql.sensors.antlr4.PluginHelper;
 import org.sonar.plugins.tsql.sensors.custom.matchers.IMatcher;
 import org.sonar.plugins.tsql.sensors.custom.matchers.NodeNameAndOrClassMatcher;
 
@@ -24,7 +24,7 @@ public class CandidateNodesProvider extends AbstractParseTreeVisitor {
 	private final CandidateRule[] rules;
 
 	public CandidateNodesProvider(final SqlRules... rules) {
-		this(new NodeNameAndOrClassMatcher(), RulesHelper.convert(rules));
+		this(new NodeNameAndOrClassMatcher(), PluginHelper.convert(rules));
 	}
 
 	public CandidateNodesProvider(final CandidateRule... rules) {

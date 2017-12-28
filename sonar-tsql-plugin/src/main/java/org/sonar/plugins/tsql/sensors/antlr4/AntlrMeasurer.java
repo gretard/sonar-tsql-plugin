@@ -4,29 +4,27 @@ import static java.lang.String.format;
 
 import org.antlr.tsql.TSqlParser;
 import org.antlr.v4.runtime.Token;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-public class AntlrMeasurer implements IAntlrSensor {
+public class AntlrMeasurer implements IAntlrFiller {
 	private static final Logger LOGGER = Loggers.get(AntlrMeasurer.class);
 	boolean debugEnabled = LOGGER.isDebugEnabled();
 
 	@Override
-	public void work(SensorContext context, AntrlFile antrlFile) {
+	public void fill(SensorContext context, FillerRequest antrlFile) {
 
-		InputFile file = antrlFile.getFile();
+		final InputFile file = antrlFile.getFile();
 		final int[] total = new int[antrlFile.getLines().length];
 		final Token[] alltokens = antrlFile.getTokens();
 
 		for (final Token token : alltokens) {
 			int startLine = token.getLine();
 			int[] endLines = antrlFile.getLineAndColumn(token.getStopIndex());
-			if (endLines == null || token.getStartIndex() >= token.getStopIndex()
-					|| StringUtils.isEmpty(token.getText())) {
+			if (endLines == null || token.getStartIndex() >= token.getStopIndex()) {
 				continue;
 			}
 			if (token.getType() == TSqlParser.EOF || token.getType() == TSqlParser.COMMENT
@@ -41,8 +39,8 @@ public class AntlrMeasurer implements IAntlrSensor {
 		for (final Token token : alltokens) {
 			int startLine = token.getLine();
 			int[] endLines = antrlFile.getLineAndColumn(token.getStopIndex());
-			if (token.getType() == TSqlParser.EOF || endLines == null || token.getStartIndex() >= token.getStopIndex()
-					|| StringUtils.isEmpty(token.getText())) {
+			if (token.getType() == TSqlParser.EOF || endLines == null
+					|| token.getStartIndex() >= token.getStopIndex()) {
 				continue;
 			}
 			if (token.getType() == TSqlParser.COMMENT || token.getType() == TSqlParser.LINE_COMMENT) {
@@ -68,8 +66,9 @@ public class AntlrMeasurer implements IAntlrSensor {
 		}
 		final int complexity = new ComplexityVisitor().visit(antrlFile.getRoot());
 		synchronized (context) {
-			
+
 			try {
+
 				context.<Integer>newMeasure().on(file).forMetric(CoreMetrics.NCLOC).withValue(locs).save();
 			} catch (final Throwable e) {
 				LOGGER.warn(format("Unexpected adding nloc measures on file %s", file.absolutePath()), e);

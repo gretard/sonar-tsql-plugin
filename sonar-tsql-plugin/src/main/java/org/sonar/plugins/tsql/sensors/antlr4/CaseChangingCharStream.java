@@ -5,10 +5,10 @@ import org.antlr.v4.runtime.misc.Interval;
 
 public class CaseChangingCharStream implements CharStream {
 
-	final CharStream stream;
-	final boolean upper;
+	private final CharStream stream;
+	private final boolean upper;
 
-	public CaseChangingCharStream(CharStream stream, boolean upper) {
+	public CaseChangingCharStream(final CharStream stream, final boolean upper) {
 		this.stream = stream;
 		this.upper = upper;
 	}

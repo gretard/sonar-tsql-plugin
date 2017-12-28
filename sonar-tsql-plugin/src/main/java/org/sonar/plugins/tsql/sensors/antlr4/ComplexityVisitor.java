@@ -11,7 +11,7 @@ import org.antlr.tsql.TSqlParserBaseVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /***
- * Calculates  complexity. Based on
+ * Calculates complexity. Based on
  * https://stackoverflow.com/questions/3353634/measuring-the-complexity-of-sql-statements
  */
 public class ComplexityVisitor extends TSqlParserBaseVisitor<Integer> {
@@ -26,7 +26,7 @@ public class ComplexityVisitor extends TSqlParserBaseVisitor<Integer> {
 			final ParseTree c = tree.getChild(i);
 			s += visit(c);
 		}
-		Class classz = tree.getClass();
+		final Class<? extends ParseTree> classz = tree.getClass();
 		if (Sql_unionContext.class.equals(classz)) {
 			s++;
 		}

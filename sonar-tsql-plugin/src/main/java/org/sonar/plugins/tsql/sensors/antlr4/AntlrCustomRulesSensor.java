@@ -11,7 +11,7 @@ import org.sonar.plugins.tsql.rules.issues.IIssuesFiller;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 import org.sonar.plugins.tsql.sensors.custom.CustomIssuesProvider;
 
-public class AntlrCustomRulesSensor implements IAntlrSensor {
+public class AntlrCustomRulesSensor implements IAntlrFiller {
 	private static final Logger LOGGER = Loggers.get(AntlrCustomRulesSensor.class);
 
 	private final IIssuesFiller filler = new DefaultIssuesFiller();
@@ -22,7 +22,7 @@ public class AntlrCustomRulesSensor implements IAntlrSensor {
 	}
 
 	@Override
-	public void work(final SensorContext context, final AntrlFile antrlFile) {
+	public void fill(final SensorContext context, final FillerRequest antrlFile) {
 		final InputFile file = antrlFile.getFile();
 		if (file == null) {
 			return;

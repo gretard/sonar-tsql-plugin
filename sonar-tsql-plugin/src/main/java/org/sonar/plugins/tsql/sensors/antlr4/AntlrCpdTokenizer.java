@@ -16,11 +16,11 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 
-public class AntlrCpdTokenizer implements IAntlrSensor {
+public class AntlrCpdTokenizer implements IAntlrFiller {
 	private static final Logger LOGGER = Loggers.get(AntlrCpdTokenizer.class);
 
 	@Override
-	public void work(final SensorContext context, final AntrlFile antrlFile) {
+	public void fill(final SensorContext context, final FillerRequest antrlFile) {
 
 		final boolean skipCpdAnalysis = context.settings().getBoolean(Constants.PLUGIN_SKIP_CPD);
 		final InputFile file = antrlFile.getFile();

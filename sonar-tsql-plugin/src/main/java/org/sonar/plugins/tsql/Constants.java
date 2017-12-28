@@ -15,7 +15,7 @@ public final class Constants {
 
 	public static final String PLUGIN_SKIP_CPD = "sonar.tsql.skip.cpd";
 
-	public static final String PLUGIN_CPD_TIMEOUT = "sonar.tsql.timeout.cpd";
+	public static final String PLUGIN_ANALYSIS_TIMEOUT = "sonar.tsql.timeout.analysis";
 
 	
 	public static final String PLUGIN_SUFFIXES = "sonar.tsql.file.suffixes";

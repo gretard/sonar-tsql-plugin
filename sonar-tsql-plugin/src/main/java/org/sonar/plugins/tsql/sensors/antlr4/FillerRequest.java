@@ -1,13 +1,12 @@
 package org.sonar.plugins.tsql.sensors.antlr4;
 
-import org.antlr.tsql.TSqlParser;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.tsql.sensors.antlr4.LinesProvider.SourceLine;
+import org.sonar.plugins.tsql.sensors.custom.lines.SourceLine;
 
-public class AntrlFile {
+public class FillerRequest {
 	public InputFile getFile() {
 		return file;
 	}
@@ -27,7 +26,7 @@ public class AntrlFile {
 	public int[] getLineAndColumn(int global) {
 
 		for (SourceLine line : this.lines) {
-			if (line.getEnd() >= global) {
+			if (line.getEnd() > global) {
 
 				return new int[] { line.getLine(), global - line.getStart() };
 			}
@@ -44,7 +43,7 @@ public class AntrlFile {
 		return root;
 	}
 
-	public AntrlFile(InputFile file, CommonTokenStream stream,  ParseTree root, SourceLine[] lines) {
+	public FillerRequest(InputFile file, CommonTokenStream stream, ParseTree root, SourceLine[] lines) {
 		this.file = file;
 		this.stream = stream;
 		this.root = root;

@@ -38,7 +38,7 @@ import org.sonar.plugins.tsql.checks.custom.RuleResultType;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 
-public class CustomPluginRulesProvider {
+public class CustomPluginChecksProvider {
 
 	public SqlRules getRules() {
 
