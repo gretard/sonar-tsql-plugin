@@ -5,7 +5,7 @@
   <groupId>org.sonar.plugins.tsql</groupId>
   <artifactId>sonar-tsql-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>0.6.2</version>
+  <version>0.7.0</version>
 
   <name>TSQL Plugin for SonarQube</name>
   <description>TSQL plugin for SonarQube</description>

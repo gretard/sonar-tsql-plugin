@@ -7,10 +7,11 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
 import org.sonar.plugins.tsql.checks.custom.RuleMode;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
+import org.sonar.plugins.tsql.sensors.antlr4.CandidateRule;
+import org.sonar.plugins.tsql.sensors.antlr4.PluginHelper;
 import org.sonar.plugins.tsql.sensors.custom.matchers.IMatcher;
 import org.sonar.plugins.tsql.sensors.custom.matchers.NodeNameAndOrClassMatcher;
 
@@ -20,13 +21,17 @@ public class CandidateNodesProvider extends AbstractParseTreeVisitor {
 	private final Map<String, CandidateNode> groupedNodes = new HashMap<>();
 	private final List<CandidateNode> singleNodes = new LinkedList<>();
 	private final IMatcher matcher;
-	private final SqlRules[] rules;
+	private final CandidateRule[] rules;
 
 	public CandidateNodesProvider(final SqlRules... rules) {
+		this(new NodeNameAndOrClassMatcher(), PluginHelper.convert(rules));
+	}
+
+	public CandidateNodesProvider(final CandidateRule... rules) {
 		this(new NodeNameAndOrClassMatcher(), rules);
 	}
 
-	public CandidateNodesProvider(final IMatcher matcher, final SqlRules... rules) {
+	public CandidateNodesProvider(final IMatcher matcher, final CandidateRule... rules) {
 		this.rules = rules;
 		this.matcher = matcher;
 	}
@@ -45,24 +50,24 @@ public class CandidateNodesProvider extends AbstractParseTreeVisitor {
 			final ParseTree c = tree.getChild(i);
 			visit(c);
 		}
+		final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode(tree);
 
-		for (final SqlRules rule : this.rules) {
-			for (final Rule r : rule.getRule()) {
-				final RuleImplementation ruleImplemention = r.getRuleImplementation();
-				final ParsedNode parsedNode = new org.sonar.plugins.tsql.sensors.custom.nodes.ParsedNode(tree);
-				if (matcher.match(ruleImplemention, parsedNode)) {
-					final CandidateNode node = new CandidateNode(rule.getRepoKey(), r, parsedNode);
-					if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
-						final String name = tree.getText();
-						groupedNodes.putIfAbsent(name, node);
-					} else {
-						singleNodes.add(node);
-					}
+		for (final CandidateRule rule : this.rules) {
+
+			final RuleImplementation ruleImplemention = rule.getRuleImplementation();
+			if (matcher.match(ruleImplemention, parsedNode)) {
+				final CandidateNode node = new CandidateNode(rule.getKey(), rule.getRule(), parsedNode);
+				if (ruleImplemention.getRuleMode() == RuleMode.GROUP) {
+					final String name = tree.getText();
+					groupedNodes.putIfAbsent(name, node);
+				} else {
+					singleNodes.add(node);
 				}
 			}
+
 		}
 
-		return tree.accept(this);
+		return null; // tree.accept(this);
 	}
 
 	public CandidateNode[] getNodes(final ParseTree node) {

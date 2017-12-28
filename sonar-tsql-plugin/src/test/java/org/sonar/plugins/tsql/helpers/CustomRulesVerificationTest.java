@@ -6,16 +6,16 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomRulesVerificationTest {
 
 	@Test
 	public void test() {
-		SqlRules rules = Antlr4Utils.getCustomMainRules();
-		for (Rule r : rules.getRule())
-		// Rule r = Antlr4Utils.getSelectAllRule();
-		{
+		CustomPluginChecksProvider provider = new CustomPluginChecksProvider();
+		SqlRules rules = provider.getRules();
+		for (Rule r : rules.getRule()) {
 			List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
 
 			for (String s : compliant) {

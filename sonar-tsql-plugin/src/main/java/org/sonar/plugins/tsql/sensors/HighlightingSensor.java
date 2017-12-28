@@ -2,14 +2,12 @@ package org.sonar.plugins.tsql.sensors;
 
 import static java.lang.String.format;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
-import org.antlr.tsql.TSqlLexer;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -17,23 +15,27 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginRulesProvider;
-import org.sonar.plugins.tsql.rules.definitions.CustomRulesProvider;
-import org.sonar.plugins.tsql.sensors.antlr4.AntlrCpdTokenizer;
+import org.sonar.plugins.tsql.rules.definitions.CustomAllChecksProvider;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrCustomRulesSensor;
 import org.sonar.plugins.tsql.sensors.antlr4.AntlrHighlighter;
-import org.sonar.plugins.tsql.sensors.antlr4.IAntlrSensor;
+import org.sonar.plugins.tsql.sensors.antlr4.AntlrMeasurer;
+import org.sonar.plugins.tsql.sensors.antlr4.CandidateRule;
+import org.sonar.plugins.tsql.sensors.antlr4.FillerRequest;
+import org.sonar.plugins.tsql.sensors.antlr4.IAntlrFiller;
+import org.sonar.plugins.tsql.sensors.antlr4.PluginHelper;
+import org.sonar.plugins.tsql.sensors.custom.lines.SourceLinesProvider;
 
 public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 	private static final Logger LOGGER = Loggers.get(HighlightingSensor.class);
 	protected final Settings settings;
-	private final CustomRulesProvider provider = new CustomRulesProvider();
+	private final SourceLinesProvider linesProvider = new SourceLinesProvider();
+	private final CustomAllChecksProvider checksProvider;
 
 	public HighlightingSensor(final Settings settings) {
 		this.settings = settings;
+		this.checksProvider = new CustomAllChecksProvider(settings);
 	}
 
 	@Override
@@ -49,53 +51,58 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 			LOGGER.debug("Skipping plugin as skip flag is set");
 			return;
 		}
-		final boolean skipCustomRules = this.settings.getBoolean(Constants.PLUGIN_SKIP_CUSTOM_RULES);
 
-		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
-		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
-		final List<SqlRules> rules = new ArrayList<>();
-		if (!skipCustomRules) {
-			final SqlRules customRules = new CustomPluginRulesProvider().getRules();
-			if (customRules != null) {
-				rules.add(customRules);
-			}
-		}
-
-		rules.addAll(provider.getRules(context.fileSystem().baseDir().getAbsolutePath(), rulesPrefix, paths).values());
-		LOGGER.info(String.format("Total %s custom rules repositories", rules.size()));
-		SqlRules[] finalRules = rules.toArray(new SqlRules[0]);
-		final IAntlrSensor[] sensors = new IAntlrSensor[] { new AntlrCpdTokenizer(), new AntlrHighlighter(),
-				new AntlrCustomRulesSensor(finalRules) };
-
+		final int timeout = settings.getInt(Constants.PLUGIN_ANALYSIS_TIMEOUT);
 		final FileSystem fs = context.fileSystem();
+		final Charset encoding = context.fileSystem().encoding();
+
+		final CandidateRule[] candidateRules = checksProvider.getChecks(fs.baseDir().getAbsolutePath());
+		final IAntlrFiller[] sensors = new IAntlrFiller[] { new AntlrHighlighter(),
+				new AntlrCustomRulesSensor(candidateRules), new AntlrMeasurer() };
+
 		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));
+		final ExecutorService executorService = Executors.newWorkStealingPool();
 
-		for (final InputFile file : files) {
-			try {
-				@SuppressWarnings("deprecation")
-				final CharStream charStream = CharStreams
-						.fromString(FileUtils.readFileToString(file.file()).toUpperCase());
+		files.forEach(new Consumer<InputFile>() {
 
-				final TSqlLexer lexer = new TSqlLexer(charStream);
+			@Override
+			public void accept(final InputFile file) {
+				executorService.execute(new Runnable() {
 
-				if (!LOGGER.isDebugEnabled()) {
-					lexer.removeErrorListeners();
-				}
+					@Override
+					public void run() {
+						try {
 
-				final CommonTokenStream stream = new CommonTokenStream(lexer);
+							final FillerRequest fillerRequest = PluginHelper.createRequest(linesProvider, file,
+									encoding);
 
-				stream.fill();
+							for (final IAntlrFiller sensor : sensors) {
 
-				for (final IAntlrSensor sensor : sensors) {
-					sensor.work(context, stream, file);
-				}
+								sensor.fill(context, fillerRequest);
 
-				LOGGER.info(String.format("Finished working on %s file", file.absolutePath()));
+							}
 
-			} catch (final Throwable e) {
-				LOGGER.warn(format("Unexpected error parsing file %s", file.absolutePath()), e);
+						} catch (final Throwable e) {
+							LOGGER.warn(format("Unexpected error parsing file %s", file.absolutePath()), e);
+						}
+
+					}
+
+				});
+
 			}
+
+		});
+
+		try {
+			executorService.shutdown();
+			executorService.awaitTermination(timeout == 0 ? 3600 : timeout, TimeUnit.SECONDS);
+			executorService.shutdownNow();
+		} catch (final InterruptedException e) {
+			LOGGER.warn("Unexpected error while running waiting for executor service to finish", e);
+
 		}
+
 	}
 
 	@Override
