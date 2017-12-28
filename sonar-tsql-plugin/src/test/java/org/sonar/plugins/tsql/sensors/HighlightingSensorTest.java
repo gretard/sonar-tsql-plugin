@@ -18,7 +18,7 @@ import org.sonar.api.utils.internal.JUnitTempFolder;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
-@Ignore
+
 public class HighlightingSensorTest {
 
 	@Rule
@@ -60,7 +60,7 @@ public class HighlightingSensorTest {
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 0, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 2, 0).size());
 		Assert.assertEquals(0, ctxTester.highlightingTypeAt("test:test.sql", 5, 0).size());
-		Assert.assertEquals(15, ctxTester.cpdTokens("test:test.sql").size());
+		Assert.assertEquals(16, ctxTester.cpdTokens("test:test.sql").size());
 
 	}
 

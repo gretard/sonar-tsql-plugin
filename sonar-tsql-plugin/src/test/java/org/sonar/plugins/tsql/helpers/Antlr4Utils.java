@@ -70,6 +70,7 @@ import org.sonar.plugins.tsql.sensors.custom.nodes.IParsedNode;
 import org.sonar.plugins.tsql.sensors.custom.nodes.NodeUsesProvider;
 
 public class Antlr4Utils {
+	
 	public static ParseTree get(String text) {
 		return getFull(text).getTree();
 	}
@@ -262,7 +263,6 @@ public class Antlr4Utils {
 	}
 
 	public static String ruleImplToString(Rule r) {
-		System.out.println(r.getKey());
 		String xmlString = "";
 		List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
 		List<String> violating = r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample();

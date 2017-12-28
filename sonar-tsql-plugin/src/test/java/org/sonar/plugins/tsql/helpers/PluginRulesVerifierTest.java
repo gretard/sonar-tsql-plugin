@@ -1,10 +1,13 @@
 package org.sonar.plugins.tsql.helpers;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -14,21 +17,17 @@ import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.sensors.HighlightingSensor;
 
-public class PluginRulesVerifier {
+public class PluginRulesVerifierTest {
 
-	public static void main(String[] args) throws Exception {
-		if (args.length != 1) {
-			return;
-		}
+	@Test
+	public void run() throws IOException {
 		TemporaryFolder folder = new TemporaryFolder();
 		folder.create();
 		Settings settings = new Settings();
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
-		String dirPath = args[0];
+		String dirPath = "..\\grammars\\tsql";
 		File dir = new File(dirPath);
-		System.out.println("checking dir: " + dir.getAbsolutePath());
 		Collection<File> files = FileUtils.listFiles(dir, new String[] { "sql" }, true);
-		System.out.println("Found " + files.size());
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
 		for (File f : files) {
 			String tempName = f.getName() + System.nanoTime();
@@ -41,15 +40,11 @@ public class PluginRulesVerifier {
 			ctxTester.fileSystem().add(file1);
 
 		}
-		System.gc();
-		System.gc();
-		long start = System.nanoTime();
 		HighlightingSensor sensor = new HighlightingSensor(settings);
 		sensor.execute(ctxTester);
-		long end = System.nanoTime();
-		long took = end - start;
 		Collection<Issue> issues = ctxTester.allIssues();
-		System.out.println(files.size() + " " + issues.size() + " " + took);
+		// System.out.println(files.size() + " " + issues.size() + " " + took);
+		Assert.assertEquals(97, issues.size());
 
 	}
 
