@@ -19,7 +19,6 @@ public class AntlrHighlighter implements IAntlrFiller {
 
 	private static final Logger LOGGER = Loggers.get(AntlrHighlighter.class);
 	private final IKeywordsProvider keywordsProvider = new KeywordsProvider();
-	private final boolean debugEnabled = LOGGER.isDebugEnabled();
 
 	@Override
 	public void fill(final SensorContext context, final FillerRequest antrlFile) {
@@ -53,7 +52,7 @@ public class AntlrHighlighter implements IAntlrFiller {
 				addCpdToken(cpdTokens, file, token, range);
 
 			} catch (final Throwable e) {
-				if (debugEnabled) {
+				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug(
 							format("Unexpected error creating text range on file %s for token %s on (%s, %s) -  (%s, %s)",
 									file.absolutePath(), token.getText(), startLine, startLineOffset, endLine,
@@ -83,7 +82,10 @@ public class AntlrHighlighter implements IAntlrFiller {
 		try {
 			cpdTokens.addToken(range, token.getText());
 		} catch (Throwable e) {
-			LOGGER.warn(format("Unexpected error adding cpd tokens on file %s", file.absolutePath()), e);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.warn(format("Unexpected error adding cpd tokens on file %s", file.absolutePath()), e);
+
+			}
 
 		}
 	}
@@ -103,8 +105,9 @@ public class AntlrHighlighter implements IAntlrFiller {
 				newHighlightning.highlight(range, TypeOfText.KEYWORD);
 			}
 		} catch (final Throwable e) {
-			LOGGER.warn(format("Unexpected error adding highlighting on file %s", file.absolutePath()), e);
-
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.warn(format("Unexpected error adding highlighting on file %s", file.absolutePath()), e);
+			}
 		}
 	}
 
