@@ -17,6 +17,8 @@ import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.checks.custom.SqlRules;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksProvider;
 import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksProvider;
 
 public final class TSQLQualityProfile extends ProfileDefinition {
@@ -35,8 +37,7 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 		final RulesProfile profile = RulesProfile.create(Constants.PROFILE_NAME, TSQLLanguage.KEY);
 		activeRules(profile, Constants.CG_REPO_KEY, Constants.CG_RULES_FILE);
 		activeRules(profile, Constants.MS_REPO_KEY, Constants.MS_RULES_FILE);
-		activeRules(profile, Constants.PLUGIN_REPO_KEY, Constants.PLUGIN_RULES_FILE);
-
+		activePluginRules(profile);
 		final String[] paths = settings.getStringArray(Constants.PLUGIN_CUSTOM_RULES_PATH);
 		final String rulesPrefix = settings.getString(Constants.PLUGIN_CUSTOM_RULES_PREFIX);
 		final Map<String, org.sonar.plugins.tsql.checks.custom.SqlRules> rules = customRulesProvider.getRules(null,
@@ -49,9 +50,9 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 				activeRules(profile, set.getRepoKey(), st);
 				st.close();
 			} catch (final FileNotFoundException e) {
-				LOGGER.info("File was not found at " + key);
+				LOGGER.warn("Custom rules file was not found at " + key);
 			} catch (IOException e) {
-				LOGGER.info("Error occured reading file at " + key);
+				LOGGER.warn("Error occured reading custom rules file at " + key);
 			}
 
 		}
@@ -76,6 +77,19 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 
 		catch (final Throwable e) {
 			LOGGER.warn("Unexpected error occured while reading rules for " + key, e);
+		}
+	}
+
+	private void activePluginRules(final RulesProfile profile) {
+		try {
+			final SqlRules rules = new CustomPluginChecksProvider().getRules();
+			for (final org.sonar.plugins.tsql.checks.custom.Rule rule : rules.getRule()) {
+				profile.activateRule(Rule.create(rules.getRepoKey(), rule.getKey()), null);
+			}
+		}
+
+		catch (final Throwable e) {
+			LOGGER.warn("Unexpected error occured while activating custom plugin rules", e);
 		}
 	}
 }

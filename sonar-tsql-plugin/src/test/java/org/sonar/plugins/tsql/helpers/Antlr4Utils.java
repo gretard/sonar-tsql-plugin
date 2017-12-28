@@ -215,52 +215,7 @@ public class Antlr4Utils {
 		return getFromStream(charStream);
 	}
 
-	public static String ruleToString(SqlRules customRules) {
 
-		for (Rule r : customRules.getRule()) {
-			List<String> compliant = r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample();
-			List<String> violating = r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample();
-			if (compliant.isEmpty() && violating.isEmpty()) {
-				continue;
-			}
-			StringBuilder sb = new StringBuilder();
-			sb.append(r.getDescription());
-			sb.append("<h2>Code examples</h2>");
-			if (!violating.isEmpty()) {
-				sb.append("<h3>Non-compliant</h3>");
-				for (String x : violating) {
-					sb.append("<pre><code>" + x + "</code></pre>");
-				}
-			}
-
-			if (!compliant.isEmpty()) {
-				sb.append("<h3>Compliant</h3>");
-				for (String x : compliant) {
-					sb.append("<pre><code>" + x + "</code></pre>");
-				}
-			}
-			if (r.getSource() != null && !r.getSource().isEmpty()) {
-				sb.append("<h4>Source</h4>");
-				sb.append(String.format("<a href='%s'>%s</a>", r.getSource(), r.getSource()));
-			}
-			r.setDescription(sb.toString());
-
-		}
-		String xmlString = "";
-		try {
-			JAXBContext context = JAXBContext.newInstance(SqlRules.class);
-			Marshaller m = context.createMarshaller();
-			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To
-			StringWriter sw = new StringWriter();
-			m.marshal(customRules, sw);
-			xmlString = sw.toString();
-
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-
-		return xmlString;
-	}
 
 	public static String ruleImplToString(Rule r) {
 		String xmlString = "";
