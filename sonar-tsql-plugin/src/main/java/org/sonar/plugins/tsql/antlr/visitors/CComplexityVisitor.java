@@ -10,10 +10,15 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.sensors.antlr4.FillerRequest;
+import org.sonar.plugins.tsql.antlr.FillerRequest;
 
 public class CComplexityVisitor implements IParseTreeItemVisitor {
 	int complexity = 1;
+	
+	public int getMeasure() {
+		return complexity;
+	}
+
 	private static final Logger LOGGER = Loggers.get(CComplexityVisitor.class);
 
 	@Override

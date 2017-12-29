@@ -12,9 +12,9 @@ import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.tsql.antlr.FillerRequest;
 import org.sonar.plugins.tsql.languages.keywords.IKeywordsProvider;
 import org.sonar.plugins.tsql.languages.keywords.KeywordsProvider;
-import org.sonar.plugins.tsql.sensors.antlr4.FillerRequest;
 
 public class AntlrHighlighter implements ISensorFiller {
 
@@ -107,7 +107,7 @@ public class AntlrHighlighter implements ISensorFiller {
 			}
 		} catch (final Throwable e) {
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.warn(format("Unexpected error adding highlighting on file %s", file.absolutePath()), e);
+				LOGGER.debug(format("Unexpected error adding highlighting on file %s", file.absolutePath()), e);
 			}
 		}
 	}

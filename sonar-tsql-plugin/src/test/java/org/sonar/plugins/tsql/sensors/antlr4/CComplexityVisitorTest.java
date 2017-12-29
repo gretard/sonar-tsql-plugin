@@ -4,13 +4,15 @@ import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sonar.plugins.tsql.helpers.Antlr4Utils;
-import org.sonar.plugins.tsql.helpers.AntrlResult;
+import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.visitors.CComplexityVisitor;
+import org.sonar.plugins.tsql.antlr.visitors.CustomTreeVisitor;
+import org.sonar.plugins.tsql.helpers.AntlrUtils;
 
 public class CComplexityVisitorTest {
 
 	@Test
-	public void testComplex() throws IOException {
+	public void testIf() throws IOException {
 		String s = "IF DATENAME(weekday, GETDATE()) IN (N'Saturday', N'Sunday')       SELECT 'Weekend'; ELSE  "
 				+ "  SELECT 'Weekday';";
 		int result = calculate(s);
@@ -24,10 +26,11 @@ public class CComplexityVisitorTest {
 		int result = calculate(s);
 		Assert.assertEquals(3, result);
 	}
+
 	@Test
-	public void testSelect() throws IOException {
+	public void testSelectWithWhere() throws IOException {
 		String s = "SELECT      * from [dbo].[test] where a > 0 or b < 0 and x > 5;";
-			
+
 		int result = calculate(s);
 		Assert.assertEquals(4, result);
 	}
@@ -61,12 +64,13 @@ public class CComplexityVisitorTest {
 	}
 
 	private int calculate(String s) {
-		AntrlResult result = Antlr4Utils.getFull(s);
-		CComplexityVisitor cc = new CComplexityVisitor();
-		cc.visit(result.getTree());
-		int r = cc.getComplexity();
-		 Antlr4Utils.print(result.getTree(), 0);
-		return r;
+		FillerRequest result = AntlrUtils.getRequest(s);
+		CComplexityVisitor vv = new CComplexityVisitor();
+		CustomTreeVisitor visitor = new CustomTreeVisitor(vv);
+		visitor.visit(result.getRoot());
+	//	AntlrUtils.print(result.getRoot(), 0, result.getStream());
+		return vv.getMeasure();
+
 	}
 
 }

@@ -7,9 +7,9 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.antlr.CandidateRule;
+import org.sonar.plugins.tsql.antlr.PluginHelper;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
-import org.sonar.plugins.tsql.sensors.antlr4.CandidateRule;
-import org.sonar.plugins.tsql.sensors.antlr4.PluginHelper;
 
 public class CustomAllChecksProvider {
 

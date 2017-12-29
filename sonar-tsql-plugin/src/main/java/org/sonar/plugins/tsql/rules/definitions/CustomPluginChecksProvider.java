@@ -21,6 +21,7 @@ import org.antlr.tsql.TSqlParser.Query_expressionContext;
 import org.antlr.tsql.TSqlParser.SCALAR_FUNCTIONContext;
 import org.antlr.tsql.TSqlParser.Search_conditionContext;
 import org.antlr.tsql.TSqlParser.Select_list_elemContext;
+import org.antlr.tsql.TSqlParser.Select_statementContext;
 import org.antlr.tsql.TSqlParser.Set_statementContext;
 import org.antlr.tsql.TSqlParser.Simple_idContext;
 import org.antlr.tsql.TSqlParser.Table_constraintContext;
@@ -49,6 +50,34 @@ public class CustomPluginChecksProvider {
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(),
 				getOrderByRule(), getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule()));
 		return customRules;
+	}
+
+	public static Rule getSemicolonRule() {
+		Rule r = new Rule();
+		r.setKey("Example1");
+		r.setInternalKey("Example1");
+		r.setDescription("Select statement should end with semicolon");
+		r.setName("Select statement should end with semicolon");
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(Select_statementContext.class.getSimpleName());
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		r.setRuleImplementation(rImpl);
+		RuleImplementation child = new RuleImplementation();
+		child.setDistance(1);
+		child.setIndex(-1);
+		child.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.setIndexCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.getTextToFind().getTextItem().add(";");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		child.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		child.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT * from dbo.test where name like '%test%';");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT * from dbo.test where name like '%test%'");
+		return r;
 	}
 
 	public static Rule getWaitForRule() {

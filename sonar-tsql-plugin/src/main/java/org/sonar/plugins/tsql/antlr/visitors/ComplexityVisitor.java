@@ -12,15 +12,19 @@ import org.antlr.tsql.TSqlParser.Sql_unionContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.metrics.TSQLMetrics;
-import org.sonar.plugins.tsql.sensors.antlr4.FillerRequest;
+import org.sonar.plugins.tsql.antlr.FillerRequest;
 
 public class ComplexityVisitor implements IParseTreeItemVisitor, ISensorFiller {
 	int complexity = 0;
 
 	private static final Logger LOGGER = Loggers.get(ComplexityVisitor.class);
+
+	public int getMeasure() {
+		return complexity;
+	}
 
 	@Override
 	public void visit(final ParseTree tree) {
@@ -54,10 +58,10 @@ public class ComplexityVisitor implements IParseTreeItemVisitor, ISensorFiller {
 		final InputFile file = fillerRequest.getFile();
 		synchronized (sensorContext) {
 			try {
-				sensorContext.<Integer>newMeasure().on(file).forMetric(TSQLMetrics.CODE_COMPLEXITY)
+				sensorContext.<Integer>newMeasure().on(file).forMetric(CoreMetrics.COGNITIVE_COMPLEXITY)
 						.withValue(complexity).save();
 			} catch (final Throwable e) {
-				LOGGER.warn(format("Unexpected adding cyclomatic complexity measures on file %s", file.absolutePath()),
+				LOGGER.warn(format("Unexpected adding cognitive complexity measures on file %s", file.absolutePath()),
 						e);
 			}
 		}

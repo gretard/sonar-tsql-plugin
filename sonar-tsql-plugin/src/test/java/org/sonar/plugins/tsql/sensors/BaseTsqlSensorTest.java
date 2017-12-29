@@ -8,8 +8,11 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 import org.sonar.api.utils.internal.JUnitTempFolder;
 import org.sonar.plugins.tsql.rules.issues.IIssuesProvider;
@@ -32,8 +35,9 @@ public class BaseTsqlSensorTest {
 
 		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
 
-		DefaultInputFile ti = new DefaultInputFile("test", "test.sql");
-		ti.initMetadata(new String(Files.readAllBytes(baseFile.toPath())));
+		InputFile ti = new TestInputFileBuilder("test", "test.sql")
+				.initMetadata(new String(Files.readAllBytes(baseFile.toPath()))).build();
+
 		ctxTester.fileSystem().add(ti);
 
 		final TsqlIssue issue = new TsqlIssue();
@@ -51,7 +55,7 @@ public class BaseTsqlSensorTest {
 			}
 
 		};
-		Settings settings = new Settings();
+		Settings settings = new MapSettings();
 		BaseTsqlSensor sensor = new BaseTsqlSensor(settings, provider, "test") {
 		};
 		sensor.execute(ctxTester);
@@ -67,8 +71,10 @@ public class BaseTsqlSensorTest {
 
 		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
 
-		DefaultInputFile ti = new DefaultInputFile("test", "test.sql");
-		ti.initMetadata(new String(Files.readAllBytes(baseFile.toPath())));
+
+		InputFile ti = new TestInputFileBuilder("test", "test.sql")
+				.initMetadata(new String(Files.readAllBytes(baseFile.toPath()))).build();
+
 
 		ctxTester.fileSystem().add(ti);
 
@@ -87,7 +93,7 @@ public class BaseTsqlSensorTest {
 			}
 
 		};
-		Settings settings = new Settings();
+		Settings settings = new MapSettings();
 		BaseTsqlSensor sensor = new BaseTsqlSensor(settings, provider, "test") {
 		};
 		sensor.execute(ctxTester);
@@ -103,8 +109,10 @@ public class BaseTsqlSensorTest {
 
 		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
 
-		DefaultInputFile ti = new DefaultInputFile("test", "test.sql");
-		ti.initMetadata(new String(Files.readAllBytes(baseFile.toPath())));
+
+		InputFile ti = new TestInputFileBuilder("test", "test.sql")
+				.initMetadata(new String(Files.readAllBytes(baseFile.toPath()))).build();
+
 
 		ctxTester.fileSystem().add(ti);
 
@@ -122,7 +130,7 @@ public class BaseTsqlSensorTest {
 			}
 
 		};
-		Settings settings = new Settings();
+		Settings settings = new MapSettings();
 		BaseTsqlSensor sensor = new BaseTsqlSensor(settings, provider, "test") {
 		};
 		sensor.execute(ctxTester);

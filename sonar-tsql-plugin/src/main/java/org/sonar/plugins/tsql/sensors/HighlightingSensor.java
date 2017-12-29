@@ -15,6 +15,9 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.antlr.CandidateRule;
+import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.PluginHelper;
 import org.sonar.plugins.tsql.antlr.visitors.AntlrHighlighter;
 import org.sonar.plugins.tsql.antlr.visitors.CComplexityVisitor;
 import org.sonar.plugins.tsql.antlr.visitors.ComplexityVisitor;
@@ -25,16 +28,11 @@ import org.sonar.plugins.tsql.antlr.visitors.ISensorFiller;
 import org.sonar.plugins.tsql.antlr.visitors.SourceLinesMeasuresFiller;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.rules.definitions.CustomAllChecksProvider;
-import org.sonar.plugins.tsql.sensors.antlr4.CandidateRule;
-import org.sonar.plugins.tsql.sensors.antlr4.FillerRequest;
-import org.sonar.plugins.tsql.sensors.antlr4.PluginHelper;
-import org.sonar.plugins.tsql.sensors.custom.lines.SourceLinesProvider;
 
 public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 	private static final Logger LOGGER = Loggers.get(HighlightingSensor.class);
 	protected final Settings settings;
-	private final SourceLinesProvider linesProvider = new SourceLinesProvider();
 	private final CustomAllChecksProvider checksProvider;
 
 	public HighlightingSensor(final Settings settings) {
@@ -75,9 +73,9 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 					public void run() {
 						try {
 
-							final FillerRequest fillerRequest = PluginHelper.createRequest(linesProvider, file,
-									encoding);
-							final ISensorFiller[] fillers = new ISensorFiller[] { new SourceLinesMeasuresFiller(), new AntlrHighlighter() };
+							final FillerRequest fillerRequest = PluginHelper.createRequest(file, encoding);
+							final ISensorFiller[] fillers = new ISensorFiller[] { new SourceLinesMeasuresFiller(),
+									new AntlrHighlighter() };
 							final IParseTreeItemVisitor[] visitors = new IParseTreeItemVisitor[] {
 									new CustomRulesVisitor(candidateRules), new ComplexityVisitor(),
 									new CComplexityVisitor() };
