@@ -5,6 +5,7 @@ import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.languages.TSQLQualityProfile;
+import org.sonar.plugins.tsql.metrics.TSQLMetrics;
 import org.sonar.plugins.tsql.rules.definitions.CodeGuardRulesDefinition;
 import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksRulesDefinition;
 import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksRulesDefinition;
@@ -49,7 +50,7 @@ public class TSQLPlugin implements Plugin {
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SUFFIXES)
 				.name("Suffixes to analyze").description("Suffixes supported by the plugin").defaultValue(".sql").type(PropertyType.STRING).build());
 		
-		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
+		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class,TSQLMetrics.class);
 		context.addExtensions(MsRulesDefinition.class, CustomPluginChecksRulesDefinition.class,
 				CodeGuardRulesDefinition.class, CustomUserChecksRulesDefinition.class, MsIssuesLoaderSensor.class,
 				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class);
