@@ -1,5 +1,8 @@
 package org.sonar.plugins.tsql.antlr;
 
+import org.antlr.tsql.TSqlParser.Comparison_operatorContext;
+import org.antlr.tsql.TSqlParser.PredicateContext;
+import org.antlr.tsql.TSqlParser.Primitive_expressionContext;
 import org.antlr.tsql.TSqlParser.Select_statementContext;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.junit.Assert;
@@ -72,5 +75,57 @@ public class CustomChecksTest {
 		Assert.assertEquals(1, issues.length);
 
 	}
+	
+	@Test
+	public void testNullNotNull() {
+		Rule r = new Rule();
+		r.setKey("Example1");
+		r.setInternalKey("Example1");
+		r.setDescription("Select statement should end with semicolon");
+		r.setName("Select statement should end with semicolon");
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(PredicateContext.class.getSimpleName());
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		r.setRuleImplementation(rImpl);
+		RuleImplementation child = new RuleImplementation();
+		child.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.setIndexCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.getTextToFind().getTextItem().add("!=");
+		child.getTextToFind().getTextItem().add("<>");
+		child.getTextToFind().getTextItem().add("=");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		child.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		child.getNames().getTextItem().add(Comparison_operatorContext.class.getSimpleName());
+	
+		RuleImplementation childNull = new RuleImplementation();
+	
+		childNull.getTextToFind().getTextItem().add("NULL");
+		childNull.setTextCheckType(TextCheckType.STRICT);
+		childNull.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		childNull.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
+		childNull.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
+	
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		rImpl.getChildrenRules().getRuleImplementation().add(childNull);
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT * from dbo.test where name IS NULL;");
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+		.add("SELECT * from dbo.test where name IS NOT NULL;");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT * from dbo.test where name = null");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+		.add("SELECT * from dbo.test where name != null");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+		.add("SELECT * from dbo.test where name <> null");
+		String s = "SELECT * from dbo.test where (name = null) or name <> null or name != null or name is null";
+		AntlrUtils.print(s);
+	
+		TsqlIssue[] issues = AntlrUtils.verify(r, s);
+
+		Assert.assertEquals(3, issues.length);
+
+	}
+
 
 }

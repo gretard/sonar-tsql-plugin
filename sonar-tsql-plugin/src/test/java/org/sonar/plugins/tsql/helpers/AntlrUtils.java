@@ -27,6 +27,12 @@ public class AntlrUtils {
 		CustomUserChecksProvider provider = new CustomUserChecksProvider();
 		return provider.getRules(null, "", path).values().toArray(new SqlRules[0]);
 	}
+
+	public static void print(String text) {
+		FillerRequest request = getRequest(text);
+		print(request.getRoot(), 0, request.getStream());
+	}
+
 	public static void print(final ParseTree node, final int level, CommonTokenStream stream) {
 		final Interval sourceInterval = node.getSourceInterval();
 
@@ -53,7 +59,7 @@ public class AntlrUtils {
 
 		}
 	}
-
+	
 	public static TsqlIssue[] verify(Rule rule, String text) {
 		FillerRequest request = getRequest(text);
 		CustomRulesVisitor visitor = new CustomRulesVisitor(new CandidateRule("test", rule));

@@ -34,6 +34,7 @@ public class CustomUserChecksProviderTest {
 	}
 	@Test
 	public void testNoRules() throws IOException {
+	
 		File baseFile = temp.newFile("ruledsTest", "xml");
 		FileUtils.copyURLToFile(getClass().getResource("/customrulesSample.xml"), baseFile);
 		

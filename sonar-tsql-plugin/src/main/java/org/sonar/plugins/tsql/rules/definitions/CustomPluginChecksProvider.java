@@ -3,6 +3,7 @@ package org.sonar.plugins.tsql.rules.definitions;
 import java.util.Arrays;
 
 import org.antlr.tsql.TSqlParser.Column_name_listContext;
+import org.antlr.tsql.TSqlParser.Comparison_operatorContext;
 import org.antlr.tsql.TSqlParser.ConstantContext;
 import org.antlr.tsql.TSqlParser.Cursor_nameContext;
 import org.antlr.tsql.TSqlParser.Cursor_statementContext;
@@ -48,7 +49,11 @@ public class CustomPluginChecksProvider {
 		customRules.setRepoName(Constants.PLUGIN_REPO_NAME);
 
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(),
-				getOrderByRule(), getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule()));
+				getOrderByRule(), 
+				getExecRule(), getNoLockRule(), getSargRule(), getPKRule(),
+				getFKRule(), getNullComparisonRule()
+				//, getIndexNamingRule()
+				));
 		return customRules;
 	}
 
@@ -553,6 +558,94 @@ public class CustomPluginChecksProvider {
 		rule.setRuleImplementation(ruleImpl);
 
 		return rule;
+	}
+	public static Rule getIndexNamingRule() {
+		RuleImplementation ruleImpl = new RuleImplementation();
+		ruleImpl.getNames().getTextItem().add(Table_constraintContext.class.getSimpleName());
+		ruleImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+
+		RuleImplementation child1 = new RuleImplementation();
+		child1.getTextToFind().getTextItem().add("INDEX");
+		child1.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		child1.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		child1.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+
+			ruleImpl.getChildrenRules().getRuleImplementation().add(child1);
+		ruleImpl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+
+		RuleImplementation main = new RuleImplementation();
+		main.getNames().getTextItem().add(IdContext.class.getSimpleName());
+		main.setTextCheckType(TextCheckType.CONTAINS);
+		main.getTextToFind().getTextItem().add("IX_");
+		main.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		main.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		main.setRuleViolationMessage("Index name is not defined using suggested naming convention to start with FK_");
+		main.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+
+		ruleImpl.getChildrenRules().getRuleImplementation().add(main);
+		ruleImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add(
+				"CREATE UNIQUE INDEX Test_Name on dbo.test (Name);");
+		ruleImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add(
+				"CREATE UNIQUE INDEX IX_Test_Name on dbo.test (Name);");
+
+		Rule rule = new Rule();
+		rule.setKey("C011");
+		rule.setInternalKey("C013");
+		rule.setStatus("BETA");
+		rule.setName("Defined index name is not using recommended naming convention");
+		rule.setDescription(
+				"<h2>Description</h2><p>Defined index name is not using recommended naming convention to start with IX_.</p>");
+		rule.setTag("naming");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("3min");
+		rule.setRuleImplementation(ruleImpl);
+
+		return rule;
+	}
+
+	public static Rule getNullComparisonRule() {
+		Rule r = new Rule();
+		r.setKey("C012");
+		r.setInternalKey("C012");
+		r.setDescription("<h2>Description</h2><p>It is not advisable to use comparison operator to check if value is null as comparison operators return UNKNOWN when either or both arguments are NULL. Please use IS NULL or IS NOT NULL instead.</p>");
+		r.setSeverity("MAJOR");
+		r.setRemediationFunction("LINEAR");
+		r.setDebtRemediationFunctionCoefficient("3min");
+		r.setName("Comparison operator to check is valu is null used");
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(PredicateContext.class.getSimpleName());
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		r.setRuleImplementation(rImpl);
+		RuleImplementation child = new RuleImplementation();
+		child.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.setIndexCheckType(RuleDistanceIndexMatchType.EQUALS);
+		child.getTextToFind().getTextItem().add("!=");
+		child.getTextToFind().getTextItem().add("<>");
+		child.getTextToFind().getTextItem().add("=");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		child.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		child.getNames().getTextItem().add(Comparison_operatorContext.class.getSimpleName());
+
+		RuleImplementation childNull = new RuleImplementation();
+
+		childNull.getTextToFind().getTextItem().add("NULL");
+		childNull.setTextCheckType(TextCheckType.STRICT);
+		childNull.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		childNull.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
+		childNull.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
+
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		rImpl.getChildrenRules().getRuleImplementation().add(childNull);
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name IS NULL;");
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT * from dbo.test where name IS NOT NULL;");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name = null");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name != null");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name <> null");
+
+		return r;
 	}
 
 	public static Rule getSargRule() {
