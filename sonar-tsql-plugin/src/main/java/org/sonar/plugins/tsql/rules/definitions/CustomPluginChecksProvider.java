@@ -198,6 +198,51 @@ public class CustomPluginChecksProvider {
 		return rule;
 	}
 
+	public static Rule getExecRule() {
+		Rule rule = new Rule();
+		rule.setKey("C005");
+		rule.setInternalKey("C005");
+		rule.setName("EXECUTE/EXEC for dynamic query is used");
+		rule.setDescription(".");
+		rule.setDescription(
+				"<h2>Description</h2><p>EXECUTE/EXEC for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p>");
+		rule.setTag("best-practise");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("2min");
+		RuleImplementation child2 = new RuleImplementation();
+		child2.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
+		child2.setTextCheckType(TextCheckType.DEFAULT);
+		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
+		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		child2.setRuleViolationMessage(
+				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
+	
+		RuleImplementation skipSubRule = new RuleImplementation();
+		skipSubRule.getNames().getTextItem().add(Func_proc_nameContext.class.getSimpleName());
+		skipSubRule.setTextCheckType(TextCheckType.DEFAULT);
+		skipSubRule.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
+		skipSubRule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		skipSubRule.setRuleViolationMessage(
+				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
+	
+		RuleImplementation impl = new RuleImplementation();
+		impl.getChildrenRules().getRuleImplementation().add(child2);
+		impl.getChildrenRules().getRuleImplementation().add(skipSubRule);
+		impl.getNames().getTextItem().add(Execute_statementContext.class.getSimpleName());
+		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC ('SELECT 1');");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC (@sQueryText);");
+	
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("EXECUTE sp_executesql N'select 1';");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("exec sys.sp_test  @test = 'Publisher';");
+	
+		rule.setRuleImplementation(impl);
+	
+		return rule;
+	}
+
 	public static Rule getSchemaRule() {
 		Rule rule = new Rule();
 		rule.setKey("C006");
@@ -245,51 +290,6 @@ public class CustomPluginChecksProvider {
 
 		rule.setRuleImplementation(impl);
 		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
-		return rule;
-	}
-
-	public static Rule getExecRule() {
-		Rule rule = new Rule();
-		rule.setKey("C005");
-		rule.setInternalKey("C005");
-		rule.setName("EXECUTE/EXEC for dynamic query is used");
-		rule.setDescription(".");
-		rule.setDescription(
-				"<h2>Description</h2><p>EXECUTE/EXEC for dynamic query was used. It is better to use sp_executesql for dynamic queries.</p>");
-		rule.setTag("best-practise");
-		rule.setSeverity("MINOR");
-		rule.setRemediationFunction("LINEAR");
-		rule.setDebtRemediationFunctionCoefficient("2min");
-		RuleImplementation child2 = new RuleImplementation();
-		child2.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
-		child2.setTextCheckType(TextCheckType.DEFAULT);
-		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
-		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage(
-				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
-
-		RuleImplementation skipSubRule = new RuleImplementation();
-		skipSubRule.getNames().getTextItem().add(Func_proc_nameContext.class.getSimpleName());
-		skipSubRule.setTextCheckType(TextCheckType.DEFAULT);
-		skipSubRule.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
-		skipSubRule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		skipSubRule.setRuleViolationMessage(
-				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
-
-		RuleImplementation impl = new RuleImplementation();
-		impl.getChildrenRules().getRuleImplementation().add(child2);
-		impl.getChildrenRules().getRuleImplementation().add(skipSubRule);
-		impl.getNames().getTextItem().add(Execute_statementContext.class.getSimpleName());
-		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		impl.setRuleResultType(RuleResultType.DEFAULT);
-		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC ('SELECT 1');");
-		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC (@sQueryText);");
-
-		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("EXECUTE sp_executesql N'select 1';");
-		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("exec sys.sp_test  @test = 'Publisher';");
-
-		rule.setRuleImplementation(impl);
-
 		return rule;
 	}
 

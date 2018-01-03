@@ -73,7 +73,7 @@ public class HighlightingSensorTest {
 		HighlightingSensor sensor = new HighlightingSensor(settings);
 		sensor.execute(ctxTester);
 		Collection<Issue> issues = ctxTester.allIssues();
-		Assert.assertEquals(97, issues.size());
+		Assert.assertEquals(99, issues.size());
 
 	}
 	
