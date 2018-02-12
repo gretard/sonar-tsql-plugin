@@ -1,13 +1,13 @@
 package org.sonar.plugins.tsql.lines;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
@@ -18,16 +18,15 @@ public class SourceLinesProvider {
 		final List<SourceLine> sourceLines = new ArrayList<>();
 
 		try {
-			final char bom = '\ufeff';
 			int totalLines = 1;
 			int global = 0;
 			int count = 0;
-			final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file, charset));
+
+			final BufferedReader bufferedReader = new BufferedReader(
+					new InputStreamReader(new BOMInputStream(file, false), charset));
 			int currentChar;
 			while ((currentChar = bufferedReader.read()) != -1) {
-				if (currentChar == bom) {
-					continue;
-				}
+
 				global++;
 				count++;
 				if (currentChar == 10) {
