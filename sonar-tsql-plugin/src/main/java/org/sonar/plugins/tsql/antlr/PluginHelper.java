@@ -19,6 +19,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.io.input.BOMInputStream;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
@@ -84,12 +85,15 @@ public class PluginHelper {
 
 	public static FillerRequest createRequest(final InputFile file, final Charset encoding)
 			throws IOException, FileNotFoundException {
-		final CharStream mainStream = CharStreams.fromPath(file.path(), encoding);
+
+		final CharStream mainStream = CharStreams
+				.fromStream(new BOMInputStream(new FileInputStream(file.absolutePath()), false), encoding);// CharStreams.fromPath(file.path(),
+																											// encoding);
 		return createRequestFromStream(file, encoding, mainStream, new FileInputStream(file.absolutePath()));
 	}
 
 	public static FillerRequest createRequestFromStream(final InputFile file, final Charset encoding,
-			final CharStream mainStream, InputStream fileInputStream)  {
+			final CharStream mainStream, InputStream fileInputStream) {
 		final SourceLinesProvider linesProvider = new SourceLinesProvider();
 		final CharStream charStream = new CaseChangingCharStream(mainStream, true);
 		final TSqlLexer lexer = new TSqlLexer(charStream);
