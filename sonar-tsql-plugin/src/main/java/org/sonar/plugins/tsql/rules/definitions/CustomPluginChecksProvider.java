@@ -51,7 +51,7 @@ public class CustomPluginChecksProvider {
 		customRules.getRule()
 				.addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(), getOrderByRule(),
 						getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule(), getNullComparisonRule()
-		// , getIndexNamingRule()
+	//	 , getIndexNamingRule()
 		));
 		return customRules;
 	}
@@ -311,8 +311,8 @@ public class CustomPluginChecksProvider {
 		impl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		impl.setRuleViolationMessage("NOLOCK hint was used");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
-				.add("SELECT name, surnam from dbo.test WITH (NOLOCK);");
-		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT name, surnam from dbo.test;");
+				.add("SELECT name, surname from dbo.test WITH (NOLOCK);");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT name, surname from dbo.test;");
 		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
 		rule.setRuleImplementation(impl);
 
