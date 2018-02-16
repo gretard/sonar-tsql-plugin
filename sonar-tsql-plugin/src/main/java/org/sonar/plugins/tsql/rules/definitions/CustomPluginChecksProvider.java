@@ -590,7 +590,7 @@ public class CustomPluginChecksProvider {
 				.add("CREATE UNIQUE INDEX IX_Test_Name on dbo.test (Name);");
 
 		Rule rule = new Rule();
-		rule.setKey("C011");
+		rule.setKey("C013");
 		rule.setInternalKey("C013");
 		rule.setStatus("BETA");
 		rule.setName("Defined index name is not using recommended naming convention");
@@ -614,7 +614,7 @@ public class CustomPluginChecksProvider {
 		r.setSeverity("MAJOR");
 		r.setRemediationFunction("LINEAR");
 		r.setDebtRemediationFunctionCoefficient("3min");
-		r.setName("Comparison operator to check is valu is null used");
+		r.setName("Comparison operator to check if value is null used");
 		RuleImplementation rImpl = new RuleImplementation();
 		rImpl.getNames().getTextItem().add(PredicateContext.class.getSimpleName());
 		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
