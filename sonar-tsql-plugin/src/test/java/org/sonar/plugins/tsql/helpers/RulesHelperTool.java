@@ -4,11 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.io.IOUtils;
+import org.sonar.plugins.tsql.antlr.FillerRequest;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class RulesHelperTool {
 
@@ -33,25 +32,25 @@ public class RulesHelperTool {
 		}
 		if ("print".equalsIgnoreCase(action)) {
 			System.out.println("Printing tree:\r\n");
-			AntrlResult result = Antlr4Utils.getFull(text);
+			FillerRequest result = AntlrUtils.getRequest(text);
 
-			Antlr4Utils.print(result.getTree(), 0, result.getStream());
+			AntlrUtils.print(result.getRoot(), 0, result.getStream());
 			return;
 
 		}
 		System.out.println("text");
-		SqlRules[] rules = Antlr4Utils.read(value);
+		SqlRules[] rules = AntlrUtils.read(value);
 
 		for (SqlRules rule : rules) {
 			System.out.println("Checking repository: " + rule.getRepoName());
 			for (Rule r : rule.getRule()) {
 				System.out.println("Checking rule: " + r.getKey());
 				for (String s : r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample()) {
-					boolean res  = Antlr4Utils.verify2(r, s).length == 0;
+					boolean res = AntlrUtils.verify(r, s).length == 0;
 					System.out.println("\tc passed: " + res + " for " + s);
 				}
 				for (String s : r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample()) {
-					boolean res = Antlr4Utils.verify2(r, s).length > 0;
+					boolean res = AntlrUtils.verify(r, s).length > 0;
 					System.out.println("\tv passed: " + !res + " for " + s);
 				}
 

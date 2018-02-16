@@ -15,18 +15,20 @@ public class DefaultIssuesFiller implements IIssuesFiller {
 	private static final Logger LOGGER = Loggers.get(DefaultIssuesFiller.class);
 
 	@Override
-	public void fill(final SensorContext context, final InputFile inputFile,
-			final TsqlIssue... issues) {
-	
+	public void fill(final SensorContext context, final InputFile inputFile, final TsqlIssue... issues) {
+
 		for (final TsqlIssue error : issues) {
-			InputFile file = inputFile; 
+			InputFile file = inputFile;
+			if (error == null) {
+				continue;
+			}
 			try {
 				if (error.getLine() < 1) {
 					LOGGER.warn(
 							format("Can't add issue %s on file %s as line is 0", error.getType(), error.getFilePath()));
 					continue;
 				}
-				if (file == null){
+				if (file == null) {
 					final FileSystem fileSystem = context.fileSystem();
 					file = fileSystem.inputFile(fileSystem.predicates().and(error.getPredicate()));
 

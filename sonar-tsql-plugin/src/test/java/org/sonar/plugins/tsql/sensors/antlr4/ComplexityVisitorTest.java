@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sonar.plugins.tsql.helpers.Antlr4Utils;
-import org.sonar.plugins.tsql.helpers.AntrlResult;
+import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.visitors.ComplexityVisitor;
+import org.sonar.plugins.tsql.antlr.visitors.CustomTreeVisitor;
+import org.sonar.plugins.tsql.helpers.AntlrUtils;
 
 public class ComplexityVisitorTest {
 
@@ -54,11 +56,14 @@ public class ComplexityVisitorTest {
 	}
 
 	private int calculate(String s) {
-		AntrlResult result = Antlr4Utils.getFull(s);
 
-		int r = new ComplexityVisitor().visit(result.getTree());
-		// Antlr4Utils.print(result.getTree(), 0);
-		return r;
+		FillerRequest result = AntlrUtils.getRequest(s);
+		ComplexityVisitor vv = new ComplexityVisitor();
+		CustomTreeVisitor visitor = new CustomTreeVisitor(vv);
+		visitor.visit(result.getRoot());
+		//AntlrUtils.print(result.getRoot(), 0, result.getStream());
+		return vv.getMeasure();
+
 	}
 
 }
