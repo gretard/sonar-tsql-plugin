@@ -17,6 +17,7 @@ import org.antlr.tsql.TSqlParser.Function_callContext;
 import org.antlr.tsql.TSqlParser.IdContext;
 import org.antlr.tsql.TSqlParser.Insert_statementContext;
 import org.antlr.tsql.TSqlParser.Order_by_clauseContext;
+import org.antlr.tsql.TSqlParser.Order_by_expressionContext;
 import org.antlr.tsql.TSqlParser.PredicateContext;
 import org.antlr.tsql.TSqlParser.Primitive_expressionContext;
 import org.antlr.tsql.TSqlParser.Query_expressionContext;
@@ -26,6 +27,8 @@ import org.antlr.tsql.TSqlParser.Select_list_elemContext;
 import org.antlr.tsql.TSqlParser.Select_statementContext;
 import org.antlr.tsql.TSqlParser.Set_statementContext;
 import org.antlr.tsql.TSqlParser.Simple_idContext;
+import org.antlr.tsql.TSqlParser.Sql_unionContext;
+import org.antlr.tsql.TSqlParser.SubqueryContext;
 import org.antlr.tsql.TSqlParser.Table_constraintContext;
 import org.antlr.tsql.TSqlParser.Table_hintContext;
 import org.antlr.tsql.TSqlParser.Table_nameContext;
@@ -51,8 +54,10 @@ public class CustomPluginChecksProvider {
 
 		customRules.getRule()
 				.addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(), getOrderByRule(),
-						getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule(), getNullComparisonRule()
-		 , getIndexNamingRule()
+						getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule(),
+						getNullComparisonRule(), getIndexNamingRule(), getWhereWithOrVsUnionRule(),
+						getUnionVsUnionALLRule(), getExistsVsInRule(), getOrderByRuleWithoutAscDesc()
+		// ,getMultipleDeclarations()
 		));
 		return customRules;
 	}
@@ -118,10 +123,9 @@ public class CustomPluginChecksProvider {
 		rule.setDebtRemediationFunctionCoefficient("2min");
 		RuleImplementation impl = new RuleImplementation();
 
-		// impl.getChildrenRules().getRuleImplementation().add(child2);
 		impl.getNames().getTextItem().add(Select_list_elemContext.class.getSimpleName());
 		impl.getTextToFind().getTextItem().add("*");
-		impl.setRuleViolationMessage("SELECT * was used");
+		impl.setRuleViolationMessage("SELECT * was used. Consider listing column names.");
 		impl.setTextCheckType(TextCheckType.STRICT);
 		impl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		impl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
@@ -149,7 +153,6 @@ public class CustomPluginChecksProvider {
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("Column list is not specified in an insert statement.");
 
 		RuleImplementation impl = new RuleImplementation();
 
@@ -157,7 +160,7 @@ public class CustomPluginChecksProvider {
 		impl.getNames().getTextItem().add(Insert_statementContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
-		impl.setRuleViolationMessage("TESTT");
+		impl.setRuleViolationMessage("Column list is not specified in an INSERT statement.");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("INSERT INTO dbo.test VALUES (1,2);");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("INSERT INTO dbo.test (a,b) VALUES (1,2);");
 
@@ -182,7 +185,6 @@ public class CustomPluginChecksProvider {
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage("Positional reference is used instead of column name in order by clause.");
 
 		RuleImplementation impl = new RuleImplementation();
 
@@ -190,7 +192,7 @@ public class CustomPluginChecksProvider {
 		impl.getNames().getTextItem().add(Order_by_clauseContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		impl.setRuleResultType(RuleResultType.DEFAULT);
-		impl.setRuleViolationMessage("");
+		impl.setRuleViolationMessage("Positional reference is used instead of column name in an ORDER BY clause.");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by 1;");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test order by name;");
 
@@ -215,17 +217,13 @@ public class CustomPluginChecksProvider {
 		child2.setTextCheckType(TextCheckType.DEFAULT);
 		child2.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		child2.setRuleViolationMessage(
-				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
-
+		
 		RuleImplementation skipSubRule = new RuleImplementation();
 		skipSubRule.getNames().getTextItem().add(Func_proc_nameContext.class.getSimpleName());
 		skipSubRule.setTextCheckType(TextCheckType.DEFAULT);
 		skipSubRule.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
 		skipSubRule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
-		skipSubRule.setRuleViolationMessage(
-				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
-
+	
 		RuleImplementation impl = new RuleImplementation();
 		impl.getChildrenRules().getRuleImplementation().add(child2);
 		impl.getChildrenRules().getRuleImplementation().add(skipSubRule);
@@ -234,6 +232,8 @@ public class CustomPluginChecksProvider {
 		impl.setRuleResultType(RuleResultType.DEFAULT);
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC ('SELECT 1');");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC (@sQueryText);");
+		impl.setRuleViolationMessage(
+				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
 
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("EXECUTE sp_executesql N'select 1';");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("exec sys.sp_test  @test = 'Publisher';");
@@ -310,7 +310,7 @@ public class CustomPluginChecksProvider {
 		impl.getNames().getTextItem().add(Table_hintContext.class.getSimpleName());
 		impl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		impl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
-		impl.setRuleViolationMessage("NOLOCK hint was used");
+		impl.setRuleViolationMessage("NOLOCK hint is used.");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT name, surname from dbo.test WITH (NOLOCK);");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT name, surname from dbo.test;");
@@ -389,7 +389,7 @@ public class CustomPluginChecksProvider {
 		child2.setRuleResultType(RuleResultType.FAIL_IF_MORE_FOUND);
 		child2.setTimes(1);
 		child2.setRuleMatchType(RuleMatchType.FULL);
-		child2.setRuleViolationMessage("Cursor was declared multiple times.");
+		child2.setRuleViolationMessage("Cursor with same name was declared multiple times.");
 
 		RuleImplementation parent = new RuleImplementation();
 		parent.getNames().getTextItem().add(Cursor_nameContext.class.getSimpleName());
@@ -482,7 +482,7 @@ public class CustomPluginChecksProvider {
 		main.getTextToFind().getTextItem().add("PK_");
 		main.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		main.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
-		main.setRuleViolationMessage("Primary key is not defined using suggested naming convention to start with PK_");
+		main.setRuleViolationMessage("Primary key is not defined using suggested naming convention to start with PK_.");
 		main.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
 
 		ruleImpl.getChildrenRules().getRuleImplementation().add(main);
@@ -535,7 +535,7 @@ public class CustomPluginChecksProvider {
 		main.getTextToFind().getTextItem().add("FK_");
 		main.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		main.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
-		main.setRuleViolationMessage("Foreign key is not defined using suggested naming convention to start with FK_");
+		main.setRuleViolationMessage("Foreign key is not defined using suggested naming convention to start with FK_.");
 		main.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
 
 		ruleImpl.getChildrenRules().getRuleImplementation().add(main);
@@ -560,6 +560,7 @@ public class CustomPluginChecksProvider {
 		return rule;
 	}
 
+	// Search_conditionContext
 	public static Rule getIndexNamingRule() {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.getNames().getTextItem().add(Create_indexContext.class.getSimpleName());
@@ -580,7 +581,7 @@ public class CustomPluginChecksProvider {
 		main.getTextToFind().getTextItem().add("IX_");
 		main.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		main.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
-		main.setRuleViolationMessage("Index name is not defined using suggested naming convention to start with FK_");
+		main.setRuleViolationMessage("Index name is not defined using suggested naming convention to start with IX_.");
 		main.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
 
 		ruleImpl.getChildrenRules().getRuleImplementation().add(main);
@@ -612,16 +613,16 @@ public class CustomPluginChecksProvider {
 		r.setDescription(
 				"<h2>Description</h2><p>It is not advisable to use comparison operator to check if value is null as comparison operators return UNKNOWN when either or both arguments are NULL. Please use IS NULL or IS NOT NULL instead.</p>");
 		r.setSeverity("MAJOR");
+		r.setTag("reliability");
 		r.setRemediationFunction("LINEAR");
 		r.setDebtRemediationFunctionCoefficient("3min");
-		r.setName("Comparison operator to check if value is null used");
+		r.setName("Comparison operator (=, <>, !=) to check if value is null used");
 		RuleImplementation rImpl = new RuleImplementation();
 		rImpl.getNames().getTextItem().add(PredicateContext.class.getSimpleName());
 		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		rImpl.setRuleViolationMessage("Comparison operator (=, <>, !=) to check if value is null used. Consider using IS NULL/IS NOT NULL.");
 		r.setRuleImplementation(rImpl);
 		RuleImplementation child = new RuleImplementation();
-		child.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
-		child.setIndexCheckType(RuleDistanceIndexMatchType.EQUALS);
 		child.getTextToFind().getTextItem().add("!=");
 		child.getTextToFind().getTextItem().add("<>");
 		child.getTextToFind().getTextItem().add("=");
@@ -644,11 +645,157 @@ public class CustomPluginChecksProvider {
 		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT * from dbo.test where name IS NOT NULL;");
 		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name = 'test';");
-		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name = null");
-		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name != null");
-		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name <> null");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name = null;");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name != null;");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name <> null;");
 
 		return r;
+	}
+
+	public static Rule getWhereWithOrVsUnionRule() {
+		Rule r = new Rule();
+		r.setKey("C014");
+		r.setInternalKey("C014");
+		r.setDescription(
+				"<h2>Description</h2><p>It is  advisable to consider using UNION/UNION ALL operator instead of OR verb in the WHERE clause.</p>");
+		r.setSeverity("MAJOR");
+		r.setTag("performance");
+		r.setRemediationFunction("LINEAR");
+		r.setDebtRemediationFunctionCoefficient("3min");
+		r.setName("OR verb is used in a WHERE clause");
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(Search_conditionContext.class.getSimpleName());
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		rImpl.setRuleViolationMessage("Consider using UNION ALL instead of OR in a WHERE clause.");
+		r.setRuleImplementation(rImpl);
+		RuleImplementation child = new RuleImplementation();
+		child.getTextToFind().getTextItem().add("or");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		child.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
+		child.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname, count from dbo.test where name = 'or' and surname = 'TestOR';");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname, count from dbo.test where name = 'Test' OR surname = 'Testor';");
+		r.setSource("https://dzone.com/articles/sql-handbook-and-best-practices-performance-tuning");
+		return r;
+	}
+
+	public static Rule getUnionVsUnionALLRule() {
+		Rule r = new Rule();
+		r.setKey("C015");
+		r.setInternalKey("C015");
+		r.setDescription(
+				"<h2>Description</h2><p>It is  advisable to consider using UNION ALL operator instead of UNION.</p>");
+		r.setSeverity("MAJOR");
+		r.setTag("performance");
+		r.setRemediationFunction("LINEAR");
+		r.setDebtRemediationFunctionCoefficient("3min");
+		r.setName("UNION operator is used");
+
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(Sql_unionContext.class.getSimpleName());
+		rImpl.setRuleViolationMessage("Consider using UNION ALL instead of UNION operator for the performance reasons.");
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		r.setRuleImplementation(rImpl);
+		RuleImplementation child = new RuleImplementation();
+		child.getTextToFind().getTextItem().add("all");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		child.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		child.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname, count from dbo.test union all SELECT name, surname, count from dbo.test2;");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname, count from dbo.test union SELECT name, surname, count from dbo.test2;");
+		r.setSource("https://dzone.com/articles/sql-handbook-and-best-practices-performance-tuning");
+		return r;
+	}
+
+	public static Rule getExistsVsInRule() {
+		Rule r = new Rule();
+		r.setKey("C016");
+		r.setInternalKey("C016");
+		r.setDescription(
+				"<h2>Description</h2><p>Consider using EXISTS/NOT EXISTS operator instead of IN for a subquery.</p>");
+		r.setSeverity("MAJOR");
+		r.setTag("performance");
+		r.setRemediationFunction("LINEAR");
+		r.setDebtRemediationFunctionCoefficient("5min");
+		r.setName("IN/NOT IN is used for a subquery");
+		RuleImplementation rImpl = new RuleImplementation();
+		rImpl.getNames().getTextItem().add(PredicateContext.class.getSimpleName());
+		rImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		rImpl.setRuleViolationMessage("Consider using EXISTS/NOT EXISTS instead of IN/NOT IN in a clause.");
+		r.setRuleImplementation(rImpl);
+
+		RuleImplementation child = new RuleImplementation();
+		child.getTextToFind().getTextItem().add("in");
+		child.setTextCheckType(TextCheckType.STRICT);
+		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+		child.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
+		child.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+
+		RuleImplementation childSubqueryContext = new RuleImplementation();
+		childSubqueryContext.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		childSubqueryContext.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
+		childSubqueryContext.getNames().getTextItem().add(SubqueryContext.class.getSimpleName());
+
+		rImpl.getChildrenRules().getRuleImplementation().add(child);
+		rImpl.getChildrenRules().getRuleImplementation().add(childSubqueryContext);
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname, count from dbo.test where locationID in (1,2,3);");
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname, count from dbo.test where locationID not in (1,2,3);");
+
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add(
+				"SELECT name, surname, count from dbo.test where exists (select 1 from dbo.locations where id = locationID);");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname, count from dbo.test where locationID in (select id from dbo.locations);");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add(
+				"SELECT name, surname, count from dbo.test where locationID not in (select id from dbo.locations);");
+
+		r.setSource("https://dzone.com/articles/sql-handbook-and-best-practices-performance-tuning");
+		return r;
+	}
+
+	public static Rule getOrderByRuleWithoutAscDesc() {
+		Rule rule = new Rule();
+		rule.setKey("C017");
+		rule.setInternalKey("C017");
+		rule.setName("ORDER BY clause does not contain order (ASC/DESC)");
+		rule.setDescription("<h2>Description</h2><p>It is advisable to specidy order how rows should be ordered.</p>");
+		rule.setTag("understanding");
+		rule.setSeverity("MINOR");
+		rule.setRemediationFunction("LINEAR");
+		rule.setDebtRemediationFunctionCoefficient("1min");
+		RuleImplementation child2 = new RuleImplementation();
+		child2.getNames().getTextItem().add(TerminalNodeImpl.class.getSimpleName());
+		child2.getTextToFind().getTextItem().add("asc");
+		child2.getTextToFind().getTextItem().add("desc");
+		child2.setTextCheckType(TextCheckType.STRICT);
+		child2.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
+		child2.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
+
+		RuleImplementation impl = new RuleImplementation();
+
+		impl.getChildrenRules().getRuleImplementation().add(child2);
+		impl.getNames().getTextItem().add(Order_by_expressionContext.class.getSimpleName());
+		impl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
+		impl.setRuleResultType(RuleResultType.DEFAULT);
+		impl.setRuleViolationMessage("No ASC/DESC order defined in an ORDER BY clause.");
+		impl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname from dbo.test order by name, surname asc;");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("SELECT name, surname from dbo.test order by name desc, surname asc;");
+
+		rule.setRuleImplementation(impl);
+		return rule;
 	}
 
 	public static Rule getSargRule() {
@@ -668,7 +815,7 @@ public class CustomPluginChecksProvider {
 		functionCallContainsColRef.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		functionCallContainsColRef.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		functionCallContainsColRef
-				.setRuleViolationMessage("Non-sargeable argument found - column referenced in a function");
+				.setRuleViolationMessage("Non-sargeable argument found - column referenced in a function.");
 
 		RuleImplementation ruleFunctionCall = new RuleImplementation();
 		ruleFunctionCall.getNames().getTextItem().add(SCALAR_FUNCTIONContext.class.getSimpleName());
@@ -691,7 +838,7 @@ public class CustomPluginChecksProvider {
 		functionCallContainsLikeWildcard.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		functionCallContainsLikeWildcard.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		functionCallContainsLikeWildcard
-				.setRuleViolationMessage("Non-sargeable argument found - predicate starts with wildcard");
+				.setRuleViolationMessage("Non-sargeable argument found - predicate starts with wildcard. %");
 
 		predicateContextContainsLike.getChildrenRules().getRuleImplementation().add(functionCallContainsLikeWildcard);
 
@@ -710,11 +857,8 @@ public class CustomPluginChecksProvider {
 				.add("SELECT name, surname from dbo.test where name like '%red' ");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT name, surname from dbo.test where date between 2008-10-10 and 2010-10-10;");
-		// impl.getCompliantRulesCodeExamples().getRuleCodeExample()
-		// .add("IF @LanguageName LIKE N'%Chinese%' SET @LanguageName =
-		// N'Chinese';");
+		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT max(price) from dbo.items;");
 
-		//
 		rule.setSource("http://sqlmag.com/t-sql/t-sql-best-practices-part-1");
 		rule.setRuleImplementation(impl);
 

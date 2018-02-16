@@ -97,7 +97,60 @@ public class CustomChecksTest {
 
 		Assert.assertEquals(1, issues.length);
 	}
+	
+	@Test
+	public void testWhereOrRule() {
+		String s = "select * from dbo.test where a = 4 or x = 5 OR f = 8 Or t = 0;";
+		Rule sut = CustomPluginChecksProvider.getWhereWithOrVsUnionRule();
+		AntlrUtils.print(s);
 
+		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
+
+		Assert.assertEquals(3, issues.length);
+	}
+	
+	@Test
+	public void testUnionVsUnionAllRule() {
+		String s = "select * from dbo.test union select * from dbo.test2;";
+		Rule sut = CustomPluginChecksProvider.getUnionVsUnionALLRule();
+		AntlrUtils.print(s);
+
+		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
+
+		Assert.assertEquals(1, issues.length);
+	}
+
+	@Test
+	public void testgetExistsVsInRule() {
+		String s = "select * from dbo.test where name IN (select id from dbo.names);";
+		Rule sut = CustomPluginChecksProvider.getExistsVsInRule();
+		AntlrUtils.print(s);
+
+		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
+
+		Assert.assertEquals(1, issues.length);
+	}
+	
+	@Test
+	public void testgetExistsVsInRule2() {
+		String s = "select * from dbo.test where name in (1, 2, 3);";
+		Rule sut = CustomPluginChecksProvider.getExistsVsInRule();
+		AntlrUtils.print(s);
+
+		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
+
+		Assert.assertEquals(0, issues.length);
+	}
+	@Test
+	public void testOrderByRuleOrder() {
+		String s = "select * from dbo.test order by name asc, surname;";
+		Rule sut = CustomPluginChecksProvider.getOrderByRuleWithoutAscDesc();
+		AntlrUtils.print(s);
+
+		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
+
+		Assert.assertEquals(1, issues.length);
+	}
 	@Test
 	public void testNullNotNull() {
 		Rule r = new Rule();

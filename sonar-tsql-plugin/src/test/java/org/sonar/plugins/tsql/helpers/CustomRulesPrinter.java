@@ -9,35 +9,17 @@ public class CustomRulesPrinter {
 	public static void main(String[] args) {
 		final CustomPluginChecksProvider provider = new CustomPluginChecksProvider();
 		final SqlRules rules = provider.getRules();
-		System.out.println("# Rules #");
-		System.out.println();
-		System.out.println("Plugin supports the following rules:");
-		System.out.println();
-		for (Rule r : rules.getRule()) {
-			System.out.println(String.format("- %s - %s", r.getKey(), r.getName()));
-		}
-		System.out.println();
-		for (Rule r : rules.getRule()) {
-			System.out.println(String.format("## %s - %s ##", r.getKey(), r.getName()));
-			System.out.println(r.getDescription().replace("<h2>Description</h2>", ""));
-			System.out.println();
-			if (!r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample().isEmpty()) {
-				System.out.println("### Compliant examples ###");
-				System.out.println();
-				for (String c : r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample()) {
-					System.out.println(String.format("`%s`\r\n", c));
-				}
-			}
 
-			if (!r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample().isEmpty()) {
-				System.out.println("### Non-compliant examples ###");
-				System.out.println();
-				for (String c : r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample()) {
-					System.out.println(String.format("`%s`\r\n", c));
-				}
+		for (Rule r : rules.getRule()) {
+			for (String c : r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample()) {
+				System.out.println(String.format("-- OK: %s", r.getKey()));
+				System.out.println(String.format("%s", c));
+			}
+			for (String c : r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample()) {
+				System.out.println(String.format("-- KO: %s", r.getKey()));
+				System.out.println(String.format("%s", c));
 			}
 		}
-
 	}
 
 }

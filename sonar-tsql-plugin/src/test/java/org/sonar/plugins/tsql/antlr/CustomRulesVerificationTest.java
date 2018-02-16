@@ -21,8 +21,9 @@ public class CustomRulesVerificationTest {
 	private String text;
 	private boolean issuesFound;
 	private String key;
+	private String ruleName;
 
-	@Parameters(name = "{index}: {1}={3}")
+	@Parameters(name = "{index}: {1}={2}")
 	public static Collection<Object[]> data() {
 		final List<Object[]> objects = new LinkedList<>();
 		final CustomPluginChecksProvider provider = new CustomPluginChecksProvider();
@@ -30,19 +31,20 @@ public class CustomRulesVerificationTest {
 		for (Rule r : rules.getRule()) {
 
 			for (String c : r.getRuleImplementation().getCompliantRulesCodeExamples().getRuleCodeExample()) {
-				objects.add(new Object[] { r, r.getName(), c, false });
+				objects.add(new Object[] { r, r.getKey(), r.getName(), c, false });
 			}
 
 			for (String c : r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample()) {
-				objects.add(new Object[] { r, r.getName(), c, true });
+				objects.add(new Object[] { r, r.getKey(), r.getName(), c, true });
 			}
 		}
 		return objects;
 	}
 
-	public CustomRulesVerificationTest(Rule rule, String key, String text, boolean issuesFound) {
+	public CustomRulesVerificationTest(Rule rule, String key, String ruleName, String text, boolean issuesFound) {
 		this.rule = rule;
 		this.key = key;
+		this.ruleName = ruleName;
 		this.text = text;
 		this.issuesFound = issuesFound;
 
@@ -53,7 +55,7 @@ public class CustomRulesVerificationTest {
 		Assert.assertNotNull("Rule's debt remiationfunction not specified", this.rule.getRemediationFunction());
 		Assert.assertNotNull("Rule's DebtRemediationFunctionCoefficient not specified",
 				this.rule.getDebtRemediationFunctionCoefficient());
-
+		Assert.assertEquals(this.rule.getKey(), this.rule.getInternalKey());
 		TsqlIssue[] issues = AntlrUtils.verify(this.rule, this.text);
 		Assert.assertEquals(String.format("Expected rule %s [%s] for text %s to find issues: %s", this.rule.getName(),
 				this.key, this.text, this.issuesFound), this.issuesFound, issues.length != 0);
