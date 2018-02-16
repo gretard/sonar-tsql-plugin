@@ -48,12 +48,11 @@ public class CustomPluginChecksProvider {
 		customRules.setRepoKey(Constants.PLUGIN_REPO_KEY);
 		customRules.setRepoName(Constants.PLUGIN_REPO_NAME);
 
-		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(),
-				getOrderByRule(), 
-				getExecRule(), getNoLockRule(), getSargRule(), getPKRule(),
-				getFKRule(), getNullComparisonRule()
-				//, getIndexNamingRule()
-				));
+		customRules.getRule()
+				.addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(), getOrderByRule(),
+						getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule(), getNullComparisonRule()
+		// , getIndexNamingRule()
+		));
 		return customRules;
 	}
 
@@ -217,7 +216,7 @@ public class CustomPluginChecksProvider {
 		child2.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		child2.setRuleViolationMessage(
 				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
-	
+
 		RuleImplementation skipSubRule = new RuleImplementation();
 		skipSubRule.getNames().getTextItem().add(Func_proc_nameContext.class.getSimpleName());
 		skipSubRule.setTextCheckType(TextCheckType.DEFAULT);
@@ -225,7 +224,7 @@ public class CustomPluginChecksProvider {
 		skipSubRule.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 		skipSubRule.setRuleViolationMessage(
 				"EXECUTE/EXEC for dynamic query is used. It is better to use sp_executesql for dynamic queries.");
-	
+
 		RuleImplementation impl = new RuleImplementation();
 		impl.getChildrenRules().getRuleImplementation().add(child2);
 		impl.getChildrenRules().getRuleImplementation().add(skipSubRule);
@@ -234,12 +233,12 @@ public class CustomPluginChecksProvider {
 		impl.setRuleResultType(RuleResultType.DEFAULT);
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC ('SELECT 1');");
 		impl.getViolatingRulesCodeExamples().getRuleCodeExample().add("EXEC (@sQueryText);");
-	
+
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("EXECUTE sp_executesql N'select 1';");
 		impl.getCompliantRulesCodeExamples().getRuleCodeExample().add("exec sys.sp_test  @test = 'Publisher';");
-	
+
 		rule.setRuleImplementation(impl);
-	
+
 		return rule;
 	}
 
@@ -559,6 +558,7 @@ public class CustomPluginChecksProvider {
 
 		return rule;
 	}
+
 	public static Rule getIndexNamingRule() {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.getNames().getTextItem().add(Table_constraintContext.class.getSimpleName());
@@ -570,7 +570,7 @@ public class CustomPluginChecksProvider {
 		child1.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
 		child1.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 
-			ruleImpl.getChildrenRules().getRuleImplementation().add(child1);
+		ruleImpl.getChildrenRules().getRuleImplementation().add(child1);
 		ruleImpl.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 
 		RuleImplementation main = new RuleImplementation();
@@ -583,10 +583,10 @@ public class CustomPluginChecksProvider {
 		main.setDistanceCheckType(RuleDistanceIndexMatchType.EQUALS);
 
 		ruleImpl.getChildrenRules().getRuleImplementation().add(main);
-		ruleImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add(
-				"CREATE UNIQUE INDEX Test_Name on dbo.test (Name);");
-		ruleImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add(
-				"CREATE UNIQUE INDEX IX_Test_Name on dbo.test (Name);");
+		ruleImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
+				.add("CREATE UNIQUE INDEX Test_Name on dbo.test (Name);");
+		ruleImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
+				.add("CREATE UNIQUE INDEX IX_Test_Name on dbo.test (Name);");
 
 		Rule rule = new Rule();
 		rule.setKey("C011");
@@ -608,7 +608,8 @@ public class CustomPluginChecksProvider {
 		Rule r = new Rule();
 		r.setKey("C012");
 		r.setInternalKey("C012");
-		r.setDescription("<h2>Description</h2><p>It is not advisable to use comparison operator to check if value is null as comparison operators return UNKNOWN when either or both arguments are NULL. Please use IS NULL or IS NOT NULL instead.</p>");
+		r.setDescription(
+				"<h2>Description</h2><p>It is not advisable to use comparison operator to check if value is null as comparison operators return UNKNOWN when either or both arguments are NULL. Please use IS NULL or IS NOT NULL instead.</p>");
 		r.setSeverity("MAJOR");
 		r.setRemediationFunction("LINEAR");
 		r.setDebtRemediationFunctionCoefficient("3min");
@@ -641,6 +642,7 @@ public class CustomPluginChecksProvider {
 		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name IS NULL;");
 		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
 				.add("SELECT * from dbo.test where name IS NOT NULL;");
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name = 'test';");
 		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name = null");
 		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name != null");
 		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name <> null");
