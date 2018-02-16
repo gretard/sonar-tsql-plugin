@@ -11,7 +11,7 @@ public class CustomSqlCodePrinter {
 		final SqlRules rules = provider.getRules();
 		System.out.println("# Rules #");
 		System.out.println();
-		System.out.println("Plugin supports the following rules:");
+		System.out.println(String.format("Plugin supports the following %s rules:", rules.getRule().size()));
 		System.out.println();
 		for (Rule r : rules.getRule()) {
 			System.out.println(String.format("- %s - %s", r.getKey(), r.getName()));
