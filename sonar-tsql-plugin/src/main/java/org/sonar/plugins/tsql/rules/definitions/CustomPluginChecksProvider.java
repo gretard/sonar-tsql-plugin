@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.antlr.tsql.TSqlParser.Column_name_listContext;
 import org.antlr.tsql.TSqlParser.Comparison_operatorContext;
 import org.antlr.tsql.TSqlParser.ConstantContext;
+import org.antlr.tsql.TSqlParser.Create_indexContext;
 import org.antlr.tsql.TSqlParser.Cursor_nameContext;
 import org.antlr.tsql.TSqlParser.Cursor_statementContext;
 import org.antlr.tsql.TSqlParser.Declare_cursorContext;
@@ -51,7 +52,7 @@ public class CustomPluginChecksProvider {
 		customRules.getRule()
 				.addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(), getOrderByRule(),
 						getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule(), getNullComparisonRule()
-	//	 , getIndexNamingRule()
+		 , getIndexNamingRule()
 		));
 		return customRules;
 	}
@@ -561,7 +562,7 @@ public class CustomPluginChecksProvider {
 
 	public static Rule getIndexNamingRule() {
 		RuleImplementation ruleImpl = new RuleImplementation();
-		ruleImpl.getNames().getTextItem().add(Table_constraintContext.class.getSimpleName());
+		ruleImpl.getNames().getTextItem().add(Create_indexContext.class.getSimpleName());
 		ruleImpl.setRuleMatchType(RuleMatchType.CLASS_ONLY);
 
 		RuleImplementation child1 = new RuleImplementation();

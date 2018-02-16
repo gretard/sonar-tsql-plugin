@@ -14,6 +14,7 @@ import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
 import org.sonar.plugins.tsql.checks.custom.RuleResultType;
 import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 import org.sonar.plugins.tsql.helpers.AntlrUtils;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomChecksTest {
@@ -75,7 +76,28 @@ public class CustomChecksTest {
 		Assert.assertEquals(1, issues.length);
 
 	}
-	
+
+	@Test
+	public void testIndexRule() {
+		String s = "CREATE UNIQUE INDEX ix_test ON Persons (LastName, FirstName);";
+		Rule sut = CustomPluginChecksProvider.getIndexNamingRule();
+		AntlrUtils.print(s);
+
+		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
+
+		Assert.assertEquals(0, issues.length);
+	}
+	@Test
+	public void testIndexRuleViolating() {
+		String s = "CREATE UNIQUE INDEX test ON Persons (LastName, FirstName);";
+		Rule sut = CustomPluginChecksProvider.getIndexNamingRule();
+		AntlrUtils.print(s);
+
+		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
+
+		Assert.assertEquals(1, issues.length);
+	}
+
 	@Test
 	public void testNullNotNull() {
 		Rule r = new Rule();
@@ -97,35 +119,30 @@ public class CustomChecksTest {
 		child.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		child.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
 		child.getNames().getTextItem().add(Comparison_operatorContext.class.getSimpleName());
-	
+
 		RuleImplementation childNull = new RuleImplementation();
-	
+
 		childNull.getTextToFind().getTextItem().add("NULL");
 		childNull.setTextCheckType(TextCheckType.STRICT);
 		childNull.setRuleMatchType(RuleMatchType.TEXT_AND_CLASS);
 		childNull.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		childNull.getNames().getTextItem().add(Primitive_expressionContext.class.getSimpleName());
-	
+
 		rImpl.getChildrenRules().getRuleImplementation().add(child);
 		rImpl.getChildrenRules().getRuleImplementation().add(childNull);
+		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name IS NULL;");
 		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
-				.add("SELECT * from dbo.test where name IS NULL;");
-		rImpl.getCompliantRulesCodeExamples().getRuleCodeExample()
-		.add("SELECT * from dbo.test where name IS NOT NULL;");
-		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
-				.add("SELECT * from dbo.test where name = null");
-		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
-		.add("SELECT * from dbo.test where name != null");
-		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample()
-		.add("SELECT * from dbo.test where name <> null");
+				.add("SELECT * from dbo.test where name IS NOT NULL;");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name = null");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name != null");
+		rImpl.getViolatingRulesCodeExamples().getRuleCodeExample().add("SELECT * from dbo.test where name <> null");
 		String s = "SELECT * from dbo.test where (name = null) or name <> null or name != null or name is null";
 		AntlrUtils.print(s);
-	
+
 		TsqlIssue[] issues = AntlrUtils.verify(r, s);
 
 		Assert.assertEquals(3, issues.length);
 
 	}
-
 
 }
