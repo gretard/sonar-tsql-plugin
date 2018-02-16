@@ -51,11 +51,12 @@ public class CustomRulesVerificationTest {
 	@Test
 	public void test() {
 		Assert.assertNotNull("Rule's debt remiationfunction not specified", this.rule.getRemediationFunction());
-		Assert.assertNotNull("Rule's DebtRemediationFunctionCoefficient not specified", this.rule.getDebtRemediationFunctionCoefficient());
-		
+		Assert.assertNotNull("Rule's DebtRemediationFunctionCoefficient not specified",
+				this.rule.getDebtRemediationFunctionCoefficient());
+
 		TsqlIssue[] issues = AntlrUtils.verify(this.rule, this.text);
-		Assert.assertEquals(String.format("Expected rule %s for text %s to find issues: %s", this.rule.getName(),
-				this.text, this.issuesFound), this.issuesFound, issues.length != 0);
+		Assert.assertEquals(String.format("Expected rule %s [%s] for text %s to find issues: %s", this.rule.getName(),
+				this.key, this.text, this.issuesFound), this.issuesFound, issues.length != 0);
 	}
 
 }
