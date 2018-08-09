@@ -29,7 +29,6 @@ public class FillerRequest {
 
 		for (SourceLine line : this.lines) {
 			if (line.getEnd() > global) {
-
 				return new int[] { line.getLine(), global - line.getStart() };
 			}
 		}
