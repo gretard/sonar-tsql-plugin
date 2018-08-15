@@ -10,18 +10,27 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
+import org.sonar.api.config.Settings;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.coverage.HitLines;
 import org.sonar.plugins.tsql.coverage.HitLines.LineInfo;
 import org.sonar.plugins.tsql.coverage.ICoveragProvider;
+import org.sonar.plugins.tsql.coverage.SqlCoverCoverageProvider;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
 public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
 	private ICoveragProvider coverageProvider;
+	private static final Logger LOGGER = Loggers.get(CoverageSensor.class);
 
 	public CoverageSensor(ICoveragProvider coverageProvider) {
 		this.coverageProvider = coverageProvider;
 
+	}
+
+	public CoverageSensor(FileSystem fs, Settings settings) {
+		this(new SqlCoverCoverageProvider(settings, fs));
 	}
 
 	@Override
@@ -53,7 +62,7 @@ public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
 								}
 								cov.save();
 							} catch (Throwable e) {
-
+								LOGGER.warn("Error while adding coverage for {}", t.absolutePath(), e);
 							}
 						}
 					}
@@ -63,7 +72,7 @@ public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
 			});
 
 		} catch (Throwable e) {
-
+			LOGGER.warn("Unexpected error while running sensor", e);
 		}
 	}
 }

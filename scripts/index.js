@@ -6,7 +6,7 @@ const cheerio = require('cheerio');
 var files = [];
 
 
-downloadFiles();
+//downloadFiles();
 generateDoc();
 
 function add(begin, end, pre) {
@@ -72,7 +72,13 @@ function generateDoc() {
         var data = fs.readFileSync(fullFile, 'utf8');
         const $ = cheerio.load(data);
         var ruleId = $('h1').last().text().trim().toUpperCase();
+        if (ruleId == "NOT FOUND") {
+            return;
+        }
         var ruleName = $('h2').last().text().trim();
+        if (ruleName.length == 0) {
+            ruleName = ruleId;
+        }
         var txt = $(".grid__col--span-8-of-12 p").toArray()
         if (ruleId == "ST012") {
             ruleName = "Consider using temporary table instead of table variable";
@@ -96,7 +102,7 @@ function generateDoc() {
             ruleText += "<p>" + text + "</p>";
         }
         var tag = "depreciated";
-        var severity = "MARJOR";
+        var severity = "MAJOR";
         var fixTime = "5min";
         if (ruleId.startsWith("MI")) {
             tag = "misc";
@@ -121,12 +127,12 @@ function generateDoc() {
         }
         if (ruleId.startsWith("NC")) {
             tag = "naming";
-            severity = "TRIVIAL";
+            severity = "MINOR";
             fixTime = "2min";
         }
         if (ruleId.startsWith("PE")) {
             tag = "performance";
-            severity = "MARJOR";
+            severity = "MAJOR";
             fixTime = "5min";
         }
 

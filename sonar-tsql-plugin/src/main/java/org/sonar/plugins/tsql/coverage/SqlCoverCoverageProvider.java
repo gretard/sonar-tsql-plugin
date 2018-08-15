@@ -45,9 +45,9 @@ public class SqlCoverCoverageProvider implements ICoveragProvider {
 		final Map<String, HitLines> lines = new HashMap<>();
 		final String prefix = settings.getString(Constants.COVERAGE_FILE);
 		String coverageFile = prefix;
-		
+		File temp = new File(coverageFile);
 		// try find coverage file
-		if (!new File(coverageFile).exists()) {
+		if (temp == null || !temp.exists()) {
 
 			final String baseDir = fileSystem.baseDir().getAbsolutePath();
 			final IReporsProvider reportsProvider = new BaseReportsProvider(prefix);

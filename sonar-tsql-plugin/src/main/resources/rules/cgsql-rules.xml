@@ -295,8 +295,8 @@
 <rule>
 <key>BP022</key>
 <internalKey>BP022</internalKey>
-<name></name>
-<description><![CDATA[<p>Money/SmallMoney datatype is used</p><p>The MONEY data type confuses the storage of data values with their display, though its name clearly suggests the sort of data it holds. It is proprietary to SQL Server and allows you to specify monetary values preceded by a currency symbol, but SQL Server doesn’t store any currency information at all with the actual numeric values, so the purpose of this is unclear.</p><p>It has limited precision; the underlying type is a BIGINT or, in the case of SMALLMONEY, an INT, so you can unintentionally get a loss of precision due to rounding errors. While simple addition or subtraction is fine, more complicated calculations that can be done for financial reports can show errors. Although the MONEY datatype generally takes less storage, and takes less bandwidth when sent over networks, via TDS, it is generally far better to use a data type such as the DECIMAL or NUMERIC type, which is less likely to suffer from rounding errors or scale overflow.</p><p>See Also: Avoid use of the MONEY and SMALLMONEY datatypes for examples of the problems MONEY and SMALLMONEY can cause.</p>]]></description>
+<name>BP022</name>
+<description><![CDATA[<h2>BP022</h2><p>Money/SmallMoney datatype is used</p><p>The MONEY data type confuses the storage of data values with their display, though its name clearly suggests the sort of data it holds. It is proprietary to SQL Server and allows you to specify monetary values preceded by a currency symbol, but SQL Server doesn’t store any currency information at all with the actual numeric values, so the purpose of this is unclear.</p><p>It has limited precision; the underlying type is a BIGINT or, in the case of SMALLMONEY, an INT, so you can unintentionally get a loss of precision due to rounding errors. While simple addition or subtraction is fine, more complicated calculations that can be done for financial reports can show errors. Although the MONEY datatype generally takes less storage, and takes less bandwidth when sent over networks, via TDS, it is generally far better to use a data type such as the DECIMAL or NUMERIC type, which is less likely to suffer from rounding errors or scale overflow.</p><p>See Also: Avoid use of the MONEY and SMALLMONEY datatypes for examples of the problems MONEY and SMALLMONEY can cause.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
 <severity>MINOR</severity>
 <cardinality>SINGLE</cardinality>
@@ -340,7 +340,7 @@
 <name>Unparsed SQL</name>
 <description><![CDATA[<h2>Unparsed SQL</h2><p>Unable to parse SQL code. The SQL may be incorrect or contain syntax that SQL Prompt doesn't understand.</p><p>Try fixing the SQL or rewriting it in a simpler form.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -354,7 +354,7 @@
 <name>Table hint without WITH keyword</name>
 <description><![CDATA[<h2>Table hint without WITH keyword</h2><p>The WITH keyword before a table hint is missing.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -368,7 +368,7 @@
 <name>WRITETEXT, UPDATETEXT and READTEXT statements are deprecated</name>
 <description><![CDATA[<h2>WRITETEXT, UPDATETEXT and READTEXT statements are deprecated</h2><p>There is no good reason for using the TEXT datatype anymore.</p><p>These functions are used in support of the TEXT datatype, which  was replaced in SQL Server 2005 by the far more versatile VARCHAR(MAX). This is compatible with string functions, and is actively supported.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -382,7 +382,7 @@
 <name>GROUP BY ALL clause is deprecated</name>
 <description><![CDATA[<h2>GROUP BY ALL clause is deprecated</h2><p>GROUP BY ALL clause is not supported for remote tables and is no longer actively maintained.</p><p>Use a custom case-by-case solution with UNION or a derived table. The results you get are more intuitive: it is easier to know when a zero category will appear or not.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -396,7 +396,7 @@
 <name>COMPUTE and COMPUTE BY clauses are deprecated</name>
 <description><![CDATA[<h2>COMPUTE and COMPUTE BY clauses are deprecated</h2><p>Starting with SQL Server 2012, the COMPUTE and COMPUTE BY clauses are no longer supported, as they are archaic ways of doing printed reports. They do not produce conventional results.</p><p>Use GROUPING, ROLLUP or CUBE instead, to produce results that can be stored for further processing or aggregation.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -410,7 +410,7 @@
 <name>FASTFIRSTROW table hint is deprecated</name>
 <description><![CDATA[<h2>FASTFIRSTROW table hint is deprecated</h2><p>Starting with SQL Server 2008, the FASTFIRSTROW table hint has been deprecated. This feature has been removed in  SQL Server 2012.</p><p>Use [FAST n] instead.  FASTFIRSTROW  allows data to begin streaming to the user earlier, at a risk of a cost in performance.  OPTION (FAST 1) is equivalent but you can, with this hint, specify the number of ‘fast’ rows.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -424,7 +424,7 @@
 <name>SETUSER statement is deprecated</name>
 <description><![CDATA[<h2>SETUSER statement is deprecated</h2><p>SETUSER statement is there only for backward-compatibility.</p><p>Since SQL Server 2008, it has been possible to use EXECUTE AS, which is much clearer.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -438,7 +438,7 @@
 <name>TAPE as backup device is deprecated</name>
 <description><![CDATA[<h2>TAPE as backup device is deprecated</h2><p>Support for tape backup devices will eventually be removed.</p><p>It is unusual to use a tape backup as these devices  are comparatively expensive and unreliable. If code has a TAPE dumpdevice defined, it is probably legacy code that must be removed.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -452,7 +452,7 @@
 <name>PASSWORD/MEDIAPASSWORD options in BACKUP/RESTORE statement are deprecated</name>
 <description><![CDATA[<h2>PASSWORD/MEDIAPASSWORD options in BACKUP/RESTORE statement are deprecated</h2><p>Since SQL Server 2012, the PASSWORD and MEDIAPASSWORD options are discontinued for creating backups.</p><p>It is important to password-protect backups. However, the protection that this option afforded was not up to current standards. Properly set-up ACLs on the directory provides stronger protection, as does a third-party backup solution.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -466,7 +466,7 @@
 <name>DBCC DBREINDEX statement is deprecated</name>
 <description><![CDATA[<h2>DBCC DBREINDEX statement is deprecated</h2><p>The use of DBCC DBREINDEX is no longer recommended.</p><p>Use ALTER INDEX REBUILD instead. It has many more options, and supports current types of index.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -480,7 +480,7 @@
 <name>DBCC CONCURRENCYVIOLATION is deprecated</name>
 <description><![CDATA[<h2>DBCC CONCURRENCYVIOLATION is deprecated</h2><p>An attempt to execute this command returns error 2526.</p><p>No recent version of edition of SQL Server includes a workload governor; therefore the command has been removed.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -494,7 +494,7 @@
 <name>DBCC INDEXDEFRAG is deprecated</name>
 <description><![CDATA[<h2>DBCC INDEXDEFRAG is deprecated</h2><p>DBCC INDEXDEFRAG is deprecated.</p><p>ALTER INDEX REORGANIZE can perform index defragmentation without taking the database offline, allowing users to access the tables being defragmented (enterprise edition only).</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -508,7 +508,7 @@
 <name>DBCC SHOWCONTIG is deprecated</name>
 <description><![CDATA[<h2>DBCC SHOWCONTIG is deprecated</h2><p>DBCC SHOWCONTIG is no longer the supported way of investigating index fragmentation.</p><p>DBCC SHOWCONTIG only displays the first partition of the specified table or index and does not display row-overflow storage information or spatial indexes. It does not show  off-row data types, such as NVARCHAR(MAX), VARCHAR(MAX), VARBINARY(MAX), and XML.</p><p>Use sys.dm_db_index_physical_stats instead.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -522,7 +522,7 @@
 <name>Deprecated SET options</name>
 <description><![CDATA[<h2>Deprecated SET options</h2><p>These SET options are deprecated: ANSI_NULLS, ANSI_PADDING, CONCAT_NULL_YIELDS_NULL, REMOTE_PROC_TRANSACTIONS, OFFSETS.</p><p>It is a bad idea to set ANSI_NULLS OFF or ANSI_PADDING OFF since this is not supported for certain indexes such as indexed views and indexes on computed columns. CONCAT_NULL_YIELDS_NULL OFF causes expressions that assume this behaviour to give strange results. REMOTE_PROC_TRANSACTIONS should not be used because remote stored procedures are deprecated so, instead of issuing remote stored procedure calls, use distributed queries that reference linked servers. The OFFSETS options will soon be unavailable.</p><p>Additionally, Microsoft claims that in a future version of SQL Server, ANSI_NULLS will be ON and any applications that explicitly set the option to OFF will generate an error and as such recommends to avoid using this feature in new development work, and plan to modify applications that do so at present.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -536,7 +536,7 @@
 <name>SET ROWCOUNT option is deprecated</name>
 <description><![CDATA[<h2>SET ROWCOUNT option is deprecated</h2><p>SET ROWCOUNT option was replaced by the TOP(N) syntax of the SELECT statement.</p><p>SET ROWCOUNT sets the limit to the number of rows returned for the rest of the batch, whereas TOP(n) within the SELECT statement sets the number of rows to return by the query. The latter is much safer and easier to control.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -550,7 +550,7 @@
 <name>READONLY and READWRITE options are deprecated</name>
 <description><![CDATA[<h2>READONLY and READWRITE options are deprecated</h2><p>READONLY and READWRITE options are no longer supported.</p><p>Use the READ_ONLY and READ_WRITE options instead.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -564,7 +564,7 @@
 <name>TORN_PAGE_DETECTION option is deprecated</name>
 <description><![CDATA[<h2>TORN_PAGE_DETECTION option is deprecated</h2><p>The TORN_PAGE_DETECTION option only checks the first 2 bytes in every 512-byte sector.</p><p>The only worthwhile page verification option is CHECKSUM.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -578,7 +578,7 @@
 <name>NON-ANSI join (*= or =*) is used</name>
 <description><![CDATA[<h2>NON-ANSI join (*= or =*) is used</h2><p>Non-ANSI joins (via *= or =*) are deprecated – use LEFT/RIGHT OUTER join syntax instead.</p><p>The *= or *= syntax is maintained only for backward compatibility with legacy systems and is rightly incomprehensible to most SQL developers.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -592,7 +592,7 @@
 <name>ALL option in GRANT/DENY/REVOKE statement is deprecated</name>
 <description><![CDATA[<h2>ALL option in GRANT/DENY/REVOKE statement is deprecated</h2><p>The  ALL keyword is highly confusing as it doesn’t add all permissions. It is legacy code that hasn’t kept pace with new versions of SQL Server. Don’t use it!</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -606,7 +606,7 @@
 <name>System table or view is deprecated</name>
 <description><![CDATA[<h2>System table or view is deprecated</h2><p>This SQL Server 2000 system table is included as a view for backward compatibility.</p><p>We recommend that you use the current SQL Server system views instead. To find the equivalent system view or views, see Mapping SQL Server 2000 System Tables to SQL Server 2005 System Views. This feature will be removed in a future version of Microsoft SQL Server.</p><p>Avoid using this feature in new development work, and plan to modify applications that currently use this feature.</p><p>Compatibility Views (Transact-SQL) (MSDN)</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -620,7 +620,7 @@
 <name>Numbered procedures are deprecated</name>
 <description><![CDATA[<h2>Numbered procedures are deprecated</h2><p>Numbered procedures are deprecated – do not use numbered procedures.</p><p>This was always a bad idea, that allowed you to overload procedures by creating more than one version of a stored procedure, and which allow you to delete them in one command. It never worked well.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -634,7 +634,7 @@
 <name>String literals as column aliases are deprecated</name>
 <description><![CDATA[<h2>String literals as column aliases are deprecated</h2><p>If Aliases are valid identifiers they do not need delimiters. If they are not, then they should be delimited by double-quotes, not single-quotes. SQL Server and Sybase allow square brackets for the same purpose though this is not ANSI Standard SQL. String aliases are not part of the SQL standard, and have been deprecated by Microsoft when used with the assignment syntax.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -645,38 +645,10 @@
 <rule>
 <key>DEP022</key>
 <internalKey>DEP022</internalKey>
-<name></name>
-<description><![CDATA[<p>DROP INDEX with two-part name is deprecated</p><p>This syntax will be removed in a future version of Microsoft SQL Server. Avoid using this syntax in new development work, and plan to modify applications that currently use the feature.</p>]]></description>
+<name>DEP022</name>
+<description><![CDATA[<h2>DEP022</h2><p>DROP INDEX with two-part name is deprecated</p><p>This syntax will be removed in a future version of Microsoft SQL Server. Avoid using this syntax in new development work, and plan to modify applications that currently use the feature.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
-<cardinality>SINGLE</cardinality>
-<status>READY</status>
-<remediationFunction>LINEAR</remediationFunction>
-<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
-<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
-<tag>depreciated</tag>
-</rule>
-<rule>
-<key>NOT FOUND</key>
-<internalKey>NOT FOUND</internalKey>
-<name>404</name>
-<description><![CDATA[<h2>404</h2><p>Not Found</p>]]></description>
-<descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
-<cardinality>SINGLE</cardinality>
-<status>READY</status>
-<remediationFunction>LINEAR</remediationFunction>
-<remediationFunctionBaseEffort></remediationFunctionBaseEffort>
-<debtRemediationFunctionCoefficient>5min</debtRemediationFunctionCoefficient>
-<tag>depreciated</tag>
-</rule>
-<rule>
-<key>NOT FOUND</key>
-<internalKey>NOT FOUND</internalKey>
-<name>404</name>
-<description><![CDATA[<h2>404</h2><p>Not Found</p>]]></description>
-<descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -690,7 +662,7 @@
 <name>System stored procedure is deprecated</name>
 <description><![CDATA[<h2>System stored procedure is deprecated</h2><p>There is never a good reason to use undocumented system stored procedures and even some documented ones, such as sp_addalias, sp_addgroup, sp_changegroup, sp_dropgroup and sp_helpgroup have been replaced with better ways of doing it.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -704,7 +676,7 @@
 <name>Three-part and four-part column references in SELECT list are deprecated</name>
 <description><![CDATA[<h2>Three-part and four-part column references in SELECT list are deprecated</h2><p>Three-part and four-part column references in SELECT list are deprecated – two-part names is the standard-compliant behavior.</p><p>Sometimes, when a table is referenced in another database or server, programmers believe that the two or three-part table name needs to be applied to the columns. This is unnecessary and meaningless. Just the table name is required for the columns.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -718,7 +690,7 @@
 <name>System function is deprecated</name>
 <description><![CDATA[<h2>System function is deprecated</h2><p>This feature will be removed in a future version of Microsoft SQL Server. Avoid using this feature in new development work, and plan to modify applications that currently use this feature.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -732,7 +704,7 @@
 <name>The SQL module was created with ANSI_NULLS and/or QUOTED_IDENTIFIER options set to OFF</name>
 <description><![CDATA[<h2>The SQL module was created with ANSI_NULLS and/or QUOTED_IDENTIFIER options set to OFF</h2><p>The SQL module was created with ANSI_NULLS and/or QUOTED_IDENTIFIER options set to OFF.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1320,7 +1292,7 @@
 <name>TRANSACTION names that are allowed</name>
 <description><![CDATA[<h2>TRANSACTION names that are allowed</h2><p>Allowed names can be listed in Rule Customization.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>TRIVIAL</severity>
+<severity>MINOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1334,7 +1306,7 @@
 <name>TRANSACTION names that are disallowed</name>
 <description><![CDATA[<h2>TRANSACTION names that are disallowed</h2><p>THROW should be avoided as a transaction name to avoid keyword name conflict.</p><p>Disallowed names must be listed in Rule Customization using regex syntax.</p><p>Eg, THROW|UnwantedName2|UnwantedName3</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>TRIVIAL</severity>
+<severity>MINOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1348,7 +1320,7 @@
 <name>Schema name for procedure is not specified</name>
 <description><![CDATA[<h2>Schema name for procedure is not specified</h2><p>A stored procedure is being called via the EXECUTE command without the schema being specified.</p><p>Even where you don’t have to qualify the name of a stored procedure, that is whenever the procedure is in your default schema, performance is slightly better if you specify the schema, and it makes the code more intelligible to others, more consistent, and easier to refactor.</p><p>SQL Monitor</p><p>The complete name of any schema-based database object consists of up to four identifiers: the server name, database name, schema name, and object name. Only if you are calling a remote stored procedure would you need a fully qualified name consisting of all four identifiers. If you are calling a procedure in another database, you obviously need its database identifier in the name. Within a database, you only need the object name itself so long as the procedure is in the same schema. By specifying the schema, the database engine needs less searching to identify it. Even system stored procedures should be qualified with the ‘sys’ schema name. When creating a stored procedure as well, it is a good habit to always specify the parent schema.</p><p>Still, if you have a synonym for your stored procedure and you call the synonym via the EXECUTE command, you should not specify any schema.</p><p>Read more on the Redgate Hub</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1362,7 +1334,7 @@
 <name>Schema name for table or view is not specified</name>
 <description><![CDATA[<h2>Schema name for table or view is not specified</h2><p>It is recommended to always specify schema name.</p><p>Usually, performance is slightly better if you specify the schema because it speeds the search for the object, but in certain cases, you need versions of the same table or view to be different depending on the user role.</p><p>You can put different tables or views of the same name in different schemas. You then need to specify the table without the schema because sql server will then choose the stored procedure from the schema associated with the role of the user.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1376,7 +1348,7 @@
 <name>Creation of table by SELECT INTO statement</name>
 <description><![CDATA[<h2>Creation of table by SELECT INTO statement</h2><p>SELECT … INTO is being used to create a table. Before SQL Server 2005 this would lock out all other users.</p><p>It is usually easier to understand tables created with a CREATE TABLE statement.  However, SELECT INTO can be very useful for creating temporary tables.</p><p>SQL Monitor</p><p>Prior to SQL Server 2005, use of SELECT…INTO in production code was a performance 'code smell' because it acquired schema locks on system tables of the database, causing SQL Server to appear unresponsive while the query was being executed. This is because it is a DDL statement in an implicit transaction, which is inevitably long-running since the data is inserted within the same SQL Statement. However, this behavior was fixed in SQL Server 2005, when the locking model changed.</p><p>SELECT…INTO became popular because it was a faster way of inserting data than using INSERT INTO…SELECT…. This was mainly due to the SELECT…INTO operation being, where possible, bulk-logged. Although INSERT INTO can now be bulk-logged, you may still see this performance advantage in SQL Server 2012 and 2014, because SELECT…INTO can be parallelized on these versions, whereas support for parallelization of INSERT INTO only emerged in SQL Server 2016. However, with SELECT…INTO, you still have the task of defining all required indexes and constraints, and so on, on the new table.</p><p>Generally, SELECT…INTO is still a useful shortcut for development work, but it no longer has a clear performance advantage, and is of doubtful value for a live database. It is not part of the SQL Standard. It is usually easier to work with tables created with a CREATE TABLE statement because you then have the advantage of specifying constraints and datatypes in advance, and this also means that you're less likely to allow inconsistencies to sneak into the data.</p><p>See also: When to use the SELECT…INTO statement</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1390,7 +1362,7 @@
 <name>INDEX HINT is used</name>
 <description><![CDATA[<h2>INDEX HINT is used</h2><p>It is not a good idea to use query hints as in WITH (INDEX (MyIndex)).</p><p>The SQL Server query optimizer usually selects the best index for a join, so these should be used only as a last resort by experienced developers and database administrators.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1404,7 +1376,7 @@
 <name>JOIN HINT is used</name>
 <description><![CDATA[<h2>JOIN HINT is used</h2><p>It is not recommended to use join hints.</p><p>It is not a good idea to use join hints as in WITH (LOOP, HASH,MERGE or REMOTE). The SQL Server query optimizer usually selects the best index for a join, so these should only be used as a last resort by experienced developers and database administrators.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1418,7 +1390,7 @@
 <name>TABLE HINT is used</name>
 <description><![CDATA[<h2>TABLE HINT is used</h2><p>It is not recommended to use table hints.</p><p>It is not a good idea to use any of the rich variety of table hints. The SQL Server query optimizer usually selects the best index for a join, so these should be used only as a last resort by experienced developers and database administrators.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1432,7 +1404,7 @@
 <name>QUERY HINT is used</name>
 <description><![CDATA[<h2>QUERY HINT is used</h2><p>It is not recommended to use query hints.</p><p>It is not a good idea to use query hints. The SQL Server query optimizer usually selects the best execution plan for a query, these should be used only as a last resort by experienced developers and database administrators.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1446,7 +1418,7 @@
 <name>SET NOCOUNT OFF is used</name>
 <description><![CDATA[<h2>SET NOCOUNT OFF is used</h2><p>It is not recommended to set NOCOUNT to OFF.</p><p>This is the default setting but it isn’t such a good idea in a production system. The count of the result of a SQL expression is useful but it is actually sent to the application in the message queue rather than as a result. The value can be gotten using the @@ROWCOUNT function.</p><p>SQL Monitor</p><p>Whenever you execute a query, a small (nine-byte) message packet, called DONE_IN_PROC, is sent back to the client. For each T-SQL statement executed, the message displays the number of rows that are affected by that statement. Use of SET NOCOUNT ON suppresses the sending of this message packet.</p><p>This can improve performance by reducing network traffic slightly. The server-based logic, and values such as @@ROWCOUNT, are all unaffected.</p><p>Triggers should not send rowcount messages, so use of SET NOCOUNT OFF for triggers is a code smell. Other code modules, such as stored procedures, should avoid use of SET NOCOUNT ON, unless one or more of the applications using the stored procedures require it to be OFF, because they are reading the value in the message.</p><p>Read more on the Redgate Hub</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1457,10 +1429,10 @@
 <rule>
 <key>PE009</key>
 <internalKey>PE009</internalKey>
-<name></name>
-<description><![CDATA[<p>No SET NOCOUNT ON before DML</p><p>It is recommended to set NOCOUNT to ON.</p><p>It is a good idea to add a set NOCOUNT to ON statement before any DML statements in a batch to prevent the count of the result of a SQL expression being sent to the users application like a print statement in the message queue rather than as a result. The value can be gotten using the @@ROWCOUNT function.</p><p>SQL Monitor</p><p>Whenever you execute a query, a small (nine-byte) message packet, called DONE_IN_PROC, is sent back to the client. For each T-SQL statement executed, the message displays the number of rows that are affected by that statement.</p><p>Use of SET NOCOUNT ON suppresses the sending of this message packet. This can improve performance by reducing network traffic slightly. The server-based logic, and values such as @@ROWCOUNT, are all unaffected.</p><p>It is recommended to add a SET NOCOUNT ON at the start of every stored procedure, trigger and dynamically executed batch. This rule will apply to all triggers, without exception. No stored procedures will need these messages either, unless they are called from outside the database by an application that is trying to use them to get a gauge of the number of rows of a result. In general, when design9ing an application, it is better to send the count in an output variable, using the value in @@RowCount.</p><p>Read more on the Redgate Hub</p>]]></description>
+<name>PE009</name>
+<description><![CDATA[<h2>PE009</h2><p>No SET NOCOUNT ON before DML</p><p>It is recommended to set NOCOUNT to ON.</p><p>It is a good idea to add a set NOCOUNT to ON statement before any DML statements in a batch to prevent the count of the result of a SQL expression being sent to the users application like a print statement in the message queue rather than as a result. The value can be gotten using the @@ROWCOUNT function.</p><p>SQL Monitor</p><p>Whenever you execute a query, a small (nine-byte) message packet, called DONE_IN_PROC, is sent back to the client. For each T-SQL statement executed, the message displays the number of rows that are affected by that statement.</p><p>Use of SET NOCOUNT ON suppresses the sending of this message packet. This can improve performance by reducing network traffic slightly. The server-based logic, and values such as @@ROWCOUNT, are all unaffected.</p><p>It is recommended to add a SET NOCOUNT ON at the start of every stored procedure, trigger and dynamically executed batch. This rule will apply to all triggers, without exception. No stored procedures will need these messages either, unless they are called from outside the database by an application that is trying to use them to get a gauge of the number of rows of a result. In general, when design9ing an application, it is better to send the count in an output variable, using the value in @@RowCount.</p><p>Read more on the Redgate Hub</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1474,7 +1446,7 @@
 <name>Interleaving DDL and DML in stored procedure/trigger</name>
 <description><![CDATA[<h2>Interleaving DDL and DML in stored procedure/trigger</h2><p>It is not recommended to mix DML and DDL statement because recompilation issues may arise.</p><p>If DML and DDL statements are interleaved, stored procedures will often be recompiled instead of using the cached query plan, especially if there are DDL statements following DML statements. The risk of this happening is far less if you use table variables rather than creating temporary tables or ordinary tables.</p><p>SQL Monitor</p><p>It makes for much clearer code and is easier to refactor if any DDL statements such as table creation or alteration are made at the start of the batch or procedure. However, only if you are using SQL Server before SQL Server 2005 do you need to worry about interleaving on performance grounds. This is because more recent versions of SQL Server no longer recompile the batch, instead of using the cached query plan, if DDL statements follow DML statements.</p><p>If either a user table, or temporary table, is created or altered within a batch, this triggers just a deferred statement-level recompile. This only happens the first time it is run, and if the version in cache is subsequently used, there is no more problem. A statement-level recompile will only recompile once, right before the batch executes for the first time.</p><p>DECLARE statements that produce a table variable do not cause any type of recompile when the procedure or trigger first executes, whereas the creation of a temporary table or ordinary table does. However, since table variables don't cause recompiles, the optimizer can never get accurate row count estimations for table variables, which can sometimes cause bad plans and poor performance.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1488,7 +1460,7 @@
 <name>PRINT statement is used in trigger</name>
 <description><![CDATA[<h2>PRINT statement is used in trigger</h2><p>Trigger should not return data back to a client.</p><p>PRINT statements can be returned to the client. These are not in the result set but sent down the Infomessage queue, like the count messages. These are fine for temporary debugging, but should not be still there in a production system.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1502,7 +1474,7 @@
 <name>Settings lead to procedure recompilation (only in proc/trigger)</name>
 <description><![CDATA[<h2>Settings lead to procedure recompilation (only in proc/trigger)</h2><p>Setting this option from within batch leads to batch recompilation.</p><p>Where possible, batches, triggers and procedures should be compiled just once and their plans reused when called again. This yields better performance and uses less memory resource. Anything that changes the execution context will force a recompile.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1516,7 +1488,7 @@
 <name>COUNT used instead of EXISTS</name>
 <description><![CDATA[<h2>COUNT used instead of EXISTS</h2><p>It is not recommended to use COUNT() in this circumstance. Use EXISTS() instead for superior performance and readability.</p><p>Some programmers use COUNT(*) to check to see if there are any rows that match some criteria when EXISTS() or NOT EXISTS() could be used instead.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1530,7 +1502,7 @@
 <name>SET FORCEPLAN used</name>
 <description><![CDATA[<h2>SET FORCEPLAN used</h2><p>It is not recommended to use SET FORCEPLAN OFF because of the possibility of performance degradation.</p><p>SET FORCEPLAN ON  overrides the logic used by the query optimizer to process a Transact-SQL SELECT statement. It prevents the optimizer from changing the order in which SQL Server processes the tables to satisfy the query. It is very unlikely to be useful.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1544,7 +1516,7 @@
 <name>No FETCH FIRST/LAST/PRIOR, but cursor is not declared as forward only</name>
 <description><![CDATA[<h2>No FETCH FIRST/LAST/PRIOR, but cursor is not declared as forward only</h2><p>It is recommended to declare cursor with appropriate scroll options (FORWARD_ONLY,FAST_FORWARD, etc).</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1558,7 +1530,7 @@
 <name>Cursor is opened but is not deallocated</name>
 <description><![CDATA[<h2>Cursor is opened but is not deallocated</h2><p>It is recommended to deallocate a cursor explicitly.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1572,7 +1544,7 @@
 <name>Incorrect usage of const UDF</name>
 <description><![CDATA[<h2>Incorrect usage of const UDF</h2><p>It is not recommended to use a UDF that returns a const value in JOIN or WHERE clauses or in a select list – it is better to store the UDF value in a variable.</p><p>SQL Monitor</p><p>Developers tend to expect to be able to set global values in a database to provide constants such as the value of Pi, or variables such as the tax rate, language, file URNs or URLs. User-defined scalar functions return a single value, and so seem to provide the ideal way of doing so. This is fine for functions that are executed infrequently, and process relatively small data sets, but in other cases it can cause dramatic query performance problems. There is an overhead in calling any SQL Server function that has a BEGIN…END block because, unless we allow SQL Server to verify its output, by creating the function using schema binding, it will re-execute the function for every row, before data can be filtered, even though it is obvious to you that it will return the same value every time. Unless you are confident with schema binding, and its consequences when making database changes, it is better to use either transfer the value to a variable, or use a module such as a view or inline Table-value function.</p><p>See also: Misuse of the scalar user-defined function as a constant (PE017)</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1586,7 +1558,7 @@
 <name>Cursor is not declared as readonly</name>
 <description><![CDATA[<h2>Cursor is not declared as readonly</h2><p>This cursor can be declared as readonly as there was no UPDATE or DELETE operation.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1600,7 +1572,7 @@
 <name>Consider using EXISTS instead of IN</name>
 <description><![CDATA[<h2>Consider using EXISTS instead of IN</h2><p>In theory, EXISTS is faster because the search stops as soon as the condition is true, whereas IN has to collect all sub-query results before testing the condition. In practice, the query optimizer treats EXISTS and IN the same way whenever it can.</p><p>SQL Monitor</p><p>It used to be that the EXISTS logical operator was faster than IN, when comparing data sets using a subquery. For example, in cases where the query had to perform a certain task, but only if the subquery returned any rows, then when evaluating WHERE [NOT] EXISTS (subquery), the database engine could quit searching as soon as it had found just one row, whereas WHERE [NOT] IN (subquery) would always collect all the results from the sub-query, before further processing.</p><p>However, the query optimizer now treats EXISTS and IN the same way, whenever it can, so you’re unlikely to see any significant performance differences. Nevertheless, you need to be cautious when using the NOT IN operator if the subquery’s source data contains NULL values. If so, you should consider using a NOT EXISTS operator instead of NOT IN, or recast the statement as a left outer join.</p><p>See also: Consider using [NOT] EXISTS instead of [NOT] IN (subquery)</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1612,9 +1584,9 @@
 <key>PE020</key>
 <internalKey>PE020</internalKey>
 <name>INSERT INTO table with ORDER BY</name>
-<description><![CDATA[<h2>INSERT INTO table with ORDER BY</h2><p>The SQL query that is used to produce the result that is inserted into the permanent table has its order specified by an ORDER BY statement. Relational tables are not ordered, so the ORDER BY is meaningless. Use a Row_Number() Window clause instead, if you need to impose a particular order on rows in the table, via a query, especially if you need to allow subsequent insertions into the table"</p><p>SQL Monitor</p><p>The SQL query that is used to produce the result that is inserted into the permanent table has its order specified by an ORDER BY statement. Relational tables are not ordered, so the ORDER BY is meaningless. Use a Row_Number() Window clause instead, if you need to impose a particular order on rows in the table, via a query, especially if you need to allow subsequent insertions into the table. For temporary tables or table variables that will have no subsequent insertions, the current order can be maintained via an IDENTITY field in the target table, but it is an anachronism now that there are better and more versatile ways of doing it.</p>]]></description>
+<description><![CDATA[<h2>INSERT INTO table with ORDER BY</h2><p>The SQL query that is used to produce the result that is inserted into the permanent table has its order specified by an ORDER BY statement. Relational tables are not ordered, so the ORDER BY is meaningless. Use a Row_Number() Window clause instead, if you need to impose a particular order on rows in the table, via a query, especially if you need to allow subsequent insertions into the table"</p><p>SQL Monitor</p><p>The SQL query that is used to produce the result that is inserted into the permanent table has its order specified by an ORDER BY statement. Relational tables are not ordered, so the ORDER BY is meaningless. Use a Row_Number() Window clause instead, if you need to impose a particular order on rows in the table, via a query, especially if you need to allow subsequent insertions into the table. For temporary tables or table variables that will have no subsequent insertions, the current order can be maintained via an IDENTITY field in the target table, but it is an anachronism now that there are better and more versatile ways of doing it.See also: SQL Prompt Code Analysis: INSERT INTO a permanent table with ORDER BY (PE020)</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1628,7 +1600,7 @@
 <name>WITH RECOMPILE option is used</name>
 <description><![CDATA[<h2>WITH RECOMPILE option is used</h2><p>Consider using RECOMPILE query hint instead of WITH RECOMPILE option.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1642,7 +1614,7 @@
 <name>Foreign key is not trusted</name>
 <description><![CDATA[<h2>Foreign key is not trusted</h2><p>Foreign key is not trusted.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1656,7 +1628,7 @@
 <name>DDL without specifying a schema name for table</name>
 <description><![CDATA[<h2>DDL without specifying a schema name for table</h2><p>The compiler can interpret a two-part object name quicker than just one name. This applies particularly to tables, views, procedures and functions. The same name can be used in different database schemas, so it pays to make your queries unambiguous.</p><p>SQL Monitor</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1670,7 +1642,7 @@
 <name>Script should end with GO</name>
 <description><![CDATA[<h2>Script should end with GO</h2><p>GO has nothing to do with SQL and is not interpreted by SQL Server. It signals the end of a batch on the client (e.g. SSMS) in order to ensure that several batches can be sent from one file or script.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1684,7 +1656,7 @@
 <name>Script should end with empty line</name>
 <description><![CDATA[<h2>Script should end with empty line</h2><p>Many editing tools will get confused  if the last line  in a text file is not terminated with a newline or carriage return / new line combination.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1698,7 +1670,7 @@
 <name>There should be no USE statement in batch</name>
 <description><![CDATA[<h2>There should be no USE statement in batch</h2><p>It is unusual to need to jump between database contexts in the middle of a batch, though it is allowed.</p><p>The USE command can only accept a literal database name. It cannot use a synonym, variable or expression. It is intended only as the way of switching the user context.It requires that a database name should be embedded somewhere in the body of the code.</p><p>For reliable installation, this requires a SQLCMD macro or similar to allow the installer to specify the name when necessary.</p><p>The use of USE itself isn't wrong, though it causes an error in Azure SQL Database. It is, in fact, often required in Admin scripts and DDL. If, however, you need to use it in application code, there is probably something wrong with the design of the database(s), since batches should always for security, run in the database context of that database user. Any cross-database work should be done with synonyms, views or iTVFs.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1712,7 +1684,7 @@
 <name>Found TODO comment</name>
 <description><![CDATA[<h2>Found TODO comment</h2><p>There is a -- TODO Task...  comment left in the code.</p><p>This rule also matches bug, fix and warning comments left in code.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1726,7 +1698,7 @@
 <name>The procedure grants itself permissions</name>
 <description><![CDATA[<h2>The procedure grants itself permissions</h2><p>The procedure grants itself permissions. This may indicate that a GO is missing.</p><p>Consider the following:</p><p>CREATE PROCEDURE MyProc  AS       BEGIN           SET NOCOUNT ON;       END;     GRANT EXECUTE ON MyProc TO PUBLIC;  GO</p><p>In the above example, if GO is omitted before the GRANT statement, the procedure will be created with the GRANT statement included as part of its body, and no rights will be granted during script execution. It is very unusual for a stored procedure to legitimately grant rights to itself, which is why this pattern should be flagged.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
@@ -1740,7 +1712,7 @@
 <name>The EOL marker sequence is not expected CR/LF</name>
 <description><![CDATA[<h2>The EOL marker sequence is not expected CR/LF</h2><p>The EOL marker sequence is not the expected CR/LF.</p>]]></description>
 <descriptionFormat>HTML</descriptionFormat>
-<severity>MARJOR</severity>
+<severity>MAJOR</severity>
 <cardinality>SINGLE</cardinality>
 <status>READY</status>
 <remediationFunction>LINEAR</remediationFunction>
