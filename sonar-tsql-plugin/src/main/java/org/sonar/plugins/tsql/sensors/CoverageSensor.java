@@ -1,10 +1,9 @@
 package org.sonar.plugins.tsql.sensors;
 
+import java.io.File;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Consumer;
 
-import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -14,65 +13,77 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.coverage.HitLines;
-import org.sonar.plugins.tsql.coverage.HitLines.LineInfo;
+import org.sonar.plugins.tsql.coverage.FileNamesMatcher;
+import org.sonar.plugins.tsql.coverage.CoveredLinesReport;
+import org.sonar.plugins.tsql.coverage.CoveredLinesReport.LineInfo;
 import org.sonar.plugins.tsql.coverage.ICoveragProvider;
 import org.sonar.plugins.tsql.coverage.SqlCoverCoverageProvider;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
 public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
-	private ICoveragProvider coverageProvider;
+
 	private static final Logger LOGGER = Loggers.get(CoverageSensor.class);
 
-	public CoverageSensor(ICoveragProvider coverageProvider) {
-		this.coverageProvider = coverageProvider;
+	private final ICoveragProvider coverageProvider;
 
+	private final FileNamesMatcher fileNamesMatcher = new FileNamesMatcher();
+
+	public CoverageSensor(final ICoveragProvider coverageProvider) {
+		this.coverageProvider = coverageProvider;
 	}
 
-	public CoverageSensor(FileSystem fs, Settings settings) {
+	public CoverageSensor(final FileSystem fs, final Settings settings) {
 		this(new SqlCoverCoverageProvider(settings, fs));
 	}
 
 	@Override
-	public void describe(SensorDescriptor descriptor) {
+	public void describe(final SensorDescriptor descriptor) {
 		descriptor.name(this.getClass().getSimpleName()).onlyOnLanguage(TSQLLanguage.KEY);
 	}
 
 	@Override
-	public void execute(SensorContext context) {
+	public void execute(final SensorContext context) {
 		final FileSystem fs = context.fileSystem();
 		if (context.settings().getBoolean(Constants.PLUGIN_SKIP_COVERAGE)) {
 			return;
 		}
 		try {
-			final Map<String, HitLines> coveredFiles = coverageProvider.getHitLines();
+			final Map<String, CoveredLinesReport> coveredFiles = coverageProvider.getHitLines();
 			final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));
 			files.forEach(new Consumer<InputFile>() {
 				@Override
 				public void accept(InputFile t) {
-					String file = FilenameUtils.removeExtension(t.file().getName());
-					for (Entry<String, HitLines> entrySet : coveredFiles.entrySet()) {
-						String s = entrySet.getKey();
-						if (s.contains(file)) {
-							try {
-								NewCoverage cov = context.newCoverage().onFile(t);
-								HitLines lines = entrySet.getValue();
-								for (LineInfo lineInfo : lines.getHitLines()) {
-									cov.lineHits(lineInfo.getLine(), lineInfo.getHitsCount());
-								}
-								cov.save();
-							} catch (Throwable e) {
-								LOGGER.warn("Error while adding coverage for {}", t.absolutePath(), e);
-							}
+					final File file = t.file();
+					final CoveredLinesReport[] hitLines = fileNamesMatcher.match(file.getName(), file.getParent(), coveredFiles);
+					final int coverageReportsFound = hitLines.length;
+					if (coverageReportsFound == 0) {
+						return;
+					}
+					if (coverageReportsFound > 1) {
+						LOGGER.info("Found {} multiple coverage matches for file {}", coverageReportsFound,
+								t.absolutePath());
+						return;
+					}
+					try {
+						NewCoverage newCoverage = context.newCoverage().onFile(t);
+						final CoveredLinesReport lines = hitLines[0];
+						for (final LineInfo lineInfo : lines.getHitLines()) {
+							newCoverage.lineHits(lineInfo.getLine(), lineInfo.getHitsCount());
 						}
+						newCoverage.save();
+					} catch (Throwable e) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Error while adding coverage for {}", t.absolutePath(), e);
+						}
+
 					}
 
 				}
-
 			});
 
 		} catch (Throwable e) {
 			LOGGER.warn("Unexpected error while running sensor", e);
 		}
 	}
+
 }
