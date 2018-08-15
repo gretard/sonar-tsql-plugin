@@ -38,16 +38,20 @@ public class TSQLPlugin implements Plugin {
 				.name("Disable custom violations detection")
 				.description("Flag whether to disable issues detection against custom rules.").defaultValue("false")
 				.type(PropertyType.BOOLEAN).build());
+
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PATH)
 				.name("Path to the custom rules path").description("A comma separated list of custom rules files")
 				.defaultValue("").type(PropertyType.STRING).build());
+		
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PREFIX)
 				.name("Custom rules file name prefix").defaultValue(".customRules").type(PropertyType.STRING).build());
+		
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SUFFIXES).name("Suffixes to analyze")
 				.description("Suffixes supported by the plugin").defaultValue(".sql").type(PropertyType.STRING)
 				.build());
 
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
+		
 		context.addExtensions(MsRulesDefinition.class, CustomPluginChecksRulesDefinition.class,
 				CodeGuardRulesDefinition.class, CustomUserChecksRulesDefinition.class, MsIssuesLoaderSensor.class,
 				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class);
