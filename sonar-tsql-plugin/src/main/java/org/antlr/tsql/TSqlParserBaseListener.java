@@ -1636,6 +1636,18 @@ public class TSqlParserBaseListener implements TSqlParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLock_table(TSqlParser.Lock_tableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLock_table(TSqlParser.Lock_tableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTruncate_table(TSqlParser.Truncate_tableContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2944,6 +2956,18 @@ public class TSqlParserBaseListener implements TSqlParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUpdate_statistics(TSqlParser.Update_statisticsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUpdate_statistics(TSqlParser.Update_statisticsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCreate_table(TSqlParser.Create_tableContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3736,6 +3760,18 @@ public class TSqlParserBaseListener implements TSqlParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExecute_body(TSqlParser.Execute_bodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExecute_body(TSqlParser.Execute_bodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExecute_statement_arg(TSqlParser.Execute_statement_argContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3976,6 +4012,18 @@ public class TSqlParserBaseListener implements TSqlParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSetuser_statement(TSqlParser.Setuser_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSetuser_statement(TSqlParser.Setuser_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDbcc_clause(TSqlParser.Dbcc_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -4091,6 +4139,18 @@ public class TSqlParserBaseListener implements TSqlParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitColumn_definition(TSqlParser.Column_definitionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMaterialized_column_definition(TSqlParser.Materialized_column_definitionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMaterialized_column_definition(TSqlParser.Materialized_column_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

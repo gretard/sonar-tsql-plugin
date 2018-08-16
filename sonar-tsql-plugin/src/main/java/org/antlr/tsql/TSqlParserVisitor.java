@@ -821,6 +821,12 @@ public interface TSqlParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEnable_trigger(TSqlParser.Enable_triggerContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TSqlParser#lock_table}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLock_table(TSqlParser.Lock_tableContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TSqlParser#truncate_table}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -1475,6 +1481,12 @@ public interface TSqlParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCreate_statistics(TSqlParser.Create_statisticsContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TSqlParser#update_statistics}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUpdate_statistics(TSqlParser.Update_statisticsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TSqlParser#create_table}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -1871,6 +1883,12 @@ public interface TSqlParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExecute_statement(TSqlParser.Execute_statementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TSqlParser#execute_body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExecute_body(TSqlParser.Execute_bodyContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TSqlParser#execute_statement_arg}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -1991,6 +2009,12 @@ public interface TSqlParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUse_statement(TSqlParser.Use_statementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TSqlParser#setuser_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetuser_statement(TSqlParser.Setuser_statementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TSqlParser#dbcc_clause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -2050,6 +2074,12 @@ public interface TSqlParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitColumn_definition(TSqlParser.Column_definitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TSqlParser#materialized_column_definition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMaterialized_column_definition(TSqlParser.Materialized_column_definitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link TSqlParser#column_constraint}.
 	 * @param ctx the parse tree

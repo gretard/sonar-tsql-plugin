@@ -5,9 +5,9 @@ import java.io.File;
 import org.sonar.api.config.Settings;
 import org.sonar.plugins.tsql.Constants;
 
-public class MsIssuesFilesProvider implements IReporsProvider {
+public class MsIssuesFilesProvider implements IReportsProvider {
 
-	private final IReporsProvider reportsProvider;
+	private final IReportsProvider reportsProvider;
 
 	public MsIssuesFilesProvider(final Settings settings) {
 		final String reportEnd = settings.getString(Constants.MS_REPORT_FILE);

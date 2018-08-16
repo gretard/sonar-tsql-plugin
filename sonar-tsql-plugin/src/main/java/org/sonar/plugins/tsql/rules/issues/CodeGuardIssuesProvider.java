@@ -12,14 +12,14 @@ import org.sonar.api.utils.TempFolder;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.rules.files.CodeGuardExecutingReportsProvider;
-import org.sonar.plugins.tsql.rules.files.IReporsProvider;
+import org.sonar.plugins.tsql.rules.files.IReportsProvider;
 import org.sonar.plugins.tsql.rules.parsers.CodeGuardIssuesParser;
 import org.sonar.plugins.tsql.rules.parsers.IIssuesParser;
 
 public class CodeGuardIssuesProvider implements IIssuesProvider {
 
 	private final IIssuesParser<TsqlIssue> issuesParser = new CodeGuardIssuesParser();
-	private final IReporsProvider reportsProvider;
+	private final IReportsProvider reportsProvider;
 
 	private static final Logger LOGGER = Loggers.get(CodeGuardIssuesProvider.class);
 

@@ -10,7 +10,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 
-public class CodeGuardExecutingReportsProvider implements IReporsProvider {
+public class CodeGuardExecutingReportsProvider implements IReportsProvider {
 
 	private static final String cgCommandLine = "\"%s\" -source \"%s\" -out \"%s\" -config \"%s\"";
 

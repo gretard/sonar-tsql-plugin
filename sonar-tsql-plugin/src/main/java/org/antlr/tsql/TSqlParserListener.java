@@ -1358,6 +1358,16 @@ public interface TSqlParserListener extends ParseTreeListener {
 	 */
 	void exitEnable_trigger(TSqlParser.Enable_triggerContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TSqlParser#lock_table}.
+	 * @param ctx the parse tree
+	 */
+	void enterLock_table(TSqlParser.Lock_tableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TSqlParser#lock_table}.
+	 * @param ctx the parse tree
+	 */
+	void exitLock_table(TSqlParser.Lock_tableContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TSqlParser#truncate_table}.
 	 * @param ctx the parse tree
 	 */
@@ -2448,6 +2458,16 @@ public interface TSqlParserListener extends ParseTreeListener {
 	 */
 	void exitCreate_statistics(TSqlParser.Create_statisticsContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TSqlParser#update_statistics}.
+	 * @param ctx the parse tree
+	 */
+	void enterUpdate_statistics(TSqlParser.Update_statisticsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TSqlParser#update_statistics}.
+	 * @param ctx the parse tree
+	 */
+	void exitUpdate_statistics(TSqlParser.Update_statisticsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TSqlParser#create_table}.
 	 * @param ctx the parse tree
 	 */
@@ -3108,6 +3128,16 @@ public interface TSqlParserListener extends ParseTreeListener {
 	 */
 	void exitExecute_statement(TSqlParser.Execute_statementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TSqlParser#execute_body}.
+	 * @param ctx the parse tree
+	 */
+	void enterExecute_body(TSqlParser.Execute_bodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TSqlParser#execute_body}.
+	 * @param ctx the parse tree
+	 */
+	void exitExecute_body(TSqlParser.Execute_bodyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TSqlParser#execute_statement_arg}.
 	 * @param ctx the parse tree
 	 */
@@ -3308,6 +3338,16 @@ public interface TSqlParserListener extends ParseTreeListener {
 	 */
 	void exitUse_statement(TSqlParser.Use_statementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TSqlParser#setuser_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterSetuser_statement(TSqlParser.Setuser_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TSqlParser#setuser_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitSetuser_statement(TSqlParser.Setuser_statementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TSqlParser#dbcc_clause}.
 	 * @param ctx the parse tree
 	 */
@@ -3407,6 +3447,16 @@ public interface TSqlParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitColumn_definition(TSqlParser.Column_definitionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TSqlParser#materialized_column_definition}.
+	 * @param ctx the parse tree
+	 */
+	void enterMaterialized_column_definition(TSqlParser.Materialized_column_definitionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TSqlParser#materialized_column_definition}.
+	 * @param ctx the parse tree
+	 */
+	void exitMaterialized_column_definition(TSqlParser.Materialized_column_definitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TSqlParser#column_constraint}.
 	 * @param ctx the parse tree

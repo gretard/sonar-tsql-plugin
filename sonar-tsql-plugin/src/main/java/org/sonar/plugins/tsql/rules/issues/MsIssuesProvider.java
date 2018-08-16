@@ -10,7 +10,7 @@ import java.util.List;
 import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.rules.files.IReporsProvider;
+import org.sonar.plugins.tsql.rules.files.IReportsProvider;
 import org.sonar.plugins.tsql.rules.files.MsIssuesFilesProvider;
 import org.sonar.plugins.tsql.rules.parsers.IIssuesParser;
 import org.sonar.plugins.tsql.rules.parsers.MsIssuesParser;
@@ -18,7 +18,7 @@ import org.sonar.plugins.tsql.rules.parsers.MsIssuesParser;
 public class MsIssuesProvider implements IIssuesProvider {
 
 	private final IIssuesParser<TsqlIssue> issuesParser = new MsIssuesParser();
-	private final IReporsProvider reportsProvider;
+	private final IReportsProvider reportsProvider;
 
 	private static final Logger LOGGER = Loggers.get(MsIssuesProvider.class);
 

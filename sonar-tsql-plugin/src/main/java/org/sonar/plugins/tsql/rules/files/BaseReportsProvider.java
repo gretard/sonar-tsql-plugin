@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-public class BaseReportsProvider implements IReporsProvider {
+public class BaseReportsProvider implements IReportsProvider {
 
 	private final String searchName;
 
