@@ -49,7 +49,7 @@ public class SqlCoverCoverageProvider implements ICoveragProvider {
 		final Map<String, CoveredLinesReport> lines = new HashMap<>();
 		final String prefix = settings.getString(Constants.COVERAGE_FILE);
 		String coverageFile = prefix;
-		File temp = new File(coverageFile);
+		final File temp = new File(coverageFile);
 		// try find coverage file
 		if (temp == null || !temp.exists()) {
 			final String baseDir = fileSystem.baseDir().getAbsolutePath();
@@ -61,7 +61,7 @@ public class SqlCoverCoverageProvider implements ICoveragProvider {
 			}
 			coverageFile = files[0].getAbsolutePath();
 		}
-
+		LOGGER.debug("Found coverage file at {}", coverageFile);
 		try (final FileInputStream stream = new FileInputStream(coverageFile)) {
 			final List<org.opencover.Class> data = read(stream);
 			for (final org.opencover.Class classz : data) {
@@ -72,7 +72,7 @@ public class SqlCoverCoverageProvider implements ICoveragProvider {
 				lines.put(nameNormalizer.normalize(fileName), new CoveredLinesReport(fileName, hitLines));
 			}
 		} catch (Throwable e) {
-			LOGGER.warn("Error occured while reading coverage file {}", coverageFile);
+			LOGGER.warn("Unexpected error occured while reading coverage file at {}", coverageFile);
 		}
 		return lines;
 	}

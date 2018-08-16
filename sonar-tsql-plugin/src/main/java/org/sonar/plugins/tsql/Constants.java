@@ -13,7 +13,7 @@ public final class Constants {
 	
 	public static final String CG_APP_PATH = "sonar.tsql.cg.path";
 
-	public static final String COVERAGE_FILE = "sonar.tsql.sqlcover.reports.path";
+	public static final String COVERAGE_FILE = "sonar.tsql.sqlcover.report";
 	
 	public static final String MS_REPORT_FILE = "sonar.tsql.ms.report";
 

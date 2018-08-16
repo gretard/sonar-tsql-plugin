@@ -13,9 +13,9 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.coverage.FileNamesMatcher;
 import org.sonar.plugins.tsql.coverage.CoveredLinesReport;
 import org.sonar.plugins.tsql.coverage.CoveredLinesReport.LineInfo;
+import org.sonar.plugins.tsql.coverage.FileNamesMatcher;
 import org.sonar.plugins.tsql.coverage.ICoveragProvider;
 import org.sonar.plugins.tsql.coverage.SqlCoverCoverageProvider;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
@@ -44,7 +44,15 @@ public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
 	@Override
 	public void execute(final SensorContext context) {
 		final FileSystem fs = context.fileSystem();
+		final boolean skipAnalysis = context.settings().getBoolean(Constants.PLUGIN_SKIP);
+
+		if (skipAnalysis) {
+			LOGGER.debug("Skipping plugin as skip flag is set");
+			return;
+		}
+
 		if (context.settings().getBoolean(Constants.PLUGIN_SKIP_COVERAGE)) {
+			LOGGER.debug("Skipping coverage sensor as skip flag is set");
 			return;
 		}
 		try {
@@ -54,7 +62,8 @@ public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
 				@Override
 				public void accept(InputFile t) {
 					final File file = t.file();
-					final CoveredLinesReport[] hitLines = fileNamesMatcher.match(file.getName(), file.getParent(), coveredFiles);
+					final CoveredLinesReport[] hitLines = fileNamesMatcher.match(file.getName(), file.getParent(),
+							coveredFiles);
 					final int coverageReportsFound = hitLines.length;
 					if (coverageReportsFound == 0) {
 						return;
@@ -65,7 +74,7 @@ public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
 						return;
 					}
 					try {
-						NewCoverage newCoverage = context.newCoverage().onFile(t);
+						final NewCoverage newCoverage = context.newCoverage().onFile(t);
 						final CoveredLinesReport lines = hitLines[0];
 						for (final LineInfo lineInfo : lines.getHitLines()) {
 							newCoverage.lineHits(lineInfo.getLine(), lineInfo.getHitsCount());
