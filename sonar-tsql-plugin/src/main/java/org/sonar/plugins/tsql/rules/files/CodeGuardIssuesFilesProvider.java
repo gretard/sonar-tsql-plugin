@@ -5,9 +5,9 @@ import java.io.File;
 import org.sonar.api.config.Settings;
 import org.sonar.plugins.tsql.Constants;
 
-public class CodeGuardIssuesFilesProvider implements IReporsProvider {
+public class CodeGuardIssuesFilesProvider implements IReportsProvider {
 
-	private final IReporsProvider reportsProvider;
+	private final IReportsProvider reportsProvider;
 
 	public CodeGuardIssuesFilesProvider(final Settings settings) {
 

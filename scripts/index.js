@@ -1,12 +1,15 @@
-console.log('aaaaa');
+
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
 const cheerio = require('cheerio');
 var files = [];
 
+if (!fs.existsSync("rules")) {
+    fs.mkdirSync("rules");
+   downloadFiles();
+}
 
-//downloadFiles();
 generateDoc();
 
 function add(begin, end, pre) {
@@ -24,7 +27,7 @@ function add(begin, end, pre) {
 
 
 
-function downloadFiles() {
+async function downloadFiles() {
     add("https://documentation.red-gate.com/codeanalysis/deprecated-syntax-rules/", 28, "dep");
     add("https://documentation.red-gate.com/codeanalysis/best-practice-rules/", 24, "bp");
     add("https://documentation.red-gate.com/codeanalysis/execution-rules/", 33, "ei");
@@ -39,13 +42,13 @@ function downloadFiles() {
     for (var file of files) {
         let names = file.split('/');
         let fileName = names[names.length - 1];
-        var request = downloadFile(file, fileName);
+        var request = await downloadFile(file, fileName);
     }
 
 }
 
 
-function downloadFile(file, fileName) {
+async function downloadFile(file, fileName) {
     return https.get(file, function (response) {
         var content = "";
         response.on("data", function (chunk) {
@@ -83,6 +86,13 @@ function generateDoc() {
         if (ruleId == "ST012") {
             ruleName = "Consider using temporary table instead of table variable";
         }
+        if (ruleId == "PE009") {
+            ruleName = "No SET NOCOUNT ON before DML";
+        }
+        if (ruleId == "BP022") {
+            ruleName ="Money/SmallMoney datatype is used";
+        }
+
         var ruleText = "";
         //        for (var i = 2; i < txt.length - 5; i++) {
         for (var i = 0; i < txt.length; i++) {
@@ -95,6 +105,7 @@ function generateDoc() {
             || text.startsWith("(More information coming soon)")
             || text.startsWith("Published")
             || text == ruleName
+            || text == ruleId
             || text.startsWith("SQL Prompt")
         ) {
                 continue;

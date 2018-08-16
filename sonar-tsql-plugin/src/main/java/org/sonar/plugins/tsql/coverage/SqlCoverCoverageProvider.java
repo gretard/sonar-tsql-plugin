@@ -18,7 +18,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.rules.files.BaseReportsProvider;
-import org.sonar.plugins.tsql.rules.files.IReporsProvider;
+import org.sonar.plugins.tsql.rules.files.IReportsProvider;
 
 public class SqlCoverCoverageProvider implements ICoveragProvider {
 
@@ -53,7 +53,7 @@ public class SqlCoverCoverageProvider implements ICoveragProvider {
 		// try find coverage file
 		if (temp == null || !temp.exists()) {
 			final String baseDir = fileSystem.baseDir().getAbsolutePath();
-			final IReporsProvider reportsProvider = new BaseReportsProvider(prefix);
+			final IReportsProvider reportsProvider = new BaseReportsProvider(prefix);
 			final File[] files = reportsProvider.get(baseDir);
 			if (files.length != 1) {
 				LOGGER.info("Found not 1, but {} coverage files matching {} path at {}", files.length, prefix, baseDir);
