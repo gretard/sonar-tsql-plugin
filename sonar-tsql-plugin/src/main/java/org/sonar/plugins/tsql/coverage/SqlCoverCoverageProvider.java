@@ -17,8 +17,7 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
-import org.sonar.plugins.tsql.rules.files.BaseReportsProvider;
-import org.sonar.plugins.tsql.rules.files.IReportsProvider;
+import org.sonar.plugins.tsql.rules.files.FilesProvider;
 
 public class SqlCoverCoverageProvider implements ICoveragProvider {
 
@@ -29,6 +28,7 @@ public class SqlCoverCoverageProvider implements ICoveragProvider {
 	private final FileSystem fileSystem;
 
 	private final NameNormalizer nameNormalizer = new NameNormalizer();
+	private final FilesProvider filesProvider = new FilesProvider();
 
 	public SqlCoverCoverageProvider(final Settings settings, final FileSystem fileSystem) {
 		this.settings = settings;
@@ -47,26 +47,26 @@ public class SqlCoverCoverageProvider implements ICoveragProvider {
 	@Override
 	public Map<String, CoveredLinesReport> getHitLines() {
 		final Map<String, CoveredLinesReport> lines = new HashMap<>();
-		final String prefix = settings.getString(Constants.COVERAGE_FILE);
-		String coverageFile = prefix;
-		final File temp = new File(coverageFile);
-		// try find coverage file
-		if (temp == null || !temp.exists()) {
-			final String baseDir = fileSystem.baseDir().getAbsolutePath();
-			final IReportsProvider reportsProvider = new BaseReportsProvider(prefix);
-			final File[] files = reportsProvider.get(baseDir);
-			if (files.length != 1) {
-				LOGGER.info("Found not 1, but {} coverage files matching {} path at {}", files.length, prefix, baseDir);
-				return lines;
-			}
-			coverageFile = files[0].getAbsolutePath();
+		final String specifiedValue = settings.getString(Constants.COVERAGE_FILE);
+		final File[] files = filesProvider.getFiles(Constants.COVERAGE_FILE_DEFAULT_VALUE, specifiedValue,
+				fileSystem.baseDir().getAbsolutePath());
+		if (files.length > 1) {
+			LOGGER.info("Found multiple coverage files at  {}. Try to specify absolute path.", specifiedValue);
+			return lines;
 		}
+		if (files.length == 0) {
+			LOGGER.debug("Did not find any coverage files at {}", specifiedValue);
+			return lines;
+		}
+		final String coverageFile = files[0].getAbsolutePath();
+
 		LOGGER.debug("Found coverage file at {}", coverageFile);
 		try (final FileInputStream stream = new FileInputStream(coverageFile)) {
 			final List<org.opencover.Class> data = read(stream);
 			for (final org.opencover.Class classz : data) {
 				final CoveredLinesReport.LineInfo[] hitLines = classz.getMethods().getMethod().getSequencePoints()
-						.getSequencePoint().stream().map(point -> new CoveredLinesReport.LineInfo(point.getSl(), point.getVc()))
+						.getSequencePoint().stream()
+						.map(point -> new CoveredLinesReport.LineInfo(point.getSl(), point.getVc()))
 						.toArray(CoveredLinesReport.LineInfo[]::new);
 				final String fileName = classz.getFullName();
 				lines.put(nameNormalizer.normalize(fileName), new CoveredLinesReport(fileName, hitLines));

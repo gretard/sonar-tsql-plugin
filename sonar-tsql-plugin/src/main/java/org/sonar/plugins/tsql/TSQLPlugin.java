@@ -24,12 +24,12 @@ public class TSQLPlugin implements Plugin {
 				.build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.CG_REPORT_FILE).name("SQL Code Guard results file")
-				.description("SQL Code Guard results file").defaultValue("cgresults.xml").type(PropertyType.STRING)
-				.build());
+				.description("SQL Code Guard results file").defaultValue(Constants.CG_REPORT_FILE_DEFAULT_VALUE)
+				.type(PropertyType.STRING).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.MS_REPORT_FILE)
 				.name("MSBuild SQL code analysis results file").description("MSBuild SQL code analysis results file")
-				.defaultValue("staticcodeanalysis.results.xml").type(PropertyType.STRING).build());
+				.defaultValue(Constants.MS_REPORT_FILE_DEFAULT_VALUE).type(PropertyType.STRING).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP).name("Disable plugin")
 				.description("Flag whether to disable plugin").defaultValue("false").type(PropertyType.BOOLEAN)
@@ -56,8 +56,8 @@ public class TSQLPlugin implements Plugin {
 				.build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.COVERAGE_FILE).name("Path to SQLCover file")
-				.description("Absolute of relative path in base dir to SQLCover file").defaultValue("Coverage.opencoverxml")
-				.type(PropertyType.STRING).build());
+				.description("Absolute of relative path in base dir to SQLCover file")
+				.defaultValue(Constants.COVERAGE_FILE_DEFAULT_VALUE).type(PropertyType.STRING).build());
 
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
 

@@ -2,7 +2,6 @@ package org.sonar.plugins.tsql.rules.files;
 
 import java.io.File;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.config.Settings;
 import org.sonar.api.utils.TempFolder;
@@ -12,21 +11,21 @@ import org.sonar.plugins.tsql.Constants;
 
 public class CodeGuardExecutingReportsProvider implements IReportsProvider {
 
-	private static final String cgCommandLine = "\"%s\" -source \"%s\" -out \"%s\" -config \"%s\"";
-
 	private static final Logger LOGGER = Loggers.get(CodeGuardExecutingReportsProvider.class);
 
 	private final TempFolder folder;
 
 	private final Settings settings;
+	private final FilesProvider filesProvide = new FilesProvider();
 
 	public CodeGuardExecutingReportsProvider(final Settings settings, final TempFolder folder) {
 		this.settings = settings;
 		this.folder = folder;
 	}
 
-	private File[] getCGANalysisFiles(String file) {
-		return new CodeGuardIssuesFilesProvider(this.settings).get(file);
+	private File[] getCGANalysisFiles(String baseDir) {
+		return filesProvide.getFiles(Constants.CG_REPORT_FILE_DEFAULT_VALUE,
+				this.settings.getString(Constants.CG_REPORT_FILE), baseDir);
 	}
 
 	@Override
@@ -38,29 +37,16 @@ public class CodeGuardExecutingReportsProvider implements IReportsProvider {
 			return getCGANalysisFiles(baseDir);
 		}
 
-		if (!new File(cgPath).exists()) {
-			LOGGER.info(String.format("SQL Code guard not found at %s, trying to search directories instead", cgPath));
-			return getCGANalysisFiles(baseDir);
-		}
-
 		final File sourceDir = new File(baseDir);
-		final File configFile = folder.newFile("temp", "config.xml");
 		final File tempResultsFile = folder.newFile("temp", "results.xml");
+		
+		final String[] args = new String[] { cgPath, "-source", sourceDir.getAbsolutePath(), "-out",
+				tempResultsFile.getAbsolutePath(), "/include:all" };
 		try {
-			FileUtils.copyURLToFile(getClass().getResource("/config/sqlcodeguardsettings.xml"), configFile);
-		} catch (final Throwable e1) {
-			LOGGER.warn("Was not able to copy sql code guard config settings, trying to search directories instead",
-					e1);
-			return getCGANalysisFiles(baseDir);
 
-		}
+			LOGGER.debug(String.format("Running command: %s", String.join(" ", args)));
 
-		final String command = String.format(cgCommandLine, cgPath, sourceDir.getAbsolutePath(),
-				tempResultsFile.getAbsolutePath(), configFile.getAbsolutePath());
-
-		try {
-			LOGGER.debug(String.format("Running command: %s", command));
-			final Process process = new ProcessBuilder(command).start();
+			final Process process = new ProcessBuilder(args).start();
 			process.waitFor();
 			LOGGER.debug("Running command finished");
 		} catch (final Throwable e) {
