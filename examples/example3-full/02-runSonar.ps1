@@ -49,7 +49,7 @@ $sonarArgs = @(
 
 # it is possible to either specify path to sqlcodeguard executable and plugin will try to run it or you can specify actual path to report's xml
 # or directory where file matching  *cgresults.xml resides by setting sonar.tsql.cg.report property
-"-Dsonar.tsql.cg.path=$sqlCodeGuard",
+"-Dsonar.tsql.cg.path=$sqlCodeGuard"
 #"-Dsonar.tsql.cg.report=$sqlCodeGuardResults",
 
 # it is possible to specify absolute path to the MSBuild code analysis report or directory where file matching *StaticCodeAnalysis.Results.xml resides, by default plugin will try to find it in the base directory's subdirectories

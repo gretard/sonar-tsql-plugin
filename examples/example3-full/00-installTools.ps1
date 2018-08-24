@@ -6,6 +6,8 @@ function Uzip-File {
 }
 
 $baseToolsDir = "$PSScriptRoot\tools";
+New-Item -ItemType Directory -Force -Path $baseToolsDir
+
 function Setup-SqlCodeGuard {
 	$url = "http://download.red-gate.com/SQLCodeGuardCmdLine.zip"
 	$output = "$baseToolsDir\SQLCodeGuardCmdLine.zip";

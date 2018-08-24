@@ -8,7 +8,7 @@ Execute the following:
  3. Publish database from src folder.
  4. Update *server* and *sonarHost* parameters in *02-runSonar.ps1* file and run that script. 
 
-TSQL sample project should now be visible in SonarQube server with coverage results
+TSQL sample project should now be visible in SonarQube server with coverage results depicted in the figure.
 
-![TSQLT example project in Sonar](imgs/sonarSample.png)
+![TSQLT example project in Sonar](imgs/sonarDashboard.png)
 
