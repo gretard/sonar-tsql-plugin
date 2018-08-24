@@ -8,7 +8,7 @@ function Uzip-File {
 $baseToolsDir = "$PSScriptRoot\tools";
 function Setup-SqlCodeGuard {
 	$url = "http://download.red-gate.com/SQLCodeGuardCmdLine.zip"
-	$output = "$PSScriptRoot\SQLCodeGuardCmdLine.zip";
+	$output = "$baseToolsDir\SQLCodeGuardCmdLine.zip";
 	$outputDir = "$baseToolsDir\SQLCodeGuardCmdLine"
 	[Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
 	$WebClient = New-Object System.Net.WebClient
