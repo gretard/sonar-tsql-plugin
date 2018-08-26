@@ -13,7 +13,7 @@ public class RulesHelperTool {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		if (args.length != 3) {
-			System.out.println("Plese pass the following: ");
+			System.out.println("Please pass the following: ");
 			System.out.println("\taction (print or  verify)");
 			System.out.println("\ttype (text or  file)");
 			System.out.println("\tvalue (sql string or path to folder) ");
