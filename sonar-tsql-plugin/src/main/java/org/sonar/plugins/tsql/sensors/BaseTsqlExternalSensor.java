@@ -7,7 +7,7 @@ import org.sonar.plugins.tsql.rules.issues.IIssuesFiller;
 import org.sonar.plugins.tsql.rules.issues.IIssuesProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
-public abstract class BaseTsqlExternalSensor extends BaseTsqlSensor {
+public class BaseTsqlExternalSensor extends BaseTsqlSensor {
 
 	private final IIssuesProvider issuesProvider;
 	private final String repositoryKey;

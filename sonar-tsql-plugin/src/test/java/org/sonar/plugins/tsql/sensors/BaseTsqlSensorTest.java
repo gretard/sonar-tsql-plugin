@@ -9,12 +9,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 import org.sonar.api.utils.internal.JUnitTempFolder;
+import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.rules.issues.IIssuesProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
@@ -26,7 +26,7 @@ public class BaseTsqlSensorTest {
 	@org.junit.Rule
 	public JUnitTempFolder temp = new JUnitTempFolder();
 
-/*	@Test
+	@Test
 	public void testAdd() throws Throwable {
 
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
@@ -56,8 +56,7 @@ public class BaseTsqlSensorTest {
 
 		};
 		Settings settings = new MapSettings();
-		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test") {
-		};
+		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
 		sensor.execute(ctxTester);
 		Assert.assertEquals(1, ctxTester.allIssues().size());
 	}
@@ -71,10 +70,8 @@ public class BaseTsqlSensorTest {
 
 		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
 
-
 		InputFile ti = new TestInputFileBuilder("test", "test.sql")
 				.initMetadata(new String(Files.readAllBytes(baseFile.toPath()))).build();
-
 
 		ctxTester.fileSystem().add(ti);
 
@@ -94,8 +91,7 @@ public class BaseTsqlSensorTest {
 
 		};
 		Settings settings = new MapSettings();
-		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(settings, provider, "test") {
-		};
+		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
 		sensor.execute(ctxTester);
 		Assert.assertEquals(0, ctxTester.allIssues().size());
 	}
@@ -109,10 +105,8 @@ public class BaseTsqlSensorTest {
 
 		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
 
-
 		InputFile ti = new TestInputFileBuilder("test", "test.sql")
 				.initMetadata(new String(Files.readAllBytes(baseFile.toPath()))).build();
-
 
 		ctxTester.fileSystem().add(ti);
 
@@ -131,9 +125,73 @@ public class BaseTsqlSensorTest {
 
 		};
 		Settings settings = new MapSettings();
-		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(settings, provider, "test") {
-		};
+		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
 		sensor.execute(ctxTester);
 		Assert.assertEquals(1, ctxTester.allIssues().size());
-	}*/
+	}
+
+	@Test
+	public void testSkipSensor() throws Throwable {
+
+		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
+
+		File baseFile = folder.newFile("test.sql");
+
+		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
+
+		InputFile ti = new TestInputFileBuilder("test", "test.sql")
+				.initMetadata(new String(Files.readAllBytes(baseFile.toPath()))).build();
+
+		ctxTester.fileSystem().add(ti);
+		ctxTester.settings().setProperty("test", true);
+		final TsqlIssue issue = new TsqlIssue();
+		issue.setFilePath(ti.absolutePath());
+		issue.setLine(1);
+		issue.setType("test");
+		IIssuesProvider provider = new IIssuesProvider() {
+
+			@Override
+			public TsqlIssue[] getIssues(String baseDir) {
+				return new TsqlIssue[] {
+
+						issue };
+			}
+
+		};
+		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
+		sensor.execute(ctxTester);
+		Assert.assertEquals(0, ctxTester.allIssues().size());
+	}
+
+	public void testSkipPlugin() throws Throwable {
+
+		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
+
+		File baseFile = folder.newFile("test.sql");
+
+		FileUtils.copyURLToFile(getClass().getResource("/testFiles/TestTable.sql"), baseFile);
+
+		InputFile ti = new TestInputFileBuilder("test", "test.sql")
+				.initMetadata(new String(Files.readAllBytes(baseFile.toPath()))).build();
+
+		ctxTester.fileSystem().add(ti);
+		ctxTester.settings().setProperty(Constants.PLUGIN_SKIP, true);
+		final TsqlIssue issue = new TsqlIssue();
+		issue.setFilePath(ti.absolutePath());
+		issue.setLine(1);
+		issue.setType("test");
+		IIssuesProvider provider = new IIssuesProvider() {
+
+			@Override
+			public TsqlIssue[] getIssues(String baseDir) {
+				return new TsqlIssue[] {
+
+						issue };
+			}
+
+		};
+		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
+		sensor.execute(ctxTester);
+		Assert.assertEquals(0, ctxTester.allIssues().size());
+	}
 }
