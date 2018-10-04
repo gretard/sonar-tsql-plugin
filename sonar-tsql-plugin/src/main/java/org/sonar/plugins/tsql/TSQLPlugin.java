@@ -11,7 +11,7 @@ import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksRulesDefinition;
 import org.sonar.plugins.tsql.rules.definitions.MsRulesDefinition;
 import org.sonar.plugins.tsql.sensors.CodeGuardIssuesLoaderSensor;
 import org.sonar.plugins.tsql.sensors.CoverageSensor;
-import org.sonar.plugins.tsql.sensors.HighlightingSensor;
+import org.sonar.plugins.tsql.sensors.CustomChecksSensor;
 import org.sonar.plugins.tsql.sensors.MsIssuesLoaderSensor;
 
 public class TSQLPlugin implements Plugin {
@@ -27,9 +27,17 @@ public class TSQLPlugin implements Plugin {
 				.description("SQL Code Guard results file").defaultValue(Constants.CG_REPORT_FILE_DEFAULT_VALUE)
 				.type(PropertyType.STRING).build());
 
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_CG).name("Skip SqlCodeGuard reporting")
+				.description("Flag whether to skip SqlCodeGuard reporting").defaultValue("false")
+				.type(PropertyType.BOOLEAN).build());
+
 		context.addExtension(PropertyDefinition.builder(Constants.MS_REPORT_FILE)
 				.name("MSBuild SQL code analysis results file").description("MSBuild SQL code analysis results file")
 				.defaultValue(Constants.MS_REPORT_FILE_DEFAULT_VALUE).type(PropertyType.STRING).build());
+
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_MS).name("Skip MSBuild reporting")
+				.description("Flag whether to skip MSBuild issues reporting").defaultValue("false")
+				.type(PropertyType.BOOLEAN).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP).name("Disable plugin")
 				.description("Flag whether to disable plugin").defaultValue("false").type(PropertyType.BOOLEAN)
@@ -39,6 +47,14 @@ public class TSQLPlugin implements Plugin {
 				.name("Disable custom violations detection")
 				.description("Flag whether to disable issues detection against custom rules.").defaultValue("false")
 				.type(PropertyType.BOOLEAN).build());
+
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_CUSTOM).name("Skip custom reporting")
+				.description("Flag whether to skip custom issues, syntax and other reporting").defaultValue("false")
+				.type(PropertyType.BOOLEAN).build());
+
+		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_MAX_FILE_SIZE)
+				.name("Max file size for analysis").description("Maximum file size under analysis size")
+				.defaultValue("10").type(PropertyType.INTEGER).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PATH)
 				.name("Path to the custom rules path").description("A comma separated list of custom rules files")
@@ -63,7 +79,7 @@ public class TSQLPlugin implements Plugin {
 
 		context.addExtensions(MsRulesDefinition.class, CustomPluginChecksRulesDefinition.class,
 				CodeGuardRulesDefinition.class, CustomUserChecksRulesDefinition.class, MsIssuesLoaderSensor.class,
-				CodeGuardIssuesLoaderSensor.class, HighlightingSensor.class, CoverageSensor.class);
+				CodeGuardIssuesLoaderSensor.class, CustomChecksSensor.class, CoverageSensor.class);
 
 	}
 }

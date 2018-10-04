@@ -41,7 +41,7 @@ public class HighlightingSensorTest {
 				.initMetadata(new String(Files.readAllBytes(f.toPath()))).setLanguage(TSQLLanguage.KEY).build();
 		ctxTester.fileSystem().add(file1);
 
-		HighlightingSensor sensor = new HighlightingSensor(settings);
+		CustomChecksSensor sensor = new CustomChecksSensor(settings);
 		sensor.execute(ctxTester);
 		Collection<Issue> issues = ctxTester.allIssues();
 		Assert.assertEquals(1, issues.size());
@@ -56,10 +56,17 @@ public class HighlightingSensorTest {
 		folder.create();
 		Settings settings = new MapSettings();
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
+		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
+		settings.setProperty(Constants.PLUGIN_SKIP, false);
+
+		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
+		
+		settings.setProperty(Constants.PLUGIN_MAX_FILE_SIZE, 10);
 		String dirPath = "..\\grammars\\tsql";
 		File dir = new File(dirPath);
 		Collection<File> files = FileUtils.listFiles(dir, new String[] { "sql" }, true);
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
+		ctxTester.setSettings(settings);
 		for (File f : files) {
 			String tempName = f.getName() + System.nanoTime();
 			File dest = folder.newFile(tempName);
@@ -70,7 +77,7 @@ public class HighlightingSensorTest {
 			ctxTester.fileSystem().add(file1);
 
 		}
-		HighlightingSensor sensor = new HighlightingSensor(settings);
+		CustomChecksSensor sensor = new CustomChecksSensor(settings);
 		sensor.execute(ctxTester);
 		Collection<Issue> issues = ctxTester.allIssues();
 		Assert.assertEquals(183, issues.size());

@@ -9,11 +9,11 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.sensors.HighlightingSensor;
+import org.sonar.plugins.tsql.sensors.CustomChecksSensor;
 
 public class KeywordsProvider implements IKeywordsProvider {
 
-	private static final Logger LOGGER = Loggers.get(HighlightingSensor.class);
+	private static final Logger LOGGER = Loggers.get(CustomChecksSensor.class);
 
 	private final List<String> keywords = new ArrayList<String>();
 

@@ -7,11 +7,8 @@ import java.util.function.Consumer;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.config.Settings;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.coverage.CoveredLinesReport;
 import org.sonar.plugins.tsql.coverage.CoveredLinesReport.LineInfo;
@@ -20,15 +17,14 @@ import org.sonar.plugins.tsql.coverage.ICoveragProvider;
 import org.sonar.plugins.tsql.coverage.SqlCoverCoverageProvider;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
-public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
-
-	private static final Logger LOGGER = Loggers.get(CoverageSensor.class);
+public class CoverageSensor extends BaseTsqlSensor {
 
 	private final ICoveragProvider coverageProvider;
 
 	private final FileNamesMatcher fileNamesMatcher = new FileNamesMatcher();
 
 	public CoverageSensor(final ICoveragProvider coverageProvider) {
+		super(Constants.PLUGIN_SKIP_COVERAGE);
 		this.coverageProvider = coverageProvider;
 	}
 
@@ -36,25 +32,9 @@ public class CoverageSensor implements org.sonar.api.batch.sensor.Sensor {
 		this(new SqlCoverCoverageProvider(settings, fs));
 	}
 
-	@Override
-	public void describe(final SensorDescriptor descriptor) {
-		descriptor.name(this.getClass().getSimpleName()).onlyOnLanguage(TSQLLanguage.KEY);
-	}
-
-	@Override
-	public void execute(final SensorContext context) {
+	protected void innerExecute(final SensorContext context) {
 		final FileSystem fs = context.fileSystem();
-		final boolean skipAnalysis = context.settings().getBoolean(Constants.PLUGIN_SKIP);
 
-		if (skipAnalysis) {
-			LOGGER.debug("Skipping plugin as skip flag is set");
-			return;
-		}
-
-		if (context.settings().getBoolean(Constants.PLUGIN_SKIP_COVERAGE)) {
-			LOGGER.debug("Skipping coverage sensor as skip flag is set");
-			return;
-		}
 		try {
 			final Map<String, CoveredLinesReport> coveredFiles = coverageProvider.getHitLines();
 			final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));

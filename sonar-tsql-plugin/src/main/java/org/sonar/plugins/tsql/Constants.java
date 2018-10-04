@@ -9,27 +9,30 @@ public final class Constants {
 
 	public static final String CG_REPORT_FILE_DEFAULT_VALUE = "cgresults.xml";
 
-	
 	public static final String PLUGIN_SKIP = "sonar.tsql.skip";
 
 	public static final String PLUGIN_SKIP_COVERAGE = "sonar.tsql.sqlcover.skip";
-	
+
+	public static final String PLUGIN_SKIP_CUSTOM = "sonar.tsql.custom.skip";
+
+	public static final String PLUGIN_SKIP_MS = "sonar.tsql.ms.skip";
+
+	public static final String PLUGIN_SKIP_CG = "sonar.tsql.cg.skip";
+
+	public static final String PLUGIN_MAX_FILE_SIZE = "sonar.tsql.custom.max.file.size";
+
 	public static final String CG_APP_PATH = "sonar.tsql.cg.path";
 
 	public static final String COVERAGE_FILE = "sonar.tsql.sqlcover.report";
-	
-	
+
 	public static final String COVERAGE_FILE_DEFAULT_VALUE = "Coverage.opencoverxml";
-	
+
 	public static final String MS_REPORT_FILE = "sonar.tsql.ms.report";
 
 	public static final String MS_REPORT_FILE_DEFAULT_VALUE = "staticcodeanalysis.results.xml";
-	
-	public static final String PLUGIN_SKIP_CPD = "sonar.tsql.skip.cpd";
 
 	public static final String PLUGIN_ANALYSIS_TIMEOUT = "sonar.tsql.timeout.analysis";
 
-	
 	public static final String PLUGIN_SUFFIXES = "sonar.tsql.file.suffixes";
 
 	public static final String PLUGIN_SKIP_CUSTOM_RULES = "sonar.tsql.skip.custom.rules";
@@ -48,13 +51,11 @@ public final class Constants {
 
 	public static final String PLUGIN_CUSTOM_RULES_PATH = "sonar.tsql.customrules.paths";
 
-	
-	
 	public static final String PLUGIN_CUSTOM_RULES_PREFIX = "sonar.tsql.customrules.prefix";
 
 	public static final String PLUGIN_RULES_FILE = "/rules/plugin-rules.xml";
 
-	public static final String PLUGIN_REPO_NAME = TSQLLanguage.KEY.toLowerCase() +" plugin custom rules";
+	public static final String PLUGIN_REPO_NAME = TSQLLanguage.KEY.toLowerCase() + " plugin custom rules";
 
 	public static final String PLUGIN_REPO_KEY = "tsqlPluginRepo";
 }

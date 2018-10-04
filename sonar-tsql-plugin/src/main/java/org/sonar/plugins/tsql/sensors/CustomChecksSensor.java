@@ -12,8 +12,6 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Settings;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.antlr.CandidateRule;
 import org.sonar.plugins.tsql.antlr.FillerRequest;
@@ -29,13 +27,13 @@ import org.sonar.plugins.tsql.antlr.visitors.SourceLinesMeasuresFiller;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.rules.definitions.CustomAllChecksProvider;
 
-public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
+public class CustomChecksSensor extends BaseTsqlSensor {
 
-	private static final Logger LOGGER = Loggers.get(HighlightingSensor.class);
 	protected final Settings settings;
 	private final CustomAllChecksProvider checksProvider;
 
-	public HighlightingSensor(final Settings settings) {
+	public CustomChecksSensor(final Settings settings) {
+		super(Constants.PLUGIN_SKIP_CUSTOM);
 		this.settings = settings;
 		this.checksProvider = new CustomAllChecksProvider(settings);
 	}
@@ -45,16 +43,11 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 		return this.getClass().getSimpleName();
 	}
 
-	@Override
-	public void execute(final org.sonar.api.batch.sensor.SensorContext context) {
-		final boolean skipAnalysis = this.settings.getBoolean(Constants.PLUGIN_SKIP);
-
-		if (skipAnalysis) {
-			LOGGER.debug("Skipping plugin as skip flag is set");
-			return;
-		}
+	protected void innerExecute(final org.sonar.api.batch.sensor.SensorContext context) {
 
 		final int timeout = settings.getInt(Constants.PLUGIN_ANALYSIS_TIMEOUT);
+		final int maxSize = settings.getInt(Constants.PLUGIN_MAX_FILE_SIZE);
+
 		final FileSystem fs = context.fileSystem();
 		final Charset encoding = context.fileSystem().encoding();
 
@@ -62,11 +55,18 @@ public class HighlightingSensor implements org.sonar.api.batch.sensor.Sensor {
 
 		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));
 		final ExecutorService executorService = Executors.newWorkStealingPool();
-
 		files.forEach(new Consumer<InputFile>() {
 
 			@Override
 			public void accept(final InputFile file) {
+				long sizeInMb = file.file().length() / 1024 / 1024;
+
+				if (sizeInMb >= maxSize) {
+					LOGGER.debug(format("File '%s' is too large for analysis: %s, max: %s", file.absolutePath(),
+							sizeInMb, maxSize));
+					return;
+				}
+
 				executorService.execute(new Runnable() {
 
 					@Override
