@@ -30,7 +30,10 @@ public class HighlightingSensorTest {
 		TemporaryFolder folder = new TemporaryFolder();
 		folder.create();
 		Settings settings = new MapSettings();
+		settings.setProperty(Constants.PLUGIN_SKIP, false);
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
+		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
+		settings.setProperty(Constants.PLUGIN_MAX_FILE_SIZE, 100);
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
 		String tempName = "test.sql";
 

@@ -92,7 +92,7 @@ public class Rule {
     @XmlElement(required = true)
     protected String tag;
     @XmlElement(required = true)
-    protected RuleImplementation ruleImplementation;
+    protected RuleImplementation ruleImplementation = new RuleImplementation();
     @XmlElement(required = true)
     protected String source;
 

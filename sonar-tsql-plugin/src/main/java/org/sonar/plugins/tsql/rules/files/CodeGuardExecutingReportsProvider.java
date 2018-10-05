@@ -1,6 +1,10 @@
 package org.sonar.plugins.tsql.rules.files;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.config.Settings;
@@ -39,7 +43,7 @@ public class CodeGuardExecutingReportsProvider implements IReportsProvider {
 
 		final File sourceDir = new File(baseDir);
 		final File tempResultsFile = folder.newFile("temp", "results.xml");
-		
+
 		final String[] args = new String[] { cgPath, "-source", sourceDir.getAbsolutePath(), "-out",
 				tempResultsFile.getAbsolutePath(), "/include:all" };
 		try {
@@ -47,7 +51,13 @@ public class CodeGuardExecutingReportsProvider implements IReportsProvider {
 			LOGGER.debug(String.format("Running command: %s", String.join(" ", args)));
 
 			final Process process = new ProcessBuilder(args).start();
-			process.waitFor();
+			final int result = process.waitFor();
+			if (result != 0 || new File(tempResultsFile.getAbsolutePath()).length() == 0) {
+				LOGGER.warn("SQL Code Guard finished with errors: {}. Output was: {}", read(process.getErrorStream()),
+						read(process.getInputStream()));
+				read(process.getErrorStream());
+				return getCGANalysisFiles(baseDir);
+			}
 			LOGGER.debug("Running command finished");
 		} catch (final Throwable e) {
 			LOGGER.warn("Error executing SQL code guard tool, trying to search directories instead", e);
@@ -55,6 +65,18 @@ public class CodeGuardExecutingReportsProvider implements IReportsProvider {
 		}
 
 		return new File[] { tempResultsFile };
+	}
+
+	protected static String read(InputStream stream) throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		StringBuilder builder = new StringBuilder();
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			builder.append(line);
+			builder.append(System.getProperty("line.separator"));
+		}
+		String result = builder.toString();
+		return result;
 	}
 
 }

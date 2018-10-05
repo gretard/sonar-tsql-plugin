@@ -18,7 +18,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksProvider;
 
 public final class TSQLQualityProfile extends ProfileDefinition {
@@ -82,7 +82,7 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 
 	private void activePluginRules(final RulesProfile profile) {
 		try {
-			final SqlRules rules = new CustomPluginChecksProvider().getRules();
+			final SqlRules rules = new CustomPluginChecks().getRules();
 			for (final org.sonar.plugins.tsql.checks.custom.Rule rule : rules.getRule()) {
 				profile.activateRule(Rule.create(rules.getRepoKey(), rule.getKey()), null);
 			}

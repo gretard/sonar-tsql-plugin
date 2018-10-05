@@ -14,7 +14,7 @@ import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
 import org.sonar.plugins.tsql.checks.custom.RuleResultType;
 import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 import org.sonar.plugins.tsql.helpers.AntlrUtils;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomChecksTest {
@@ -80,7 +80,7 @@ public class CustomChecksTest {
 	@Test
 	public void testIndexRule() {
 		String s = "CREATE UNIQUE INDEX ix_test ON Persons (LastName, FirstName);";
-		Rule sut = CustomPluginChecksProvider.getIndexNamingRule();
+		Rule sut = CustomPluginChecks.getIndexNamingRule();
 		AntlrUtils.print(s);
 
 		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
@@ -90,7 +90,7 @@ public class CustomChecksTest {
 	@Test
 	public void testIndexRuleViolating() {
 		String s = "CREATE UNIQUE INDEX test ON Persons (LastName, FirstName);";
-		Rule sut = CustomPluginChecksProvider.getIndexNamingRule();
+		Rule sut = CustomPluginChecks.getIndexNamingRule();
 		AntlrUtils.print(s);
 
 		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
@@ -101,7 +101,7 @@ public class CustomChecksTest {
 	@Test
 	public void testWhereOrRule() {
 		String s = "select * from dbo.test where a = 4 or x = 5 OR f = 8 Or t = 0;";
-		Rule sut = CustomPluginChecksProvider.getWhereWithOrVsUnionRule();
+		Rule sut = CustomPluginChecks.getWhereWithOrVsUnionRule();
 		AntlrUtils.print(s);
 
 		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
@@ -112,7 +112,7 @@ public class CustomChecksTest {
 	@Test
 	public void testUnionVsUnionAllRule() {
 		String s = "select * from dbo.test union select * from dbo.test2;";
-		Rule sut = CustomPluginChecksProvider.getUnionVsUnionALLRule();
+		Rule sut = CustomPluginChecks.getUnionVsUnionALLRule();
 		AntlrUtils.print(s);
 
 		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
@@ -123,7 +123,7 @@ public class CustomChecksTest {
 	@Test
 	public void testgetExistsVsInRule() {
 		String s = "select * from dbo.test where name IN (select id from dbo.names);";
-		Rule sut = CustomPluginChecksProvider.getExistsVsInRule();
+		Rule sut = CustomPluginChecks.getExistsVsInRule();
 		AntlrUtils.print(s);
 
 		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
@@ -134,7 +134,7 @@ public class CustomChecksTest {
 	@Test
 	public void testgetExistsVsInRule2() {
 		String s = "select * from dbo.test where name in (1, 2, 3);";
-		Rule sut = CustomPluginChecksProvider.getExistsVsInRule();
+		Rule sut = CustomPluginChecks.getExistsVsInRule();
 		AntlrUtils.print(s);
 
 		TsqlIssue[] issues = AntlrUtils.verify(sut, s);
@@ -144,7 +144,7 @@ public class CustomChecksTest {
 	@Test
 	public void testOrderByRuleOrder() {
 		String s = "select * from dbo.test order by name asc, surname;";
-		Rule sut = CustomPluginChecksProvider.getOrderByRuleWithoutAscDesc();
+		Rule sut = CustomPluginChecks.getOrderByRuleWithoutAscDesc();
 		AntlrUtils.print(s);
 
 		TsqlIssue[] issues = AntlrUtils.verify(sut, s);

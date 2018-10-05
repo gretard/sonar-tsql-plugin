@@ -13,7 +13,7 @@ import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
 public final class CustomPluginChecksRulesDefinition implements RulesDefinition {
 
-	private final CustomPluginChecksProvider provider = new CustomPluginChecksProvider();
+	private final CustomPluginChecks provider = new CustomPluginChecks();
 
 	private static final Logger LOGGER = Loggers.get(CustomUserChecksRulesDefinition.class);
 

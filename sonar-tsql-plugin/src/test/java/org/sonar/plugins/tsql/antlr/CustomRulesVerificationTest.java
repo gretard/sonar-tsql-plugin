@@ -12,7 +12,7 @@ import org.junit.runners.Parameterized.Parameters;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.helpers.AntlrUtils;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 @RunWith(Parameterized.class)
@@ -26,7 +26,7 @@ public class CustomRulesVerificationTest {
 	@Parameters(name = "{index}: {1}={2}")
 	public static Collection<Object[]> data() {
 		final List<Object[]> objects = new LinkedList<>();
-		final CustomPluginChecksProvider provider = new CustomPluginChecksProvider();
+		final CustomPluginChecks provider = new CustomPluginChecks();
 		final SqlRules rules = provider.getRules();
 		for (Rule r : rules.getRule()) {
 

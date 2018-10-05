@@ -11,7 +11,9 @@ import java.util.function.Consumer;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.config.Settings;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.antlr.CandidateRule;
 import org.sonar.plugins.tsql.antlr.FillerRequest;
@@ -26,6 +28,7 @@ import org.sonar.plugins.tsql.antlr.visitors.ISensorFiller;
 import org.sonar.plugins.tsql.antlr.visitors.SourceLinesMeasuresFiller;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 import org.sonar.plugins.tsql.rules.definitions.CustomAllChecksProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 
 public class CustomChecksSensor extends BaseTsqlSensor {
 
@@ -55,15 +58,29 @@ public class CustomChecksSensor extends BaseTsqlSensor {
 
 		final Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasLanguage(TSQLLanguage.KEY));
 		final ExecutorService executorService = Executors.newWorkStealingPool();
+
+		final org.sonar.plugins.tsql.checks.custom.Rule fileTooLargeRule = CustomPluginChecks.getFileTooLargeRule();
 		files.forEach(new Consumer<InputFile>() {
 
 			@Override
 			public void accept(final InputFile file) {
 				long sizeInMb = file.file().length() / 1024 / 1024;
 
-				if (sizeInMb >= maxSize) {
-					LOGGER.debug(format("File '%s' is too large for analysis: %s, max: %s", file.absolutePath(),
-							sizeInMb, maxSize));
+				if (maxSize > 0 && sizeInMb >= maxSize) {
+					try {
+						NewIssue is = context.newIssue()
+								.forRule(RuleKey.of(CustomPluginChecks.getRepoKey(), fileTooLargeRule.getKey()));
+						is.at(is.newLocation().on(file).message(String
+								.format("File size is %s and over %s mb. Consider splitting it. ", sizeInMb, maxSize)))
+								.save();
+						context.newAnalysisError().onFile(file)
+								.message(String.format("File is over %s mb. Consider splitting it. ", sizeInMb)).save();
+						LOGGER.debug(format("File '%s' is too large for analysis: %s, max: %s", file.absolutePath(),
+								sizeInMb, maxSize));
+					} catch (Throwable e) {
+						LOGGER.warn("Unexpected error while saving anslysis error", e);
+
+					}
 					return;
 				}
 

@@ -15,7 +15,7 @@ public class CustomAllChecksProvider {
 
 	private final CustomUserChecksProvider provider = new CustomUserChecksProvider();
 
-	private final CustomPluginChecksProvider pluginChecksProvider = new CustomPluginChecksProvider();
+	private final CustomPluginChecks pluginChecksProvider = new CustomPluginChecks();
 	private final Settings settings;
 	private static final Logger LOGGER = Loggers.get(CustomAllChecksProvider.class);
 

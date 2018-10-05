@@ -2,12 +2,12 @@ package org.sonar.plugins.tsql.helpers;
 
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecksProvider;
+import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 
 public class CustomSqlCodePrinter {
 
 	public static void main(String[] args) {
-		final CustomPluginChecksProvider provider = new CustomPluginChecksProvider();
+		final CustomPluginChecks provider = new CustomPluginChecks();
 		final SqlRules rules = provider.getRules();
 		System.out.println("# Rules #");
 		System.out.println();
