@@ -22,6 +22,8 @@ Currently plug-in supports:
 5. If you want plug-in to import issues found by Microsoft, please before running a sonar analysis build solution with setting */p:RunSqlCodeAnalysis=true*. 
 6. If you want coverage to be reported - please run SQLCover before running sonar analysis
 
+You can find more information on configuration at wiki at [Getting started](https://github.com/gretard/sonar-tsql-plugin/wiki/Getting-started) on how to configure external tools.
+
 ## Configuration ##
 Options which are available for overriding can be found at [Configuration](https://github.com/gretard/sonar-tsql-plugin/wiki/Configuration).
 

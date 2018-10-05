@@ -45,19 +45,19 @@ public class TSQLPlugin implements Plugin {
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_CUSTOM_RULES)
 				.name("Disable custom violations detection")
-				.description("Flag whether to disable issues detection against custom rules.").defaultValue("false")
+				.description("Flag whether to disable issues detection against custom rules").defaultValue("false")
 				.type(PropertyType.BOOLEAN).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_SKIP_CUSTOM).name("Skip custom reporting")
-				.description("Flag whether to skip custom issues, syntax and other reporting").defaultValue("false")
-				.type(PropertyType.BOOLEAN).build());
+				.description("Flag whether to skip custom issues, syntax highlighting and other reporting")
+				.defaultValue("false").type(PropertyType.BOOLEAN).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_MAX_FILE_SIZE)
 				.name("Max file size for analysis").description("Maximum file size under analysis size")
 				.defaultValue("10").type(PropertyType.INTEGER).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PATH)
-				.name("Path to the custom rules path").description("A comma separated list of custom rules files")
+				.name("Path to the custom rules path").description("A comma separated list of custom rules files/paths")
 				.defaultValue("").type(PropertyType.STRING).build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.PLUGIN_CUSTOM_RULES_PREFIX)
@@ -72,7 +72,7 @@ public class TSQLPlugin implements Plugin {
 				.build());
 
 		context.addExtension(PropertyDefinition.builder(Constants.COVERAGE_FILE).name("Path to SQLCover file")
-				.description("Absolute of relative path in base dir to SQLCover file")
+				.description("Absolute or relative path in base dir to SQLCover file")
 				.defaultValue(Constants.COVERAGE_FILE_DEFAULT_VALUE).type(PropertyType.STRING).build());
 
 		context.addExtensions(TSQLLanguage.class, TSQLQualityProfile.class);
