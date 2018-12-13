@@ -191,7 +191,7 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_MORE_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(1, an.create(new CandidateNode("test", rule, nnode), results).size());
 
 	}
 
