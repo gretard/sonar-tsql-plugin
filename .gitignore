@@ -15,3 +15,5 @@ node_modules
 scripts/rules/*.html
 rules.xml
 scripts/package-lock.json
+examples/**/bin/Debug/**
+examples/**/obj/Debug/**
