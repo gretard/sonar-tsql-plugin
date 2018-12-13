@@ -17,3 +17,4 @@ rules.xml
 scripts/package-lock.json
 examples/**/bin/Debug/**
 examples/**/obj/Debug/**
+examples/**/.scannerwork/**
