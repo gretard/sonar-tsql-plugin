@@ -15,7 +15,6 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
@@ -29,7 +28,7 @@ public class HighlightingSensorTest {
 	public void testSingleFile() throws IOException {
 		TemporaryFolder folder = new TemporaryFolder();
 		folder.create();
-		Settings settings = new MapSettings();
+		Settings settings = new org.sonar.api.config.internal.MapSettings();
 		settings.setProperty(Constants.PLUGIN_SKIP, false);
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
@@ -57,13 +56,13 @@ public class HighlightingSensorTest {
 	public void testTSQLGrammarFiles() throws IOException {
 		TemporaryFolder folder = new TemporaryFolder();
 		folder.create();
-		Settings settings = new MapSettings();
+		Settings settings = new org.sonar.api.config.internal.MapSettings();
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
 		settings.setProperty(Constants.PLUGIN_SKIP, false);
 
 		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
-		
+
 		settings.setProperty(Constants.PLUGIN_MAX_FILE_SIZE, 10);
 		String dirPath = "..\\grammars\\tsql";
 		File dir = new File(dirPath);
@@ -86,5 +85,5 @@ public class HighlightingSensorTest {
 		Assert.assertEquals(183, issues.size());
 
 	}
-	
+
 }
