@@ -92,6 +92,18 @@ public class PluginHelper {
 		return createRequestFromStream(file, encoding, mainStream, new FileInputStream(file.absolutePath()));
 	}
 
+	public static ParseTree read(final InputFile file, final Charset encoding) throws IOException {
+		final CharStream charStream = new CaseChangingCharStream(CharStreams.fromStream(file.inputStream()), true);
+		final TSqlLexer lexer = new TSqlLexer(charStream);
+		lexer.removeErrorListeners();
+		final CommonTokenStream stream = new CommonTokenStream(lexer);
+		stream.fill();
+		final TSqlParser parser = new TSqlParser(stream);
+		parser.removeErrorListeners();
+		final ParseTree root = parser.tsql_file();
+		return root;
+	}
+
 	public static FillerRequest createRequestFromStream(final InputFile file, final Charset encoding,
 			final CharStream mainStream, InputStream fileInputStream) {
 		final SourceLinesProvider linesProvider = new SourceLinesProvider();
