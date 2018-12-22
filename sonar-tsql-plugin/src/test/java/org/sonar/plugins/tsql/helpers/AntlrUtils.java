@@ -1,35 +1,34 @@
 package org.sonar.plugins.tsql.helpers;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.sonar.plugins.tsql.antlr.AntlrContext;
+import org.sonar.plugins.tsql.antlr.CandidateNode;
 import org.sonar.plugins.tsql.antlr.CandidateRule;
-import org.sonar.plugins.tsql.antlr.FillerRequest;
-import org.sonar.plugins.tsql.antlr.PluginHelper;
 import org.sonar.plugins.tsql.antlr.issues.CustomIssuesProvider;
-import org.sonar.plugins.tsql.antlr.nodes.CandidateNode;
 import org.sonar.plugins.tsql.antlr.visitors.CustomRulesVisitor;
 import org.sonar.plugins.tsql.antlr.visitors.CustomTreeVisitor;
+import org.sonar.plugins.tsql.checks.CustomUserChecksProvider;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksProvider;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class AntlrUtils {
+
 	public static SqlRules[] read(String path) {
 		CustomUserChecksProvider provider = new CustomUserChecksProvider();
 		return provider.getRules(null, "", path).values().toArray(new SqlRules[0]);
 	}
 
-	public static void print(String text) {
-		FillerRequest request = getRequest(text);
+	public static void print(String text) throws IOException {
+		AntlrContext request = getRequest(text);
 		print(request.getRoot(), 0, request.getStream());
 	}
 
@@ -59,9 +58,9 @@ public class AntlrUtils {
 
 		}
 	}
-	
-	public static TsqlIssue[] verify(Rule rule, String text) {
-		FillerRequest request = getRequest(text);
+
+	public static TsqlIssue[] verify(Rule rule, String text) throws IOException {
+		AntlrContext request = getRequest(text);
 		CustomRulesVisitor visitor = new CustomRulesVisitor(new CandidateRule("test", rule));
 		CustomTreeVisitor treeVisitor = new CustomTreeVisitor(visitor);
 		treeVisitor.visit(request.getRoot());
@@ -71,11 +70,10 @@ public class AntlrUtils {
 		return issues;
 	}
 
-	public static FillerRequest getRequest(String text) {
-		final CharStream charStream = CharStreams.fromString(text.toUpperCase());
-		FillerRequest request = PluginHelper.createRequestFromStream(null, Charset.defaultCharset(), charStream,
-				IOUtils.toInputStream(text, Charset.defaultCharset()));
-		return request;
+	public static AntlrContext getRequest(String text) throws IOException {
+		return AntlrContext.fromStreams(null, IOUtils.toInputStream(text, Charset.defaultCharset()),
+				IOUtils.toInputStream(text, Charset.defaultCharset()), Charset.defaultCharset());
+
 	}
 
 }

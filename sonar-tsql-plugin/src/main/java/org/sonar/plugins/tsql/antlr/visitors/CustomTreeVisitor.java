@@ -2,9 +2,11 @@ package org.sonar.plugins.tsql.antlr.visitors;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.plugins.tsql.antlr.AntlrContext;
 
 @SuppressWarnings("rawtypes")
-public class CustomTreeVisitor extends AbstractParseTreeVisitor {
+public class CustomTreeVisitor extends AbstractParseTreeVisitor implements IParseTreeItemVisitor {
 
 	private final IParseTreeItemVisitor[] visitors;
 
@@ -22,10 +24,22 @@ public class CustomTreeVisitor extends AbstractParseTreeVisitor {
 			visit(c);
 		}
 		for (final IParseTreeItemVisitor visitor : this.visitors) {
-			visitor.visit(tree);
+			visitor.apply(tree);
 		}
 
 		return null;
 	}
 
+	@Override
+	public void fillContext(SensorContext context, AntlrContext antlrContext) {
+		this.apply(antlrContext.getRoot());
+		for (final IParseTreeItemVisitor visitor : this.visitors) {
+			visitor.fillContext(context, antlrContext);
+		}
+	}
+
+	@Override
+	public void apply(ParseTree tree) {
+		this.visit(tree);
+	}
 }

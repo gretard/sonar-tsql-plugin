@@ -10,11 +10,11 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.AntlrContext;
 
 public class CComplexityVisitor implements IParseTreeItemVisitor {
 	int complexity = 1;
-	
+
 	public int getMeasure() {
 		return complexity;
 	}
@@ -22,7 +22,7 @@ public class CComplexityVisitor implements IParseTreeItemVisitor {
 	private static final Logger LOGGER = Loggers.get(CComplexityVisitor.class);
 
 	@Override
-	public void visit(final ParseTree tree) {
+	public void apply(final ParseTree tree) {
 		final Class<? extends ParseTree> classz = tree.getClass();
 		if (Search_condition_notContext.class.equals(classz)) {
 			complexity++;
@@ -35,9 +35,9 @@ public class CComplexityVisitor implements IParseTreeItemVisitor {
 	}
 
 	@Override
-	public void fill(SensorContext sensorContext, FillerRequest fillerRequest) {
+	public void fillContext(SensorContext sensorContext, AntlrContext antrlContext) {
 
-		final InputFile file = fillerRequest.getFile();
+		final InputFile file = antrlContext.getFile();
 		synchronized (sensorContext) {
 			try {
 				sensorContext.<Integer>newMeasure().on(file).forMetric(CoreMetrics.COMPLEXITY).withValue(complexity)

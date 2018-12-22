@@ -9,6 +9,7 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FileNamesMatcher {
 	private final NameNormalizer nameNormalizer = new NameNormalizer();
+	
 	public CoveredLinesReport[] match(String fileName, String parentDirName, Map<String, CoveredLinesReport> coverage) {
 		final String name = FilenameUtils.removeExtension(fileName);
 		final String normalizedName = nameNormalizer.normalize(name);

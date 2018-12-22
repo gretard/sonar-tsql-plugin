@@ -14,16 +14,18 @@ import org.sonar.api.utils.log.Loggers;
 public class SourceLinesProvider {
 	private static final Logger LOGGER = Loggers.get(SourceLinesProvider.class);
 
-	public SourceLine[] getLines(final InputStream file, final Charset charset) {
+	public SourceLine[] getLines(final InputStream inputStream, final Charset charset) {
+		if (inputStream == null) {
+			return new SourceLine[0];
+		}
 		final List<SourceLine> sourceLines = new ArrayList<>();
 
-		try {
+		try (final BufferedReader bufferedReader = new BufferedReader(
+				new InputStreamReader(new BOMInputStream(inputStream, false), charset))) {
 			int totalLines = 1;
 			int global = 0;
 			int count = 0;
 
-			final BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(new BOMInputStream(file, false), charset));
 			int currentChar;
 			while ((currentChar = bufferedReader.read()) != -1) {
 
@@ -37,10 +39,6 @@ public class SourceLinesProvider {
 
 			}
 			sourceLines.add(new SourceLine(totalLines, count, global - count, global));
-
-			file.close();
-			bufferedReader.close();
-
 		} catch (final Throwable e) {
 			LOGGER.warn("Error occured reading file", e);
 		}

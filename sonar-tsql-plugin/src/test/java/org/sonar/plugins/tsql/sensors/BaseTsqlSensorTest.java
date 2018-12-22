@@ -11,8 +11,6 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.config.MapSettings;
-import org.sonar.api.config.Settings;
 import org.sonar.api.utils.internal.JUnitTempFolder;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.rules.issues.IIssuesProvider;
@@ -55,7 +53,6 @@ public class BaseTsqlSensorTest {
 			}
 
 		};
-		Settings settings = new MapSettings();
 		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
 		sensor.execute(ctxTester);
 		Assert.assertEquals(1, ctxTester.allIssues().size());
@@ -90,7 +87,6 @@ public class BaseTsqlSensorTest {
 			}
 
 		};
-		Settings settings = new MapSettings();
 		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
 		sensor.execute(ctxTester);
 		Assert.assertEquals(0, ctxTester.allIssues().size());
@@ -124,7 +120,6 @@ public class BaseTsqlSensorTest {
 			}
 
 		};
-		Settings settings = new MapSettings();
 		BaseTsqlExternalSensor sensor = new BaseTsqlExternalSensor(provider, "test", "test");
 		sensor.execute(ctxTester);
 		Assert.assertEquals(1, ctxTester.allIssues().size());

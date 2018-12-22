@@ -6,6 +6,11 @@ import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
 public class CandidateRule {
 	private final String key;
 	private final Rule rule;
+	private final boolean isAdHoc;
+
+	public boolean isAdHoc() {
+		return isAdHoc;
+	}
 
 	public String getKey() {
 		return key;
@@ -16,8 +21,13 @@ public class CandidateRule {
 	}
 
 	public CandidateRule(final String key, final Rule rule) {
+		this(key, rule, false);
+	}
+
+	public CandidateRule(final String key, final Rule rule, boolean isAdhoc) {
 		this.key = key;
 		this.rule = rule;
+		this.isAdHoc = isAdhoc;
 	}
 
 	public RuleImplementation getRuleImplementation() {

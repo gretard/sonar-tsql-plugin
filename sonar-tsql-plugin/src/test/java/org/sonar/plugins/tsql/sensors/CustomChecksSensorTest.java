@@ -15,12 +15,10 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.api.config.MapSettings;
-import org.sonar.api.config.Settings;
 import org.sonar.plugins.tsql.Constants;
 import org.sonar.plugins.tsql.languages.TSQLLanguage;
 
-public class HighlightingSensorTest {
+public class CustomChecksSensorTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
@@ -29,12 +27,13 @@ public class HighlightingSensorTest {
 	public void testSingleFile() throws IOException {
 		TemporaryFolder folder = new TemporaryFolder();
 		folder.create();
-		Settings settings = new MapSettings();
-		settings.setProperty(Constants.PLUGIN_SKIP, false);
-		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
-		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
-		settings.setProperty(Constants.PLUGIN_MAX_FILE_SIZE, 100);
+
 		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
+
+		ctxTester.settings().setProperty(Constants.PLUGIN_SKIP, false);
+		ctxTester.settings().setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
+		ctxTester.settings().setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
+		ctxTester.settings().setProperty(Constants.PLUGIN_MAX_FILE_SIZE, 100);
 		String tempName = "test.sql";
 
 		File f = folder.newFile(tempName);
@@ -44,9 +43,13 @@ public class HighlightingSensorTest {
 				.initMetadata(new String(Files.readAllBytes(f.toPath()))).setLanguage(TSQLLanguage.KEY).build();
 		ctxTester.fileSystem().add(file1);
 
-		CustomChecksSensor sensor = new CustomChecksSensor(settings);
+		CustomChecksSensor sensor = new CustomChecksSensor();
 		sensor.execute(ctxTester);
 		Collection<Issue> issues = ctxTester.allIssues();
+		for (Issue i : issues) {
+			System.out.println(i.ruleKey() + " " + i.primaryLocation());
+		}
+
 		Assert.assertEquals(1, issues.size());
 		Assert.assertEquals(2, ctxTester.cpdTokens(file1.key()).size());
 		Assert.assertEquals(1, ctxTester.highlightingTypeAt(file1.key(), 2, 1).size());
@@ -57,19 +60,15 @@ public class HighlightingSensorTest {
 	public void testTSQLGrammarFiles() throws IOException {
 		TemporaryFolder folder = new TemporaryFolder();
 		folder.create();
-		Settings settings = new MapSettings();
-		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
-		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
-		settings.setProperty(Constants.PLUGIN_SKIP, false);
+		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
 
-		settings.setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
-		
-		settings.setProperty(Constants.PLUGIN_MAX_FILE_SIZE, 10);
+		ctxTester.settings().setProperty(Constants.PLUGIN_SKIP, false);
+		ctxTester.settings().setProperty(Constants.PLUGIN_SKIP_CUSTOM_RULES, false);
+		ctxTester.settings().setProperty(Constants.PLUGIN_SKIP_CUSTOM, false);
+		ctxTester.settings().setProperty(Constants.PLUGIN_MAX_FILE_SIZE, 100);
 		String dirPath = "..\\grammars\\tsql";
 		File dir = new File(dirPath);
 		Collection<File> files = FileUtils.listFiles(dir, new String[] { "sql" }, true);
-		SensorContextTester ctxTester = SensorContextTester.create(folder.getRoot());
-		ctxTester.setSettings(settings);
 		for (File f : files) {
 			String tempName = f.getName() + System.nanoTime();
 			File dest = folder.newFile(tempName);
@@ -80,11 +79,11 @@ public class HighlightingSensorTest {
 			ctxTester.fileSystem().add(file1);
 
 		}
-		CustomChecksSensor sensor = new CustomChecksSensor(settings);
+		CustomChecksSensor sensor = new CustomChecksSensor();
 		sensor.execute(ctxTester);
 		Collection<Issue> issues = ctxTester.allIssues();
 		Assert.assertEquals(183, issues.size());
 
 	}
-	
+
 }

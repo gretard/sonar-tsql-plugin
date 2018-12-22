@@ -17,15 +17,16 @@ import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.tsql.Constants;
+import org.sonar.plugins.tsql.checks.CustomPluginChecks;
+import org.sonar.plugins.tsql.checks.CustomUserChecksProvider;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
-import org.sonar.plugins.tsql.rules.definitions.CustomUserChecksProvider;
 
 public final class TSQLQualityProfile extends ProfileDefinition {
 
 	private static final Logger LOGGER = Loggers.get(TSQLQualityProfile.class);
 	private final Settings settings;
 	private final CustomUserChecksProvider customRulesProvider = new CustomUserChecksProvider();
+	private final CustomPluginChecks customPluginChecks = new CustomPluginChecks();
 
 	public TSQLQualityProfile(Settings settings) {
 		this.settings = settings;
@@ -46,6 +47,9 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 		for (final String key : rules.keySet()) {
 			try {
 				org.sonar.plugins.tsql.checks.custom.SqlRules set = rules.get(key);
+				if (set.isIsAdhoc()) {
+					continue;
+				}
 				FileInputStream st = new FileInputStream(key);
 				activeRules(profile, set.getRepoKey(), st);
 				st.close();
@@ -82,7 +86,7 @@ public final class TSQLQualityProfile extends ProfileDefinition {
 
 	private void activePluginRules(final RulesProfile profile) {
 		try {
-			final SqlRules rules = new CustomPluginChecks().getRules();
+			final SqlRules rules = customPluginChecks.getRules();
 			for (final org.sonar.plugins.tsql.checks.custom.Rule rule : rules.getRule()) {
 				profile.activateRule(Rule.create(rules.getRepoKey(), rule.getKey()), null);
 			}

@@ -8,6 +8,14 @@ public class TsqlIssue {
 	private String type;
 
 	private String description;
+	private boolean isExternal;
+	public boolean isExternal() {
+		return isExternal;
+	}
+
+	public void setExternal(boolean isExternal) {
+		this.isExternal = isExternal;
+	}
 
 	private String filePath;
 	private int line;

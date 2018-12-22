@@ -5,9 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
-import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.AntlrContext;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
+import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class RulesHelperTool {
 
@@ -32,7 +33,7 @@ public class RulesHelperTool {
 		}
 		if ("print".equalsIgnoreCase(action)) {
 			System.out.println("Printing tree:\r\n");
-			FillerRequest result = AntlrUtils.getRequest(text);
+			AntlrContext result = AntlrUtils.getRequest(text);
 
 			AntlrUtils.print(result.getRoot(), 0, result.getStream());
 			return;
@@ -50,8 +51,9 @@ public class RulesHelperTool {
 					System.out.println("\tc passed: " + res + " for " + s);
 				}
 				for (String s : r.getRuleImplementation().getViolatingRulesCodeExamples().getRuleCodeExample()) {
-					boolean res = AntlrUtils.verify(r, s).length > 0;
-					System.out.println("\tv passed: " + !res + " for " + s);
+					TsqlIssue[] iss = AntlrUtils.verify(r, s);
+					boolean res = iss.length > 0;
+					System.out.println("\tv passed: " + res + " for " + s);
 				}
 
 			}

@@ -1,4 +1,4 @@
-package org.sonar.plugins.tsql.rules.definitions;
+package org.sonar.plugins.tsql.checks;
 
 import java.util.Arrays;
 
@@ -49,7 +49,7 @@ public class CustomPluginChecks {
 	public static String getRepoKey() {
 		return Constants.PLUGIN_REPO_KEY;
 	}
-
+	
 	public SqlRules getRules() {
 
 		SqlRules customRules = new SqlRules();
@@ -59,7 +59,7 @@ public class CustomPluginChecks {
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(),
 				getOrderByRule(), getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule(),
 				getNullComparisonRule(), getIndexNamingRule(), getWhereWithOrVsUnionRule(), getUnionVsUnionALLRule(),
-				getExistsVsInRule(), getOrderByRuleWithoutAscDesc(), getFileTooLargeRule()
+				getExistsVsInRule(), getOrderByRuleWithoutAscDesc()
 		// ,getMultipleDeclarations()
 		));
 		return customRules;
