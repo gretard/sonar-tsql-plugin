@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.antlr.tsql.TSqlParser.Cfl_statementContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.sonar.plugins.tsql.antlr.IParsedNode;
 
 public class ParsedNode implements IParsedNode {
 

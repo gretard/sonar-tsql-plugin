@@ -15,9 +15,9 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.AntlrContext;
 
-public class ComplexityVisitor implements IParseTreeItemVisitor, ISensorFiller {
+public class ComplexityVisitor implements IParseTreeItemVisitor {
 	int complexity = 0;
 
 	private static final Logger LOGGER = Loggers.get(ComplexityVisitor.class);
@@ -27,7 +27,7 @@ public class ComplexityVisitor implements IParseTreeItemVisitor, ISensorFiller {
 	}
 
 	@Override
-	public void visit(final ParseTree tree) {
+	public void apply(final ParseTree tree) {
 		final Class<? extends ParseTree> classz = tree.getClass();
 		if (Sql_unionContext.class.equals(classz)) {
 			this.complexity++;
@@ -54,8 +54,8 @@ public class ComplexityVisitor implements IParseTreeItemVisitor, ISensorFiller {
 	}
 
 	@Override
-	public void fill(SensorContext sensorContext, FillerRequest fillerRequest) {
-		final InputFile file = fillerRequest.getFile();
+	public void fillContext(SensorContext sensorContext, AntlrContext antrlContext) {
+		final InputFile file = antrlContext.getFile();
 		synchronized (sensorContext) {
 			try {
 				sensorContext.<Integer>newMeasure().on(file).forMetric(CoreMetrics.COGNITIVE_COMPLEXITY)

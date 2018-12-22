@@ -3,7 +3,7 @@ package org.sonar.plugins.tsql.antlr.lines;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
-import org.sonar.plugins.tsql.antlr.nodes.IParsedNode;
+import org.sonar.plugins.tsql.antlr.IParsedNode;
 
 public class DefaultLinesProvider implements ILinesProvider {
 

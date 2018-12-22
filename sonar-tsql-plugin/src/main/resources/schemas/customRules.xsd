@@ -139,6 +139,7 @@
   <xs:element name="severity" type="xs:string"/>
   <xs:element name="cardinality" type="xs:string"/>
   <xs:element name="status" type="xs:string"/>
+  <xs:element name="ruleType" type="xs:string" default="CODE_SMELL" />
   <xs:element name="remediationFunction" type="xs:string"/>
   <xs:element name="remediationFunctionBaseEffort" type="xs:string"/>
   <xs:element name="debtRemediationFunctionCoefficient" type="xs:string"/>
@@ -161,6 +162,7 @@
         <xs:element ref="tag"/>
         <xs:element ref="ruleImplementation"/>
         <xs:element ref="source"/>
+        <xs:element ref="ruleType"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

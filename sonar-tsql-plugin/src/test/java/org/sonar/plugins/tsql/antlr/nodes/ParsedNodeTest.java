@@ -4,12 +4,13 @@ import org.antlr.tsql.TSqlParser.Cfl_statementContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.plugins.tsql.antlr.IParsedNode;
 import org.sonar.plugins.tsql.helpers.AntlrUtils;
 
 public class ParsedNodeTest {
 
 	@Test
-	public void testGetChildren() {
+	public void testGetChildren() throws Throwable {
 		String s = "SELECT * from dbo.test where name like '%test%' ;";
 		ParseTree tree = AntlrUtils.getRequest(s).getRoot();
 		ParsedNode node = new ParsedNode(tree);
@@ -20,7 +21,7 @@ public class ParsedNodeTest {
 	}
 
 	@Test
-	public void testControlFlowParent() {
+	public void testControlFlowParent() throws Throwable {
 		String s = "IF @a > 0  SELECT 1 else SELECT 2;";
 		ParseTree tree = AntlrUtils.getRequest(s).getRoot();
 		ParsedNode node = new ParsedNode(tree.getChild(0).getChild(0).getChild(0).getChild(0).getChild(0).getChild(0));
@@ -30,7 +31,7 @@ public class ParsedNodeTest {
 	}
 
 	@Test
-	public void testControlFlowParentNotContrl() {
+	public void testControlFlowParentNotContrl() throws Throwable {
 		String s = "SELECT 1;";
 		ParseTree tree = AntlrUtils.getRequest(s).getRoot();
 		ParsedNode node = new ParsedNode(tree.getChild(0).getChild(0));
@@ -40,7 +41,7 @@ public class ParsedNodeTest {
 	}
 
 	@Test
-	public void testGetItemNull() {
+	public void testGetItemNull() throws Throwable {
 		ParsedNode node = new ParsedNode(null);
 		Assert.assertEquals(0, node.getChildren().length);
 		Assert.assertEquals(0, node.getParents().length);
@@ -50,7 +51,7 @@ public class ParsedNodeTest {
 	}
 
 	@Test
-	public void testSiblings() {
+	public void testSiblings() throws Throwable {
 		String s = "SELECT * from dbo.test where name like '%test%' ;";
 		ParseTree tree = AntlrUtils.getRequest(s).getRoot().getChild(0).getChild(0).getChild(0).getChild(0);
 		ParsedNode node = new ParsedNode(tree);
@@ -60,7 +61,7 @@ public class ParsedNodeTest {
 	}
 
 	@Test
-	public void testParents() {
+	public void testParents() throws Throwable {
 		String s = "SELECT * from dbo.test where name like '%test%' ;";
 		ParseTree tree = AntlrUtils.getRequest(s).getRoot().getChild(0).getChild(0).getChild(0).getChild(0);
 		ParsedNode node = new ParsedNode(tree);

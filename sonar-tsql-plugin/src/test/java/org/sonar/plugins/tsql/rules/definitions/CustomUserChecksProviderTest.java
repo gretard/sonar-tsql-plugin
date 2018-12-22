@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sonar.api.utils.internal.JUnitTempFolder;
+import org.sonar.plugins.tsql.checks.CustomUserChecksProvider;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 
 public class CustomUserChecksProviderTest {
@@ -34,5 +35,16 @@ public class CustomUserChecksProviderTest {
 		CustomUserChecksProvider provider = new CustomUserChecksProvider();
 		Map<String, SqlRules> rules = provider.getRules(null, "rules", baseFile.getParentFile().getAbsolutePath());
 		Assert.assertEquals(0, rules.size());
+	}
+	
+	@Test
+	public void testReadFile() throws IOException {
+
+		File baseFile = temp.newFile("rulesTest", "xml");
+		FileUtils.copyURLToFile(getClass().getResource("/customrulesSample.xml"), baseFile);
+
+		CustomUserChecksProvider provider = new CustomUserChecksProvider();
+		Map<String, SqlRules> rules = provider.getRules(null, "rules", baseFile.getAbsolutePath());
+		Assert.assertEquals(1, rules.size());
 	}
 }

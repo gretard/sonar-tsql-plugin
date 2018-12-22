@@ -3,16 +3,16 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.sonar.plugins.tsql</groupId>
-  <artifactId>sonar-tsql-plugin</artifactId>
+  <artifactId>sonar-tsqlopen-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>0.8.2</version>
+  <version>0.9.0</version>
 
   <name>TSQL Plugin for SonarQube</name>
   <description>TSQL plugin for SonarQube</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.apiVersion>7.2</sonar.apiVersion>
+    <sonar.apiVersion>7.4</sonar.apiVersion>
     <jdk.min.version>1.8</jdk.min.version>
   </properties>
 

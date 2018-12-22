@@ -3,13 +3,14 @@ package org.sonar.plugins.tsql.antlr.nodes;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.plugins.tsql.antlr.IParsedNode;
 import org.sonar.plugins.tsql.helpers.AntlrUtils;
 import org.sonar.plugins.tsql.helpers.TestNode;
 
 public class NodeUsesProviderTest {
 
 	@Test
-	public void testGetUsesNodes() {
+	public void testGetUsesNodes() throws Throwable {
 		String s = "SELECT *,test from dbo.test where name like '%test%' ;";
 		ParseTree tree = AntlrUtils.getRequest(s).getRoot();
 		NodeUsesProvider provider = new NodeUsesProvider(tree);
@@ -18,7 +19,7 @@ public class NodeUsesProviderTest {
 	}
 
 	@Test
-	public void testGetUsesNodesNull() {
+	public void testGetUsesNodesNull() throws Throwable {
 		String s = "SELECT *,test from dbo.test where name like '%test%' ;";
 		ParseTree tree = AntlrUtils.getRequest(s).getRoot();
 		NodeUsesProvider provider = new NodeUsesProvider(tree);

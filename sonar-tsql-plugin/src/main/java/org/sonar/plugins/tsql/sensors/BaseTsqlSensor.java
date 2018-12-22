@@ -42,8 +42,11 @@ public abstract class BaseTsqlSensor implements org.sonar.api.batch.sensor.Senso
 			LOGGER.debug(String.format("Skipping sensor as skip flag is set: %s", sensorName));
 			return;
 		}
-		innerExecute(context);
-
+		try {
+			innerExecute(context);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected abstract void innerExecute(final org.sonar.api.batch.sensor.SensorContext context);

@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.apache.commons.lang3.StringUtils;
+import org.sonar.plugins.tsql.antlr.IParsedNode;
 
 @SuppressWarnings("rawtypes")
 public class NodeUsesProvider extends AbstractParseTreeVisitor implements INodesProvider<IParsedNode> {

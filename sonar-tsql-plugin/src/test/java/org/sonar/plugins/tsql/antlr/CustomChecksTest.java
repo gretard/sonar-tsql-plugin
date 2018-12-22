@@ -7,6 +7,7 @@ import org.antlr.tsql.TSqlParser.Select_statementContext;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.plugins.tsql.checks.CustomPluginChecks;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.RuleDistanceIndexMatchType;
 import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
@@ -14,13 +15,12 @@ import org.sonar.plugins.tsql.checks.custom.RuleMatchType;
 import org.sonar.plugins.tsql.checks.custom.RuleResultType;
 import org.sonar.plugins.tsql.checks.custom.TextCheckType;
 import org.sonar.plugins.tsql.helpers.AntlrUtils;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 public class CustomChecksTest {
 
 	@Test
-	public void testCheckEndingWithSemicolon() {
+	public void testCheckEndingWithSemicolon() throws Throwable {
 		Rule r = new Rule();
 		r.setKey("Example1");
 		r.setInternalKey("Example1");
@@ -54,7 +54,7 @@ public class CustomChecksTest {
 	}
 
 	@Test
-	public void testCheckEndingWIthSemicolon2() {
+	public void testCheckEndingWIthSemicolon2() throws Throwable {
 		Rule r = new Rule();
 		RuleImplementation rImpl = new RuleImplementation();
 		rImpl.getNames().getTextItem().add(Select_statementContext.class.getSimpleName());
@@ -78,7 +78,7 @@ public class CustomChecksTest {
 	}
 
 	@Test
-	public void testIndexRule() {
+	public void testIndexRule() throws Throwable {
 		String s = "CREATE UNIQUE INDEX ix_test ON Persons (LastName, FirstName);";
 		Rule sut = CustomPluginChecks.getIndexNamingRule();
 		AntlrUtils.print(s);
@@ -87,8 +87,9 @@ public class CustomChecksTest {
 
 		Assert.assertEquals(0, issues.length);
 	}
+
 	@Test
-	public void testIndexRuleViolating() {
+	public void testIndexRuleViolating() throws Throwable {
 		String s = "CREATE UNIQUE INDEX test ON Persons (LastName, FirstName);";
 		Rule sut = CustomPluginChecks.getIndexNamingRule();
 		AntlrUtils.print(s);
@@ -97,9 +98,9 @@ public class CustomChecksTest {
 
 		Assert.assertEquals(1, issues.length);
 	}
-	
+
 	@Test
-	public void testWhereOrRule() {
+	public void testWhereOrRule() throws Throwable {
 		String s = "select * from dbo.test where a = 4 or x = 5 OR f = 8 Or t = 0;";
 		Rule sut = CustomPluginChecks.getWhereWithOrVsUnionRule();
 		AntlrUtils.print(s);
@@ -108,9 +109,9 @@ public class CustomChecksTest {
 
 		Assert.assertEquals(3, issues.length);
 	}
-	
+
 	@Test
-	public void testUnionVsUnionAllRule() {
+	public void testUnionVsUnionAllRule() throws Throwable {
 		String s = "select * from dbo.test union select * from dbo.test2;";
 		Rule sut = CustomPluginChecks.getUnionVsUnionALLRule();
 		AntlrUtils.print(s);
@@ -121,7 +122,7 @@ public class CustomChecksTest {
 	}
 
 	@Test
-	public void testgetExistsVsInRule() {
+	public void testgetExistsVsInRule() throws Throwable {
 		String s = "select * from dbo.test where name IN (select id from dbo.names);";
 		Rule sut = CustomPluginChecks.getExistsVsInRule();
 		AntlrUtils.print(s);
@@ -130,9 +131,9 @@ public class CustomChecksTest {
 
 		Assert.assertEquals(1, issues.length);
 	}
-	
+
 	@Test
-	public void testgetExistsVsInRule2() {
+	public void testgetExistsVsInRule2() throws Throwable {
 		String s = "select * from dbo.test where name in (1, 2, 3);";
 		Rule sut = CustomPluginChecks.getExistsVsInRule();
 		AntlrUtils.print(s);
@@ -141,8 +142,9 @@ public class CustomChecksTest {
 
 		Assert.assertEquals(0, issues.length);
 	}
+
 	@Test
-	public void testOrderByRuleOrder() {
+	public void testOrderByRuleOrder() throws Throwable {
 		String s = "select * from dbo.test order by name asc, surname;";
 		Rule sut = CustomPluginChecks.getOrderByRuleWithoutAscDesc();
 		AntlrUtils.print(s);
@@ -151,8 +153,9 @@ public class CustomChecksTest {
 
 		Assert.assertEquals(1, issues.length);
 	}
+
 	@Test
-	public void testNullNotNull() {
+	public void testNullNotNull() throws Throwable {
 		Rule r = new Rule();
 		r.setKey("Example1");
 		r.setInternalKey("Example1");

@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import org.antlr.tsql.TSqlParser;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -12,17 +13,17 @@ import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.AntlrContext;
 import org.sonar.plugins.tsql.languages.keywords.IKeywordsProvider;
 import org.sonar.plugins.tsql.languages.keywords.KeywordsProvider;
 
-public class AntlrHighlighter implements ISensorFiller {
+public class AntlrHighlighter implements IParseTreeItemVisitor {
 
 	private static final Logger LOGGER = Loggers.get(AntlrHighlighter.class);
 	private final IKeywordsProvider keywordsProvider = new KeywordsProvider();
 
 	@Override
-	public void fill(final SensorContext context, final FillerRequest antrlFile) {
+	public void fillContext(final SensorContext context, final AntlrContext antrlFile) {
 
 		final InputFile file = antrlFile.getFile();
 		if (file == null) {
@@ -37,7 +38,7 @@ public class AntlrHighlighter implements ISensorFiller {
 			final int startLineOffset = token.getCharPositionInLine();
 			final int[] endDetails = antrlFile.getLineAndColumn(token.getStopIndex());
 
-			if (endDetails == null || token.getType() == TSqlParser.EOF
+			if (endDetails == null || endDetails.length != 2 || token.getType() == TSqlParser.EOF
 					|| token.getStartIndex() >= token.getStopIndex()) {
 				continue;
 			}
@@ -54,10 +55,9 @@ public class AntlrHighlighter implements ISensorFiller {
 
 			} catch (final Throwable e) {
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug(
-							format("Unexpected error creating text range on file %s for token %s on (%s, %s) -  (%s, %s)",
-									file.absolutePath(), token.getText(), startLine, startLineOffset, endLine,
-									endLineOffset),
+					LOGGER.debug(format(
+							"Unexpected error creating text range on file %s for token %s on (%s, %s) -  (%s, %s)",
+							file.absolutePath(), token.getText(), startLine, startLineOffset, endLine, endLineOffset),
 							e);
 				}
 
@@ -85,7 +85,6 @@ public class AntlrHighlighter implements ISensorFiller {
 		} catch (Throwable e) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug(format("Unexpected error adding cpd tokens on file %s", file.absolutePath()), e);
-
 			}
 
 		}
@@ -110,6 +109,11 @@ public class AntlrHighlighter implements ISensorFiller {
 				LOGGER.debug(format("Unexpected error adding highlighting on file %s", file.absolutePath()), e);
 			}
 		}
+	}
+
+	@Override
+	public void apply(ParseTree tree) {
+
 	}
 
 }

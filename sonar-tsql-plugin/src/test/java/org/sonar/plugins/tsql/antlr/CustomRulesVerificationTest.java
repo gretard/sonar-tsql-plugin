@@ -9,10 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sonar.plugins.tsql.checks.CustomPluginChecks;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 import org.sonar.plugins.tsql.helpers.AntlrUtils;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 import org.sonar.plugins.tsql.rules.issues.TsqlIssue;
 
 @RunWith(Parameterized.class)
@@ -51,7 +51,7 @@ public class CustomRulesVerificationTest {
 	}
 
 	@Test
-	public void test() {
+	public void test()  throws Throwable{
 		Assert.assertNotNull("Rule's debt remiationfunction not specified", this.rule.getRemediationFunction());
 		Assert.assertNotNull("Rule's DebtRemediationFunctionCoefficient not specified",
 				this.rule.getDebtRemediationFunctionCoefficient());

@@ -7,9 +7,10 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.sonar.plugins.tsql.antlr.CandidateNode;
+import org.sonar.plugins.tsql.antlr.CandidateRule;
+import org.sonar.plugins.tsql.antlr.IParsedNode;
 import org.sonar.plugins.tsql.antlr.lines.ILinesProvider;
-import org.sonar.plugins.tsql.antlr.nodes.CandidateNode;
-import org.sonar.plugins.tsql.antlr.nodes.IParsedNode;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.RuleImplementation;
 import org.sonar.plugins.tsql.checks.custom.RuleResultType;
@@ -24,7 +25,7 @@ public class FoundViolationsAnalyzerTest {
 		Rule rule = new Rule();
 		IParsedNode nnode = new TestNode("test", "test", 0);
 		Map<RuleImplementation, List<IParsedNode>> results = new HashMap<>();
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -40,7 +41,8 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(1, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(1, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
+
 
 	}
 
@@ -57,7 +59,7 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -74,7 +76,8 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
+
 
 	}
 
@@ -104,7 +107,7 @@ public class FoundViolationsAnalyzerTest {
 		ruleImpl.setRuleResultType(RuleResultType.SKIP_IF_FOUND);
 		results.put(ruleImpl, nodes);
 		results.put(ruleImpl0, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -122,7 +125,7 @@ public class FoundViolationsAnalyzerTest {
 		ruleImpl0.setRuleResultType(RuleResultType.FAIL_IF_NOT_FOUND);
 		results.put(ruleImpl, nodes);
 		results.put(ruleImpl0, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -139,7 +142,7 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.SKIP_IF_NOT_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -156,7 +159,7 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_LESS_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -174,7 +177,7 @@ public class FoundViolationsAnalyzerTest {
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_LESS_FOUND);
 		ruleImpl.setTimes(2);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(1, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(1, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -191,7 +194,7 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_MORE_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(1, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(1, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -211,7 +214,7 @@ public class FoundViolationsAnalyzerTest {
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_MORE_FOUND);
 		ruleImpl.setTimes(0);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(1, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(1, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -230,7 +233,7 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.FAIL_IF_FOUND);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(1, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(1, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 
@@ -249,7 +252,7 @@ public class FoundViolationsAnalyzerTest {
 		RuleImplementation ruleImpl = new RuleImplementation();
 		ruleImpl.setRuleResultType(RuleResultType.DEFAULT);
 		results.put(ruleImpl, nodes);
-		Assert.assertEquals(0, an.create(new CandidateNode("test", rule, nnode), results).size());
+		Assert.assertEquals(0, an.analyze(new CandidateNode(new CandidateRule("test", rule), nnode), results).size());
 
 	}
 }

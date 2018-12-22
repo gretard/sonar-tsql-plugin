@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
-import org.sonar.plugins.tsql.antlr.FillerRequest;
+import org.sonar.plugins.tsql.antlr.AntlrContext;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
 
@@ -32,7 +32,7 @@ public class RulesHelperTool {
 		}
 		if ("print".equalsIgnoreCase(action)) {
 			System.out.println("Printing tree:\r\n");
-			FillerRequest result = AntlrUtils.getRequest(text);
+			AntlrContext result = AntlrUtils.getRequest(text);
 
 			AntlrUtils.print(result.getRoot(), 0, result.getStream());
 			return;

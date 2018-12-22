@@ -1,8 +1,8 @@
 package org.sonar.plugins.tsql.helpers;
 
+import org.sonar.plugins.tsql.checks.CustomPluginChecks;
 import org.sonar.plugins.tsql.checks.custom.Rule;
 import org.sonar.plugins.tsql.checks.custom.SqlRules;
-import org.sonar.plugins.tsql.rules.definitions.CustomPluginChecks;
 
 public class CustomSqlCodePrinter {
 
