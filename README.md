@@ -11,7 +11,7 @@ Currently plug-in supports:
 - Support for adding your custom rules defined in xml format. See [Custom rules](https://github.com/gretard/sonar-tsql-plugin/wiki/Custom-rules) section for more details.
 - Complexity metrics: cyclomatic and cognitive.
 - SQLCover reports (since version 0.8.0). SQLCover reporting details can be found at [https://github.com/GoEddie/SQLCover](https://github.com/GoEddie/SQLCover). You can take a look at examples folder at [/examples/example2-coverage](https://github.com/gretard/sonar-tsql-plugin/tree/master/examples/example2-coverage). 
-
+- Adhoc rules (since version 0.9.0), please check example at [example4-adhoc](https://github.com/gretard/sonar-tsql-plugin/tree/master/examples/example4-adhoc)
 
 ## Usage ##
 
