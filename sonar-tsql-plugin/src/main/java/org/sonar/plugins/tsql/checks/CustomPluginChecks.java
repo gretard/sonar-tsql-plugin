@@ -59,7 +59,7 @@ public class CustomPluginChecks {
 		customRules.getRule().addAll(Arrays.asList(getWaitForRule(), getSelectAllRule(), getInsertRule(),
 				getOrderByRule(), getExecRule(), getNoLockRule(), getSargRule(), getPKRule(), getFKRule(),
 				getNullComparisonRule(), getIndexNamingRule(), getWhereWithOrVsUnionRule(), getUnionVsUnionALLRule(),
-				getExistsVsInRule(), getOrderByRuleWithoutAscDesc(), getFileTooLargeRule()
+				getExistsVsInRule(), getOrderByRuleWithoutAscDesc()
 		// ,getMultipleDeclarations()
 		));
 		return customRules;

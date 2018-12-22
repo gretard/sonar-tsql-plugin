@@ -229,6 +229,9 @@ public class Rule {
      *     
      */
     public String getSeverity() {
+    	if (severity == null) {
+    		this.severity = "MINOR";
+    	}
         return severity;
     }
 
@@ -445,6 +448,9 @@ public class Rule {
      *     
      */
     public String getRuleType() {
+    	if (ruleType == null) {
+    		this.ruleType = "CODE_SMELL";
+    	}
         return ruleType;
     }
 
