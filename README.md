@@ -13,6 +13,12 @@ Currently plug-in supports:
 - SQLCover reports (since version 0.8.0). SQLCover reporting details can be found at [https://github.com/GoEddie/SQLCover](https://github.com/GoEddie/SQLCover). You can take a look at examples folder at [/examples/example2-coverage](https://github.com/gretard/sonar-tsql-plugin/tree/master/examples/example2-coverage). 
 - Adhoc rules (since version 0.9.0), please check example at [example4-adhoc](https://github.com/gretard/sonar-tsql-plugin/tree/master/examples/example4-adhoc)
 
+## Donating ##
+You can support this [project and others](https://github.com/gretard) via [Paypal](https://www.paypal.me/greta514284/)
+
+[![Support via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/greta514284/)
+
+
 ## Usage ##
 
 1. Download and install SonarQube
