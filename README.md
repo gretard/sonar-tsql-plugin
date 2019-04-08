@@ -1,5 +1,7 @@
 # sonar-tsql-plugin
-This repository contains T-SQL language plug-in for Sonar.
+This repository contains T-SQL language plug-in for Sonar. 
+
+!! Please use [sonar-sql-plugin](https://github.com/gretard/sonar-sql-plugin) instead as it supports multiple dialects and contains various code fixes.
 
 ## Description ##
 Currently plug-in supports:
